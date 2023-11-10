@@ -1,0 +1,130 @@
+{
+    "config": {
+        "avg_num_neighbours": 10.0,
+        "compile": false,
+        "compute_forces": true,
+        "correlation": 2,
+        "datamodule": {
+            "atomic_numbers_col": "physicsml_atom_numbers",
+            "cell": null,
+            "coordinates_col": "physicsml_coordinates",
+            "cut_off": 5.0,
+            "edge_attrs_col": "physicsml_bond_features",
+            "edge_idxs_col": "physicsml_bond_idxs",
+            "max_nbins": 1000000,
+            "node_attrs_col": "physicsml_atom_features",
+            "node_idxs_col": "physicsml_atom_idxs",
+            "num_elements": 4,
+            "num_workers": 0,
+            "pbc": null,
+            "pre_batch": null,
+            "pre_batch_in_memory": false,
+            "self_interaction": false,
+            "total_atomic_energy_col": "physicsml_total_atomic_energy",
+            "train_batch_size": 32,
+            "use_scaled_positions": false,
+            "validation_batch_size": null,
+            "y_edge_scalars": null,
+            "y_edge_vector": null,
+            "y_graph_scalars": [
+                "wb97x_dz.energy"
+            ],
+            "y_graph_vector": null,
+            "y_node_scalars": null,
+            "y_node_vector": "wb97x_dz.forces"
+        },
+        "float32_matmul_precision": null,
+        "hidden_irreps": "4x0e + 4x1o",
+        "max_ell": 2,
+        "mlp_irreps": "5x0e",
+        "num_bessel": 8,
+        "num_edge_feats": 0,
+        "num_interactions": 2,
+        "num_node_feats": 4,
+        "num_polynomial_cutoff": 6,
+        "optimizer": {
+            "config": {
+                "amsgrad": true,
+                "lr": 0.01
+            },
+            "name": "Adam"
+        },
+        "scaling_mean": 0.0,
+        "scaling_std": 1.0,
+        "scheduler": {
+            "config": {
+                "factor": 0.8,
+                "patience": 50
+            },
+            "frequency": 1,
+            "interval": "epoch",
+            "monitor": "val_loss",
+            "name": "ReduceLROnPlateau",
+            "strict": true
+        },
+        "trainer": {
+            "accelerator": "auto",
+            "accumulate_grad_batches": 1,
+            "barebones": false,
+            "benchmark": null,
+            "callbacks": null,
+            "check_val_every_n_epoch": 1,
+            "default_root_dir": "training",
+            "detect_anomaly": false,
+            "deterministic": null,
+            "devices": "auto",
+            "enable_checkpointing": false,
+            "enable_model_summary": true,
+            "enable_progress_bar": true,
+            "fast_dev_run": false,
+            "gradient_clip_algorithm": null,
+            "gradient_clip_val": null,
+            "inference_mode": true,
+            "limit_predict_batches": null,
+            "limit_test_batches": null,
+            "limit_train_batches": null,
+            "limit_val_batches": null,
+            "log_every_n_steps": 50,
+            "logger": true,
+            "max_epochs": 1,
+            "max_steps": -1,
+            "max_time": null,
+            "min_epochs": null,
+            "min_steps": null,
+            "num_nodes": 1,
+            "num_sanity_val_steps": null,
+            "overfit_batches": 0.0,
+            "precision": 32,
+            "profiler": null,
+            "reload_dataloaders_every_n_epochs": 0,
+            "strategy": "auto",
+            "sync_batchnorm": false,
+            "use_distributed_sampler": true,
+            "val_check_interval": null
+        },
+        "transfer_learning": null,
+        "x_features": [
+            "physicsml_total_atomic_energy",
+            "physicsml_atom_idxs",
+            "physicsml_atom_numbers",
+            "physicsml_coordinates"
+        ],
+        "y_features": [
+            "wb97x_dz.energy",
+            "wb97x_dz.forces"
+        ],
+        "y_graph_scalars_loss_config": {
+            "name": "MSELoss",
+            "weight": 1.0
+        },
+        "y_graph_vector_loss_config": null,
+        "y_node_scalars_loss_config": null,
+        "y_node_vector_loss_config": {
+            "name": "MSELoss",
+            "weight": 1.0
+        }
+    },
+    "name": "mace_model",
+    "tag": "mace_model",
+    "version": "0.40.0"
+}

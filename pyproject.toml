@@ -1,0 +1,261 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = ["setuptools>=64.0.0", "setuptools_scm>=6.2.0"]
+
+[project]
+name = 'physicsml'
+description = 'A package for all physics based/related models'
+readme = 'README.md'
+requires-python = '>= 3.8'
+authors = [{name = 'Exscientia'}]
+maintainers = [{name = 'Exscientia'}]
+classifiers = [
+    'Development Status :: 4 - Beta',
+    'Intended Audience :: Science/Research',
+    'Natural Language :: English',
+    'Operating System :: OS Independent',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3 :: Only',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Typing :: Typed',
+]
+
+dynamic = ['version']
+
+dependencies = [
+    'molflux @ git+ssh://git@github.com/Exscientia/molflux.git@main',
+    'torch>=2.0,<2.1',
+    'lightning>=2.1',
+    'torch-geometric>=2.3.0',
+    'e3nn',
+    'torchani!=2.2.4', # bug in torchani where it tries to import cuaev when not built
+    'tensorboard',
+]
+
+[project.optional-dependencies]
+openeye = [
+    'openeye-toolkits<2023.0.0; python_version == "3.8"',  # openeye 2023 not supported on python 3.8
+    'openeye-toolkits',
+]
+rdkit = [
+    'rdkit'
+]
+dvc = [
+    'aiobotocore[boto3]>=2.5.2',  # boto fixed by dvc[s3], errors without this (aibotocore 2.4.1)
+    'botocore>=1.29.161',
+    'dvc[s3]>=3.5.0',
+    'dvc-s3',  # improves version pinning
+]
+ase = [
+    'openeye-toolkits<2023.0.0; python_version == "3.8"',  # openeye 2023 not supported on python 3.8
+    'openeye-toolkits',
+    'rdkit',
+    'aiobotocore[boto3]>=2.5.2',  # boto fixed by dvc[s3], errors without this (aibotocore 2.4.1)
+    'botocore>=1.29.161',
+    'dvc[s3]>=3.5.0',
+    'dvc-s3',  # improves version pinning
+    'ase',
+]
+openmm = [
+    'openeye-toolkits<2023.0.0; python_version == "3.8"',  # openeye 2023 not supported on python 3.8
+    'openeye-toolkits',
+    'rdkit',
+    'aiobotocore[boto3]>=2.5.2',  # boto fixed by dvc[s3], errors without this (aibotocore 2.4.1)
+    'botocore>=1.29.161',
+    'dvc[s3]>=3.5.0',
+    'dvc-s3',  # improves version pinning
+]
+dev = [
+    'nox',
+    'pre-commit',
+]
+docs = [
+    'sphinx!=5.1.0',
+    'sphinx-sitemap',
+    'sphinx-inline-tabs',
+#    'exs-sphinx-rse==0.5.1',
+    'jupytext>=1.11.2',
+    'myst-nb',
+    'openeye-toolkits!=2023.1.0',
+    'ase',
+    'rdkit',
+]
+tests = [
+    'coverage[toml]',
+    'coverage-badge',
+    'pytest',
+    'h5py'
+]
+typing = [
+    'mypy',
+    'types-PyYAML',
+    'types-setuptools',
+]
+
+[project.entry-points.'molflux.modelzoo.plugins.physicsml']
+allegro_model = 'physicsml.models.allegro.supervised.allegro_model:AllegroModel'
+ani_model = 'physicsml.models.ani.supervised.ani_model:ANIModel'
+egnn_model = 'physicsml.models.egnn.supervised.egnn_model:EGNNModel'
+mace_model = 'physicsml.models.mace.supervised.mace_model:MACEModel'
+nequip_model = 'physicsml.models.nequip.supervised.nequip_model:NequipModel'
+tensor_net_model = 'physicsml.models.tensor_net.supervised.tensor_net_model:TensorNetModel'
+
+adapter_egnn_model = 'physicsml.models.egnn.adapter.adapter_egnn_model:AdapterEGNNModel'
+adapter_mace_model = 'physicsml.models.mace.adapter.adapter_mace_model:AdapterMACEModel'
+adapter_nequip_model = 'physicsml.models.nequip.adapter.adapter_nequip_model:AdapterNequipModel'
+
+ssf_egnn_model = 'physicsml.models.egnn.ssf.ssf_egnn_model:SsfEGNNModel'
+ssf_mace_model = 'physicsml.models.mace.ssf.ssf_mace_model:SsfMACEModel'
+ssf_nequip_model = 'physicsml.models.nequip.ssf.ssf_nequip_model:SsfNequipModel'
+
+mean_var_allegro_model = 'physicsml.models.allegro.mean_var.mean_var_allegro_model:MeanVarAllegroModel'
+mean_var_ani_model = 'physicsml.models.ani.mean_var.mean_var_ani_model:MeanVarANIModel'
+mean_var_egnn_model = 'physicsml.models.egnn.mean_var.mean_var_egnn_model:MeanVarEGNNModel'
+mean_var_mace_model = 'physicsml.models.mace.mean_var.mean_var_mace_model:MeanVarMACEModel'
+mean_var_nequip_model = 'physicsml.models.nequip.mean_var.mean_var_nequip_model:MeanVarNequipModel'
+
+[project.entry-points.'molflux.features.plugins.physicsml']
+physicsml_features = 'physicsml.featurisation.physicsml_features.physicsml_features:PhysicsMLFeatures'
+allegro = 'physicsml.models.allegro.allegro_prism:Allegro'
+ani = 'physicsml.models.ani.ani_prism:ANI'
+egnn = 'physicsml.models.egnn.egnn_prism:EGNN'
+mace = 'physicsml.models.mace.mace_prism:MACE'
+nequip = 'physicsml.models.nequip.nequip_prism:Nequip'
+
+[project.urls]
+documentation = 'https://github.com/exscientia/physicsml/issues' # TODO: Fix docs url
+repository = 'https://github.com/exscientia/physicsml.git'
+issue-tracker = 'https://github.com/exscientia/physicsml/issues'
+changelog = 'https://github.com/exscientia/physicsml/src/main/CHANGELOG.md'
+
+[tool.black]
+include = 'src/.*\.pyi?$|tests/.*\.pyi?$|docs/.*\.pyi?$'
+line-length = 88
+target-version = ['py38', 'py39', 'py310', 'py311']
+
+[tool.coverage.paths]
+source = ['src/physicsml/', '.cache/nox/*/lib/*/site-packages/physicsml/']
+
+[tool.coverage.report]
+show_missing = true
+
+[tool.coverage.run]
+source_pkgs = ['physicsml']
+branch = true
+
+[tool.isort]
+known_first_party = "physicsml"
+profile = "black"
+src_paths = ["src", "tests"]
+
+[tool.mypy]
+cache_dir = ".cache/mypy_cache"
+disallow_incomplete_defs = true
+disallow_subclassing_any = false
+disallow_untyped_decorators = false
+disallow_untyped_defs = true
+explicit_package_bases = true
+files = ['src/', 'tests/', 'noxfile.py']
+ignore_missing_imports = true
+mypy_path = 'src'
+namespace_packages = true
+no_implicit_optional = true
+plugins = ['pydantic.mypy']
+warn_redundant_casts =true
+warn_return_any = true
+warn_unreachable = true
+warn_unused_ignores = true
+show_error_codes = true
+
+[[tool.mypy.overrides]]
+module = "physicsml.models.allegro.modules.*"
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+check_untyped_defs = true
+disallow_untyped_defs = false
+module = 'tests.*'
+
+[[tool.mypy.overrides]]
+check_untyped_defs = true
+disallow_untyped_decorators = false
+disallow_untyped_defs = false
+module = 'noxfile'
+
+[tool.pytest.ini_options]
+addopts = "-rv --doctest-modules --color=yes"
+cache_dir = ".cache/pytest_cache"
+log_cli = true
+log_cli_level = "WARNING"
+log_cli_format = "%(levelname)s:%(name)s: %(message)s"
+minversion = "6.0"
+norecursedirs = ['src/physicsml/models']
+testpaths = ['src', 'tests']
+
+[tool.ruff]
+cache-dir = ".cache/ruff"
+line-length = 88
+src = ["src/physicsml", "tests"]
+namespace-packages = ["src/physicsml"]
+extend-exclude = [
+    "src/physicsml/models/mace/modules/symmetric_contraction.py"
+]
+respect-gitignore = true
+show-fixes = true
+select = [ # https://beta.ruff.rs/docs/rules/
+    # "A",  # flake8-builtins
+    # "ARG", # flake8-unused-arguments
+    "B", # flake8-bugbear
+    # "BLE", # flake8-blind-except
+    "COM", # flake8-commas
+    "C4", # flake8-comprehensions
+    # "C90", # mccabe
+    # "D", # pydocstyle
+    "DTZ", # flake8-datetimz
+    "E",  # pycodestyle error
+    # "ERA", # eradicate
+    "F", # Pyflakes
+    # "G", # flake8-logging-format
+    "I", # isort
+    # "ISC", # flake8-implicit-str-concat
+    # "N", # pep8-naming
+    # "NPY", # NumPy-specific rules
+    "Q", # flake8-quotes
+    "PD", # pandas-vet
+    # "PIE", # flake8-pie
+    # "PL", # Pylint
+    # "PT", # flake8-pytest-style
+    # "PTH", # flake8-use-pathlib
+    "RSE",  # flake8-raise
+    "RUF", # Ruff-specific rules
+    "S", # flake8-bandit
+    # "SIM", # flake8-simplify
+    "TCH", # flake8-type-checking
+    "TID", # flake8-tidy-imports
+    # "TRY", # tryceratops
+    "T20", # flake8-print
+    "UP", # pyupgrade
+    "W", # pycodestyle warning
+    "YTT", # flake8-2020
+]
+ignore = ["E501", "S101"]
+
+[tool.ruff.per-file-ignores]
+"docs/source/conf.py" = ["ERA"]
+"src/physicsml/__init__.py" = ["F401"]
+"src/physicsml/lightning/losses/__init__.py" = ["E402", "F403", "F401"]
+"tests/*" = ["ARG001", "D", "S101", "PLR2004"]
+"noxfile.py" = ["T201"]
+
+[tool.ruff.isort]
+known-first-party = ["physicsml"]
+
+[tool.ruff.pydocstyle]
+convention = "google"
+
+[tool.setuptools_scm]
+local_scheme = "dirty-tag"
+write_to = "src/physicsml/version.py"
