@@ -26,7 +26,7 @@ FORMATTING_TOOLS = ["black[jupyter]~=23.0"]
 LINTING_TOOLS = ["ruff~=0.0.292"]
 LOCKFILE_TOOLS = ["pip-tools>=7.0.0"]  # default --resolver=backtracking
 
-EXTRAS = ["openeye", "rdkit", "ase", "openmm"]
+EXTRAS = ["rdkit", "ase", "openmm"]
 
 
 def resolve_lockfile_path(python_version: str, extra: Optional[str] = None, rootdir: str = PINNED_VERSIONS) -> pathlib.Path:
