@@ -1,8 +1,8 @@
-name: Dev CI Actions
+name: Main CI Actions
 
 on:
-  branch:
-    - main
+  push:
+    branches: ['main']
 
 jobs:
   quality-checks:

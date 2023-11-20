@@ -50,8 +50,6 @@ dvc = [
     'dvc-s3',  # improves version pinning
 ]
 ase = [
-    'openeye-toolkits<2023.0.0; python_version == "3.8"',  # openeye 2023 not supported on python 3.8
-    'openeye-toolkits',
     'rdkit',
     'aiobotocore[boto3]>=2.5.2',  # boto fixed by dvc[s3], errors without this (aibotocore 2.4.1)
     'botocore>=1.29.161',
@@ -60,8 +58,6 @@ ase = [
     'ase',
 ]
 openmm = [
-    'openeye-toolkits<2023.0.0; python_version == "3.8"',  # openeye 2023 not supported on python 3.8
-    'openeye-toolkits',
     'rdkit',
     'aiobotocore[boto3]>=2.5.2',  # boto fixed by dvc[s3], errors without this (aibotocore 2.4.1)
     'botocore>=1.29.161',

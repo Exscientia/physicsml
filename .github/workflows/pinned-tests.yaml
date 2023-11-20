@@ -5,7 +5,7 @@ on:
 
 jobs:
   tests-pinned:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         python-version: ["3.11"]
@@ -18,6 +18,10 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: 'pip'
+#      - name: Install g++
+#        run: |
+#          sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+#          sudo apt install -y g++-11
       - name: Run pinned tests
         run: |
           pip install nox
