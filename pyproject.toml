@@ -26,7 +26,7 @@ classifiers = [
 dynamic = ['version']
 
 dependencies = [
-    'molflux @ git+ssh://git@github.com/Exscientia/molflux.git@main',
+    'molflux',
     'torch>=2.0,<2.1',
     'lightning>=2.1',
     'torch-geometric>=2.3.0',

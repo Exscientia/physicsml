@@ -177,7 +177,7 @@ dvc-task==0.3.0
     # via dvc
 e3nn==0.5.1
     # via physicsml (pyproject.toml)
-molflux @ git+ssh://git@github.com/Exscientia/molflux.git@main
+molflux==0.0.0a0
     # via physicsml (pyproject.toml)
 entrypoints==0.4
     # via gto
