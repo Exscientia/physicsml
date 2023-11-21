@@ -113,6 +113,9 @@ mean_var_egnn_model = 'physicsml.models.egnn.mean_var.mean_var_egnn_model:MeanVa
 mean_var_mace_model = 'physicsml.models.mace.mean_var.mean_var_mace_model:MeanVarMACEModel'
 mean_var_nequip_model = 'physicsml.models.nequip.mean_var.mean_var_nequip_model:MeanVarNequipModel'
 
+ensemble_ani_model = 'physicsml.models.ani.ensemble.ensemble_ani_model:EnsembleANIModel'
+
+
 [project.entry-points.'molflux.features.plugins.physicsml']
 physicsml_features = 'physicsml.featurisation.physicsml_features.physicsml_features:PhysicsMLFeatures'
 allegro = 'physicsml.models.allegro.allegro_prism:Allegro'
