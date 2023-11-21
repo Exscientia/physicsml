@@ -26,7 +26,7 @@ FORMATTING_TOOLS = ["black[jupyter]~=23.0"]
 LINTING_TOOLS = ["ruff~=0.0.292"]
 LOCKFILE_TOOLS = ["pip-tools>=7.0.0"]  # default --resolver=backtracking
 
-EXTRAS = ["openeye", "rdkit", "ase", "openmm"]
+EXTRAS = ["rdkit", "ase"]
 
 
 def resolve_lockfile_path(python_version: str, extra: Optional[str] = None, rootdir: str = PINNED_VERSIONS) -> pathlib.Path:
@@ -271,7 +271,7 @@ def run_tests(session: nox.Session, *args: str, extra: Optional[str], lockfile_p
     # Setup which files and tests to target
     # install test dependencies and extra dependencies
     if extra == "openmm":
-        session.conda_install("openmm", "openmm-torch", "openmm-ml", "pytorch>=2.0,<2.1", channel=["conda-forge"])
+        session.conda_install("openmm", "openmm-torch", "pytorch>=2.0,<2.1", channel=["conda-forge"])
         package_extras = ",".join(["tests", extra])
 
     elif extra is not None:

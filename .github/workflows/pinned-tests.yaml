@@ -18,6 +18,10 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: 'pip'
+#      - name: Install g++
+#        run: |
+#          sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+#          sudo apt install -y g++-11
       - name: Run pinned tests
         run: |
           pip install nox
