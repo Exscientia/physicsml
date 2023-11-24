@@ -86,7 +86,7 @@ docutils==0.20.1
     #   sphinx
 e3nn==0.5.1
     # via physicsml (pyproject.toml)
-molflux @ git+ssh://git@github.com/Exscientia/molflux.git@main
+molflux==0.0.0a0
     # via physicsml (pyproject.toml)
 evaluate==0.4.1
     # via molflux

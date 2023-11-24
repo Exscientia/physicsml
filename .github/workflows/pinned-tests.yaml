@@ -1,0 +1,34 @@
+name: Pinned Tests
+
+on:
+  workflow_call:
+
+jobs:
+  tests-pinned:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+#      - name: Install g++
+#        run: |
+#          sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+#          sudo apt install -y g++-11
+      - name: Run pinned tests
+        run: |
+          pip install nox
+          nox -s tests_run_pinned-${{ matrix.python-version }}
+      - name: Test Summary
+        uses: test-summary/action@v2
+        with:
+          paths: "test-reports/${{ matrix.python-version }}/.junitxml.*.xml"
+          show: "fail"
+        if: always()
