@@ -4,15 +4,8 @@ from typing import Dict
 import pytest
 import torch
 
-try:
-    import openmm as mm
-    import openmm.app as app
-except ImportError as exp:
-    from physicsml.utils import OptionalDependencyImportError
-
-    raise OptionalDependencyImportError("OPENMM", "openmm") from exp
-
-
+import openmm as mm
+import openmm.app as app
 from physicsml.plugins.openmm.mlpotential import MLPotential
 from physicsml.plugins.openmm.physicsml_potential import (
     PhysicsMLPotentialImplFactory,  # noqa F401

@@ -10,6 +10,6 @@ dependencies:
 - openff-toolkit
 - openmmtools
 - pytorch>=2.0,<2.1
-- pytorch-gpu
+#- pytorch-gpu
 - pip:
   - .[openmm]

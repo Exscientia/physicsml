@@ -9,7 +9,7 @@ from physicsml.models.ani.supervised.default_configs import ANIModelConfig
 from physicsml.utils import OptionalDependencyImportError
 
 
-class ANIModel(PhysicsMLModelBase[ANIModelConfig]):  # type: ignore
+class ANIModel(PhysicsMLModelBase[ANIModelConfig]):
     def _info(self) -> ModelInfo:
         return ModelInfo(
             model_description="",

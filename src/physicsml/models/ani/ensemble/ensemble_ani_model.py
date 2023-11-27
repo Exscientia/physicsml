@@ -4,12 +4,12 @@ from molflux.modelzoo.info import ModelInfo
 
 from physicsml.lightning.model_uncertainty import PhysicsMLUncertaintyModelBase
 from physicsml.models.ani.ani_datamodule import ANIDataModule
-from physicsml.models.ani.mean_var.default_configs import MeanVarANIModelConfig
-from physicsml.models.ani.mean_var.mean_var_ani_module import PooledMeanVarANIModule
+from physicsml.models.ani.ensemble.default_configs import EnsembleANIModelConfig
+from physicsml.models.ani.ensemble.ensemble_ani_module import PooledEnsembleANIModule
 from physicsml.utils import OptionalDependencyImportError
 
 
-class MeanVarANIModel(PhysicsMLUncertaintyModelBase[MeanVarANIModelConfig]):
+class EnsembleANIModel(PhysicsMLUncertaintyModelBase[EnsembleANIModelConfig]):
     def _info(self) -> ModelInfo:
         return ModelInfo(
             model_description="",
@@ -17,11 +17,11 @@ class MeanVarANIModel(PhysicsMLUncertaintyModelBase[MeanVarANIModelConfig]):
         )
 
     @property
-    def _config_builder(self) -> Type[MeanVarANIModelConfig]:
-        return MeanVarANIModelConfig
+    def _config_builder(self) -> Type[EnsembleANIModelConfig]:
+        return EnsembleANIModelConfig
 
     def _instantiate_module(self) -> Any:
-        return PooledMeanVarANIModule(
+        return PooledEnsembleANIModule(
             model_config=self.model_config,
         )
 

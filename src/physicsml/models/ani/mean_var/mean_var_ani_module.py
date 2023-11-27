@@ -4,12 +4,13 @@ from typing import Any, Dict, List, Optional
 
 import torch
 from molflux.modelzoo.models.lightning.module import (
-    LightningModuleBase,
     SingleBatchStepOutput,
 )
 from torchani import ANIModel
 from torchani.aev import AEVComputer
 
+from physicsml.lightning.losses.construct_loss import construct_loss
+from physicsml.lightning.module import PhysicsMLModuleBase
 from physicsml.models.ani.ani_1_2_defaults import (
     ani_1_2_aev_configs,
     ani_1_2_net_sizes_dict,
@@ -31,7 +32,7 @@ def atomic_nets_to_module(net_sizes: Dict[str, Any]) -> Dict[str, torch.nn.Seque
     return atomic_nets
 
 
-class PooledMeanVarANIModule(LightningModuleBase):
+class PooledMeanVarANIModule(PhysicsMLModuleBase):
     """
     Class for pooled ani model
     """
@@ -46,6 +47,8 @@ class PooledMeanVarANIModule(LightningModuleBase):
         super().__init__(model_config=model_config)
 
         self.losses = self.configure_losses()
+
+        self.compute_forces = self.model_config.compute_forces
         self.scaling_mean = model_config.scaling_mean
         self.scaling_std = model_config.scaling_std
 
@@ -116,6 +119,12 @@ class PooledMeanVarANIModule(LightningModuleBase):
         losses: Dict[str, Optional[Any]] = {}
         losses["y_graph_scalars"] = torch.nn.GaussianNLLLoss(eps=0.01)
 
+        if self.model_config.y_node_vector_loss_config is not None:
+            losses["y_node_vector"] = construct_loss(
+                loss_config=self.model_config.y_node_vector_loss_config,
+                column_name="y_node_vector",
+            )
+
         return losses
 
     def _training_step_on_single_source_batch(
@@ -131,7 +140,26 @@ class PooledMeanVarANIModule(LightningModuleBase):
         for k, v in single_source_batch.items():
             single_source_batch[k] = v.to(self.device)
 
-        output = self.forward(single_source_batch)
+        if self.compute_forces:
+            single_source_batch["coordinates"].requires_grad = True
+            output = self(single_source_batch)
+            forces = self.compute_forces_by_gradient(
+                energy=output["y_graph_scalars"],
+                coordinates=single_source_batch["coordinates"],
+            )
+            if output.get("y_node_vector", None) is not None:
+                raise RuntimeError(
+                    "Cannot compute forces is model already outputs y_node_vector.",
+                )
+
+            flat_forces = []
+            for idx, mol in enumerate(single_source_batch["species"]):
+                num_atoms = (mol != -1).sum()
+                flat_forces.append(forces[idx, :num_atoms, :])
+
+            output["y_node_vector"] = torch.cat(flat_forces, dim=0)
+        else:
+            output = self(single_source_batch)
 
         loss = self.compute_loss(output, single_source_batch)
 
@@ -150,7 +178,27 @@ class PooledMeanVarANIModule(LightningModuleBase):
         for k, v in single_source_batch.items():
             single_source_batch[k] = v.to(self.device)
 
-        output = self.forward(single_source_batch)
+        if self.compute_forces:
+            with torch.enable_grad():
+                single_source_batch["coordinates"].requires_grad = True
+                output = self(single_source_batch)
+                forces = self.compute_forces_by_gradient(
+                    energy=output["y_graph_scalars"],
+                    coordinates=single_source_batch["coordinates"],
+                )
+                if output.get("y_node_vector", None) is not None:
+                    raise RuntimeError(
+                        "Cannot compute forces is model already outputs y_node_vector.",
+                    )
+
+                flat_forces = []
+                for idx, mol in enumerate(single_source_batch["species"]):
+                    num_atoms = (mol != -1).sum()
+                    flat_forces.append(forces[idx, :num_atoms, :])
+
+                output["y_node_vector"] = torch.cat(flat_forces, dim=0)
+        else:
+            output = self(single_source_batch)
 
         loss = self.compute_loss(output, single_source_batch)
 
@@ -159,10 +207,33 @@ class PooledMeanVarANIModule(LightningModuleBase):
     def predict_step(self, batch: Any, batch_idx: int, dataloader_idx: int = 0) -> Any:
         """fit method for doing a predict step"""
 
-        batch_clone = {}
-        for k, v in batch.items():
-            batch_clone[k] = v.clone().to(self.device)
-        output = self.forward(batch_clone)
+        if self.compute_forces:
+            with torch.inference_mode(False):
+                batch_clone = {}
+                for k, v in batch.items():
+                    batch_clone[k] = v.clone().to(self.device)
+                batch_clone["coordinates"].requires_grad = True
+                output = self(batch_clone)
+                forces = self.compute_forces_by_gradient(
+                    energy=output["y_graph_scalars"],
+                    coordinates=batch_clone["coordinates"],
+                )
+                if output.get("y_node_vector", None) is not None:
+                    raise RuntimeError(
+                        "Cannot compute forces is model already outputs y_node_vector.",
+                    )
+
+                flat_forces = []
+                for idx, mol in enumerate(batch_clone["species"]):
+                    num_atoms = (mol != -1).sum()
+                    flat_forces.append(forces[idx, :num_atoms, :])
+
+                output["y_node_vector"] = torch.cat(flat_forces, dim=0)
+        else:
+            batch_clone = {}
+            for k, v in batch.items():
+                batch_clone[k] = v.clone().to(self.device)
+            output = self(batch_clone)
 
         detached_output: Any
         detached_output = {}

@@ -8,8 +8,9 @@ from physicsml.models.ani.config import ANIDataModuleConfig
 
 
 @dataclass(config=ConfigDict)
-class MeanVarANIModelConfig(PhysicsMLModelConfig):
+class EnsembleANIModelConfig(PhysicsMLModelConfig):
     which_ani: Literal["ani1", "ani2", "ani_spice"] = "ani1"
+    n_models: int = 4
     scaling_mean: float = 0.0
     scaling_std: float = 1.0
     y_graph_scalars_loss_config: Optional[Dict] = None
