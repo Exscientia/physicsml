@@ -3,10 +3,10 @@ from typing import Dict
 
 import pytest
 import torch
+from openmmml.mlpotential import MLPotential
 
 import openmm as mm
 import openmm.app as app
-from physicsml.plugins.openmm.mlpotential import MLPotential
 from physicsml.plugins.openmm.physicsml_potential import (
     PhysicsMLPotentialImplFactory,  # noqa F401
 )

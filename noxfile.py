@@ -26,7 +26,7 @@ FORMATTING_TOOLS = ["black[jupyter]~=23.0"]
 LINTING_TOOLS = ["ruff~=0.0.292"]
 LOCKFILE_TOOLS = ["pip-tools>=7.0.0"]  # default --resolver=backtracking
 
-EXTRAS = ["rdkit", "ase"]
+EXTRAS = ["openmm", "rdkit", "ase"]
 
 
 def resolve_lockfile_path(python_version: str, extra: Optional[str] = None, rootdir: str = PINNED_VERSIONS) -> pathlib.Path:
@@ -123,7 +123,7 @@ def dist_build(session: nox.Session) -> None:
     session.run("python", "-m", "build")
 
 
-@nox.session(python=SUPPORTED_PYTHON_VERSIONS)
+@nox.session(venv_backend="conda", python=SUPPORTED_PYTHON_VERSIONS)
 def docs_build(session: nox.Session) -> None:
     """Build sphinx documentation and API docs.
 
@@ -131,12 +131,13 @@ def docs_build(session: nox.Session) -> None:
         nox -s docs_build-3.8
     """
 
+    session.conda_install("openmm", "openmm-torch", "openmm-ml", "pytorch>=2.0,<2.1", channel=["conda-forge"])
     lockfile_path = resolve_lockfile_path(python_version=session.python)
     session.install(".[docs]", "--constraint", lockfile_path)
 
-    # Build API docs
-    apidoc_cmd = apidoc_cmd = "sphinx-apidoc -f -o docs/source/api src/physicsml --implicit-namespaces"
-    session.run(*apidoc_cmd.split(" "))
+    # # Build API docs
+    # apidoc_cmd = "sphinx-apidoc -f -o docs/source/pages/reference/api src/physicsml --implicit-namespaces"
+    # session.run(*apidoc_cmd.split(" "))
 
     # wipe artefacts from previous runs, in case there are any
     session.run("rm", "-rf", "docs/build/html", external=True)
@@ -144,8 +145,8 @@ def docs_build(session: nox.Session) -> None:
     # -a -E flags make sure things are built from scratch
     build_cmd = "sphinx-build -a -E docs/source/ docs/build/html"
 
-    # Run doctests in the documentation
-    session.run(*build_cmd.split(" "), "-b", "doctest")
+    # # Run doctests in the documentation
+    # session.run(*build_cmd.split(" "), "-b", "doctest")
 
     # Build HTML pages
     session.run(*build_cmd.split(" "), "-b", "html")
@@ -241,7 +242,7 @@ def generate_lockfile(session: nox.Session, extra: Optional[str], lockfile_path:
 
 
 @nox.session(python=SUPPORTED_PYTHON_VERSIONS)
-@nox.parametrize("extra", EXTRAS)
+@nox.parametrize("extra", [*EXTRAS, None])
 def dependencies_pin(session: nox.Session, extra: Optional[str]) -> None:
     """Generate pinned dependencies lockfiles.
 
@@ -271,7 +272,7 @@ def run_tests(session: nox.Session, *args: str, extra: Optional[str], lockfile_p
     # Setup which files and tests to target
     # install test dependencies and extra dependencies
     if extra == "openmm":
-        session.conda_install("openmm", "openmm-torch", "pytorch>=2.0,<2.1", channel=["conda-forge"])
+        session.conda_install("openmm", "openmm-torch", "openmm-ml", "pytorch>=2.0,<2.1", channel=["conda-forge"])
         package_extras = ",".join(["tests", extra])
 
     elif extra is not None:

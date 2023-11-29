@@ -15,12 +15,13 @@ except ImportError as exp:
 
     raise OptionalCondaDependencyImportError("OPENMM-TORCH", "openmm-torch") from exp
 
-from physicsml.plugins.openmm.load import to_openmm_torchscript
-from physicsml.plugins.openmm.mlpotential import (
+from openmmml.mlpotential import (
     MLPotential,
     MLPotentialImpl,
     MLPotentialImplFactory,
 )
+
+from physicsml.plugins.openmm.load import to_openmm_torchscript
 
 logger = logging.getLogger(__name__)
 
