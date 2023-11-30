@@ -20,10 +20,6 @@ All of the datasets below require a kwarg specifying the backend to process the 
 
 ## ``ani1x``
 
-```{note}
-Description from [source](https://www.nature.com/articles/s41597-020-0473-z).
-```
-
 The ANI-1x and ANI-1ccx ML-based general-purpose datasets for organic molecules
 were developed through active learning; an automated data diversification process.
 The ANI-1x data set contains multiple quantum mechanical properties from 5M density
@@ -34,14 +30,25 @@ for the chemical elements C, H, N, and O are provided: energies, atomic forces, 
 moments, atomic charges, etc.
 
 ```{note}
+Description from [source](https://www.nature.com/articles/s41597-020-0473-z).
+
+The molecules here are point clouds. They do not have any bonds.
+```
+
+## ``ani2x``
+
+The new model, dubbed ANI-2x, is trained to three additional chemical elements: S, F, and Cl.
+Additionally, ANI-2x underwent torsional refinement training to better predict molecular torsion
+profiles. These new features open a wide range of new applications within organic chemistry and
+drug development. These seven elements (H, C, N, O, F, Cl, and S) make up ~90% of drug-like molecules.
+
+```{note}
+Description from [source](https://pubs.acs.org/doi/10.1021/acs.jctc.0c00121).
+
 The molecules here are point clouds. They do not have any bonds.
 ```
 
 ## ``gdb9``
-
-```{note}
-Description from [source](https://www.nature.com/articles/sdata201422).
-```
 
 Computational de novo design of new drugs and materials requires rigorous and unbiased exploration of chemical compound
 space. However, large uncharted territories persist due to its size scaling combinatorially with molecular size. We
@@ -56,12 +63,11 @@ provides quantum chemical properties for a relevant, consistent, and comprehensi
 molecules. This database may serve the benchmarking of existing methods, development of new methods, such as hybrid
 quantum mechanics/machine learning, and systematic identification of structure-property relationships.
 
+```{note}
+Description from [source](https://www.nature.com/articles/sdata201422).
+```
 
 ## ``spice``
-
-```{note}
-Description from [source](https://github.com/openmm/spice-dataset)
-```
 
 SPICE dataset, a new quantum chemistry dataset for training potentials relevant to simulating drug-like small
 molecules interacting with proteins. It contains over 1.1 million conformations for a diverse set of small
@@ -70,14 +76,12 @@ and a wide range of covalent and non-covalent interactions. It provides both for
 calculated at the ωB97M-D3(BJ)/def2-TZVPPD level of theory.
 
 ```{note}
+Description from [source](https://github.com/openmm/spice-dataset).
+
 The molecules here are point clouds. They do not have any bonds. The formal charges are added from the SMILES.
 ```
 
 ## ``pcqm4m_v2``
-
-```{note}
-Description from [source](https://ogb.stanford.edu/docs/lsc/pcqm4mv2/)
-```
 
 PCQM4Mv2 is a quantum chemistry dataset originally curated under the PubChemQC project.
 Based on the PubChemQC, we define a meaningful ML task of predicting DFT-calculated HOMO-LUMO
@@ -90,3 +94,7 @@ expensive on its own.
 
 We provide molecules as the SMILES strings, from which 2D molecule graphs (nodes are atoms and edges
 are chemical bonds). We further provide the equilibrium 3D graph structure for training molecules.
+
+```{note}
+Description from [source](https://ogb.stanford.edu/docs/lsc/pcqm4mv2/).
+```
