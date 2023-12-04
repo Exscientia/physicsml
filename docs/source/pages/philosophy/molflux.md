@@ -17,12 +17,3 @@ modelling. It handles the basic standard API and provides the abstractions on to
 
 If you are not familiar with the ``molflux`` package, have a look at its documentation. It will be the main package you will
 need to use to access the ``physicsml`` models. The ``physicsml`` package is simply an extension of the ``molflux`` package.
-
-
-## Crash course
-
-In this section, we give you a quick crash course of the ``molflux`` package.
-
-## ``molflux[lightning]``
-
-Of particular interest is the ``lightning`` integration of ``molflux``.
