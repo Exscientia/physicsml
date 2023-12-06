@@ -13,13 +13,11 @@ kernelspec:
 # QM datasets
 
 The ``physicsml`` package uses the ``molflux.datasets`` module which provides efficient and convenient handling
-of datasets and direct access to publicly available ones (such as ANI1ccx). It is built on top of huggingface ``datasets``. (LINK)
-
-Checkout the docs for more info LINK.
+of datasets and direct access to publicly available ones (such as ANI1ccx). It is built on top of HuggingFace [``datasets``](https://huggingface.co/docs/datasets/index).
 
 As part of the ``molflux`` package, you can access multiple quantum mechanical datasets directly. The dataset files are
 downloaded from source, processed on the fly, and the dataset is constructed and cached for later use. For more information
-about ``molflux`` datasets, please see the docs LINK.
+about ``molflux`` datasets, please see the docs (TODO: LINK).
 
 All of the datasets below require a kwarg specifying the backend to process the molecules, either ``'rdkit'`` or ``'openeye'``.
 

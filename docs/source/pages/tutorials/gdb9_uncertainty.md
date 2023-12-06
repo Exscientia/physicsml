@@ -10,16 +10,18 @@ kernelspec:
   name: python3
 ---
 
-# QM9 training
+# QM9 with uncertainty
 
-In this tutorial we provide a simple example of training the ANI model on the QM9 dataset. We require the ``rdkit``
-package, so make sure to ``pip install 'physicsml[rdkit]'`` to follow along!
+In this tutorial we provide an example of training a model with uncertainty on the QM9 dataset. To do this, we will use a
+model that supports uncertainty prediction, ``ensemble_ani_model``. For more information on which models support uncertainty,
+check out the [models page](../models/intro.md). We require the ``rdkit`` package, so make sure to ``pip install 'physicsml[rdkit]'``
+to follow along!
 
 
 ## Loading the QM9 dataset
 
-First, let's load the QM9 dataset and select 1000 random datapoints for this example. For more information on the
-loading and using dataset, see the ``molflux`` documentation (TODO: LINK).
+First, let's load the QM9 dataset and select 1000 random datapoints for this example. For more information on the loading
+and using dataset, see the ``molflux`` documentation (TODO: LINK).
 
 ```{code-cell} ipython3
 import numpy as np
@@ -35,8 +37,8 @@ dataset = dataset.select(idxs[:1000])
 print(dataset)
 ```
 
-You can see that there is the ``mol_bytes`` column (which is the ``rdkit`` serialisation of the 3d molecules) and the
-remaining columns of computed properties.
+You can see that there is the ``mol_bytes`` column (which is the ``rdkit`` serialisation of the 3d molecules and the
+remaining columns of computes properties.
 
 
 ## Featurising
@@ -127,18 +129,23 @@ print(split_featurised_dataset)
 
 For more information about splitting datasets, see the ``molflux`` splitting documentation (TODO: LINK).
 
-
 ## Training the model
 
-We can now turn to training the model! We start by defining the model config and the ``x_features`` and the
-``y_features``. Once loaded, we can simply train the model by calling the ``.train()`` method
+We can now turn to training the model! The ``ensemble_ani_model`` is composed of a single AEV computer and a number of
+neural network heads. These heads is trained from different randomly initialised parameters with the idea that each one
+converges to a different minimum of the loss landscape. The final prediction is the mean of the individual predictions
+with a standard deviation computed from their variance. The idea is that if all the models produce a similar prediction for
+a datapoint then it must "more certain", whereas if the predictions are different then the uncertainty is higher.
+
+We start by specifying the model config and the ``x_features``, the ``y_features``, and the ``n_models`` the number of
+heads to use.
 
 ```{code-cell} ipython3
 from molflux.modelzoo import load_from_dict as load_model_from_dict
 
 model = load_model_from_dict(
     {
-        "name": "ani_model",
+        "name": "ensemble_ani_model",
         "config": {
             "x_features": [
                 'physicsml_atom_idxs',
@@ -148,6 +155,7 @@ model = load_model_from_dict(
             ],
             "y_features": ['u0'],
             "which_ani": "ani2",
+            "n_models": 8,
             "y_graph_scalars_loss_config": {
                 "name": "MSELoss",
             },
@@ -160,11 +168,11 @@ model = load_model_from_dict(
             "datamodule": {
                 "y_graph_scalars": ['u0'],
                 "pre_batch": "in_memory",
-                "train": {"batch_size": 64},
+                "train": {"batch_size": 256},
                 "validation": {"batch_size": 128},
             },
             "trainer": {
-                "max_epochs": 10,
+                "max_epochs": 20,
                 "accelerator": "cpu",
                 "logger": False,
             }
@@ -177,28 +185,21 @@ model.train(
 )
 ```
 
-Once trained, you can save the model by doing
+Now that the model is trained, we can inference it to get some predictions! Apart from the usual ``predict`` method (which
+returns the energy predictions), the unceratinty models support ``predict_with_std`` with returns a tuple of energy
+predictions and their corresponding standard deviation prediction. For more information about the uncertainty API in
+``physicsml`` models, see the ``molflux`` documentation (TODO: LINK) on which it is based.
 
-```python
-from molflux.core import save_model
-
-save_model(model, "model_path", featurisation_metadata)
-```
-
-This will persist the model artefacts (the model weights checkpoint), the model config, the featurisation metadata, and
-the requirements file of the environment the model was built in for reproducibility. For more on saving models, check out
-the ``molflux`` documentation (TODO: LINK).
-
-After training, we can now compute some predictions and metrics! We load the ``regression`` suite of metrics which can
-generate a variety of regression metrics and use the model predictions and the reference values to compute them.
+Below we demonstrate how to get predictions and standard deviations and plot them!
 
 ```{code-cell} ipython3
 import json
-
-from molflux.metrics import load_suite
 import matplotlib.pyplot as plt
 
-preds = model.predict(
+from molflux.metrics import load_suite
+
+
+preds, stds = model.predict_with_std(
     split_featurised_dataset["test"],
     datamodule_config={"predict": {"batch_size": 256}}
 )
@@ -207,16 +208,19 @@ regression_suite = load_suite("regression")
 
 scores = regression_suite.compute(
     references=split_featurised_dataset["test"]["u0"],
-    predictions=preds["ani_model::u0"],
+    predictions=preds["ensemble_ani_model::u0"],
 )
 
 print(json.dumps(scores, indent=4))
 
 true_shifted = [x - e for x, e in zip(split_featurised_dataset["test"]["u0"], split_featurised_dataset["test"]["physicsml_total_atomic_energy"])]
-pred_shifted = [x - e for x, e in zip(preds["ani_model::u0"], split_featurised_dataset["test"]["physicsml_total_atomic_energy"])]
-plt.scatter(
+pred_shifted = [x - e for x, e in zip(preds["ensemble_ani_model::u0"], split_featurised_dataset["test"]["physicsml_total_atomic_energy"])]
+
+plt.errorbar(
     true_shifted,
     pred_shifted,
+    yerr=stds["ensemble_ani_model::u0::std"],
+    fmt='o',
 )
 plt.plot([-0.1, 0.1], [-0.1, 0.1], c='r')
 plt.xlabel("True values")

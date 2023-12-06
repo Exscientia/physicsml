@@ -13,8 +13,11 @@ kernelspec:
 # ASE
 
 One of the functionalities that ``physicsml`` provides is an ASE Calculator. This allows you to plug into the ASE ecosystem
-easily. Note: to use this functionality, you must install the PhysicsML package with the ASE optional dependencies as
-``pip install "physicsml[ase]"``.
+easily.
+
+```{note}
+To use the ASE functionality, you need to ``pip install "physicsml[ase]"``.
+```
 
 Let’s look at an example and discuss the available kwargs in detail. Loading a physicsml ASE calculator is simple.
 You can just point at a model path and get a calculator. First, let's quickly train a model
@@ -143,6 +146,6 @@ from ase import Atoms
 atoms = Atoms("H2O", positions=np.array([[0, 0, 0], [0, 0, 1], [0, 1, 0]]))
 atoms.set_calculator(ase_calculator)
 
-print('Energy', atoms.get_potential_energy())
-print('Forces', atoms.get_forces())
+print(atoms.get_potential_energy())
+print(atoms.get_forces())
 ```

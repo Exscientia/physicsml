@@ -15,6 +15,10 @@ kernelspec:
 The ``physicsml`` package provides an OpenMM integration via the ``openmm-ml`` package. This integration allows for standardised
 access and use of all ``physicsml`` models in OpenMM.
 
+```{note}
+To use the OpenMM functionality, you need to create an environment with ``openmm-ml`` and ``pip install "physicsml[openmm]"`` in it.
+```
+
 ## PhysicsML ``MLPotential``
 
 The ``physicsml`` package provides an integration into the ``MLPotential`` class of ``openmm-ml``. The class takes the
@@ -45,10 +49,14 @@ following kwargs
 
 ## Example
 
-Here, we present a brief example of using trained MACE model in the OpenMM integration.
+Here, we present a brief example of using a trained MACE model in the OpenMM integration.
 
-First, we train a model. For the purposes of this tutorial, we just load, initialise the parameters and save the model.
-For more info about training models, checkout the [tutorials](../tutorials/gdb9_training.md).
+First, we train a model. For the purposes of this tutorial, we just load, initialise the parameters randomly and save the model.
+
+```{note}
+Note that all results below are not physical and are presented for illustration purposes only. For more info about
+training models, checkout the [tutorials](../tutorials/gdb9_training.md).
+```
 
 ```{code-cell} ipython3
 :tags: [hide-cell]
@@ -136,7 +144,7 @@ model.module = model._instantiate_module()
 save_model(model, "trained_mace_model", featurisation_metadata)
 ```
 
-Now, we can use this trained model (which is saved in ``trained_mace_model``) in the OpenMM integration. We use a the
+Now, we can use this trained model (which is saved in ``trained_mace_model``) in the OpenMM integration. We use the
 alanine dipeptide system in vacuum.
 
 ```{code-cell} ipython3
@@ -145,7 +153,8 @@ import openmm.app as app
 from openmmml.mlpotential import MLPotential
 from physicsml.plugins.openmm.physicsml_potential import PhysicsMLPotentialImplFactory
 
-# you can download the pdb file from https://github.com/openmm/openmm-ml/blob/main/test/alanine-dipeptide-explicit.pdb.
+# You can download the pdb file from https://github.com/openmm/openmm-ml/blob/main/test/alanine-dipeptide-explicit.pdb.
+# Here, we truncate it to remove all the water molecules for speed
 pdb = app.PDBFile("alanine-dipeptide-truncated.pdb")
 
 # specify the Mace potential

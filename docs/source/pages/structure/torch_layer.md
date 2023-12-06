@@ -1,23 +1,23 @@
 # Torch layer
 
-The lowest layer is ``torch``. This consists of the ``torch`` dataset, dataloader, optimizers, and schedulers.
+The lowest layer is the ``torch`` layer. This consists of the ``torch`` dataset, dataloader, optimizers, and schedulers.
 
 ## Datasets
 
 In the ``physicsml`` package, most models are graph based meaning that they can all share the same low-level graph dataset.
 Once the featurised data is given to the ``train`` or ``predict`` methods, it is internally converted to a ``torch`` compatible
-dataset. This dataset is built on top of ``torch-geometric``, an excellent library for graph-based torch modelling. In general,
-a model developer will rarely have to worry about this (unless they are implement a special kind of model that requires
-extra inputs).
+dataset. This dataset is built on top of ``torch-geometric`` (see their [docs](https://pytorch-geometric.readthedocs.io/en/latest/)),
+an excellent library for graph-based torch modelling. In general, a model developer will rarely have to worry about this
+(unless they are implementing a special kind of model that requires extra inputs).
 
 The only exception to this is the ANI models. They require a special dataset (which is quite simpler) since the only inputs
 they use are ``species`` and ``coordinates``.
 
 ## Dataloaders
 
-Again, we use the ``torch-geometric`` dataloading for almost all models except for the ANI models. Model developers will
+Again, we use the ``torch-geometric`` dataloading for all models except for the ANI models. Model developers will
 rarely have to modify this unless their models require additional inputs. Here, we will describe what a batch from each
-dataloader looks like.
+dataloader looks like and what you need to expect as an input to your model.
 
 ### ``torch-geometric`` batch
 
@@ -107,7 +107,7 @@ An ANI model batch looks like
     The node level vector references for the predictions.
 ```
 
-By default the precision for floating point number is ``float32`` unless specified in the [``trainer`` config](lightning_layer.md#trainer-config)
+By default the precision for floating point number is ``float32`` unless otherwise specified in the ``Trainer`` [config](lightning_layer.md#trainer-config)
 
 ## ``optimizer``
 

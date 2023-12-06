@@ -13,7 +13,7 @@ kernelspec:
 # PhysicsML features
 
 The ``physicsml`` package provides its own featuriser to extract relevant features for 3d models. The featurisers are
-built on top of the ``molflux.features`` (see docs for more info LINK).
+built on top of the ``molflux.features`` (see docs for more info (TODO: LINK)).
 
 The featuriser is built on top of either molecules from ``rdkit`` and ``openeye``. It takes in molecule objects or
 their binary serialisation and uses the built-in ``rdkit`` or ``openeye`` functions to extract a bunch of different atom
@@ -21,7 +21,7 @@ and bond features. By default, it will also extract the coordinates of the molec
 
 ## Config template
 
-First, let's take a look at the featurisation config template. This is based on the ``molflux`` config (see LINK).
+First, let's take a look at the featurisation config template. This is based on the ``molflux`` config (see (TODO: LINK)).
 
 ```python
 featurisation_metadata = {
@@ -128,9 +128,8 @@ in the molecule, and the coordinates of the atoms. For example, CH4 would be
 ### ``atomic_energies``
 
 This is used for adding the self energies of molecules in energy prediction models and is vital for achieving good performance.
-It essentially transforms the problem from predicting total energies to predicting interaction energies. The atomic energies
-for specific atoms can be found in tables online or can be obtained numerically via a convenience function (see LINK). The
-config can then be specified simply as ``{atomic_num: energy}``. For example with the ``ani1x`` dataset, we have
+It essentially transforms the problem from predicting total energies to predicting interaction energies. The
+config can be specified simply as ``{atomic_num: energy}``. For example with the ``ani1x`` dataset, we have
 
 ```python
 {
@@ -161,8 +160,23 @@ dict can be provided for only some atomic numbers while others can just be speci
 ```{note}
 If only a single atomic energy (float) is specified and if the featuriser encounters a charged atom, it will raise a
 warning and use the only specified energy for that atom. If the value is a dictionary of {charges: atomic energies} and
-the featuriser encounters a charged atom which is not specified in the dictionary, then it will raise a RuntimeError
+the featuriser encounters a charged atom which is not specified in the dictionary, then it will raise a ``RuntimeError``
 and fail.
+```
+
+In general, there are two ways to obtain atomic self energies for featurisation: From numerical QM solutions or via dataset
+least squares regression fitting. For the second option, we provide a convenience function to do so. It uses the
+molecule column, the energy column, and the backend to perform a least squares regression using the number and types of
+atoms in the molecules against the energy
+
+```{code-cell} opython3
+from physicsml.utils import get_atomic_energies
+
+get_atomic_energies(
+    dataset["mol_bytes"],
+    dataset['u0'],
+    backend="rdkit"
+)
 ```
 
 
@@ -243,6 +257,12 @@ one-hot encoding of the features and the list of bond indices. For CH4, it would
 
 ```{warning}
 We do not guarantee that the molecules being featurised have correct, sanitised bond features. That is the user's responsibility.
+```
+
+```{important}
+If ``bond_features`` are computed and specified in the model config, then edge features (notice, edge not bond) will be created
+for all the edges in the input graph. The edges which are bona fide bonds will use the features computed here. The edges which
+are not bonds will use a feature vector of zeros with the same dimension as the ``bond_features``.
 ```
 
 ### ``backend``

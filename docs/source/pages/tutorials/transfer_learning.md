@@ -12,10 +12,10 @@ kernelspec:
 
 # Transfer learning
 
-In this tutorial we provide an example of using the transfer learning functionality. We require the ``rdkit``
+In this tutorial, we provide an example of using the transfer learning functionality. We require the ``rdkit``
 package, so make sure to ``pip install 'physicsml[rdkit]'`` to follow along!
 
-In this example, we will train an EGNN model on the ``lumo`` energy of QM9 and then transfer this model to predict the
+We will train an EGNN model on the ``lumo`` energy of QM9 and then transfer this model to predict the
 ``u0`` energy.
 
 ## Pre-trained model
@@ -36,7 +36,7 @@ dataset = dataset.select(idxs[:1000])
 print(dataset)
 ```
 
-You can see that there is the ``mol_bytes`` column (which is the ``rdkit`` serialisation of the 3d molecules and the
+You can see that there is the ``mol_bytes`` column (which is the ``rdkit`` serialisation of the 3d molecules) and the
 remaining columns of computes properties.
 
 Next, we will featurise the dataset. In this example, we start by using the atomic numbers only (since we do not require
@@ -242,7 +242,8 @@ print(split_featurised_dataset)
 ```
 
 Now we need to define the model config. This will be exactly the same as the pre-trained model config with ``lumo``
-substituted with ``u0`` and with the addition of the transfer learning config.
+substituted with ``u0`` and with the addition of the transfer learning config. For more information about the
+transfer learning config, see [here](../structure/transfer_learning.md).
 
 
 ```{code-cell} ipython3
@@ -320,7 +321,7 @@ As you can see, we first specify the path to the pre-trained model. The EGNN mod
 example, we choose to match only the backbone (since the ``lumo`` and ``u0`` tasks are different and the ``pooling_head``
 will not contain any useful learnt information).
 
-Next, we specify a two stage transfer learning. The first, we choose to freeze the ``egnn`` backbone and to train the
+Next, we specify a two stage transfer learning. In the first, we choose to freeze the ``egnn`` backbone and to train the
 ``pooling_head``. Additionally, we override some kwargs (like the batch size and the learning rate). Notice that you
 only need to specify the kwargs you want to override (like the learning rate) and all the rest will be used from the
 main config. In the second stage we train the whole model (no frozen modules) at a lower learning rate for less epochs.

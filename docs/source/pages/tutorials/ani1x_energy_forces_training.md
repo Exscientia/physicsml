@@ -20,7 +20,7 @@ dataset. In this example we choose the ``nequip_model``. We require the ``rdkit`
 ## Loading the ANI1x dataset
 
 First, let's load the ``ani1x`` dataset. We will load a truncated version of the dataset (since it's too large to load
-in the docs)
+in the docs). For more information on the loading and using dataset, see the ``molflux`` documentation (TODO: LINK).
 
 ```{code-cell} ipython3
 from molflux.datasets import load_dataset_from_store
@@ -30,13 +30,14 @@ dataset = load_dataset_from_store("ani1x_truncated.parquet")
 print(dataset)
 ```
 
-You can see that there is the ``mol_bytes`` column (which is the ``rdkit`` serialisation of the 3d molecules and the
+You can see that there is the ``mol_bytes`` column (which is the ``rdkit`` serialisation of the 3d molecules) and the
 remaining columns of computes properties.
 
 
 ## Featurising
 
-Next, we will featurise the dataset. We extract the atomic numbers, coordinates, and atomic self energies.
+Next, we will featurise the dataset. We extract the atomic numbers, coordinates, and atomic self energies. For more
+information on the physicsml features, see [here](../features/intro.md).
 
 ```{code-cell} ipython3
 import logging
@@ -116,7 +117,7 @@ split_featurised_dataset = next(split_dataset(featurised_dataset, shuffle_strate
 
 print(split_featurised_dataset)
 ```
-
+For more information about splitting datasets, see the ``molflux`` splitting documentation (TODO: LINK).
 
 ## Training the model
 
@@ -223,6 +224,7 @@ plt.scatter(
     true_shifted,
     pred_shifted,
 )
+plt.plot([-0.3, 0.3], [-0.3, 0.3], c='r')
 plt.xlabel("True values")
 plt.ylabel("Predicted values")
 plt.show()

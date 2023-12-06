@@ -5,7 +5,7 @@ have been taken from their original repos. To fit into the standardised API, som
 
 ```{important}
 All the models have been check to reproduce the same output at each layer as the code from the original repos. All the
-models have been check for similar speeds to the original repos.
+models have been checked for similar training and inference speeds to the original repos.
 
 As part of the refactor, some modules have been renamed and reorganised for better clarity.
 ```

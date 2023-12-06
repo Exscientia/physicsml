@@ -2,10 +2,11 @@ name: Pinned Tests
 
 on:
   workflow_call:
+  workflow_dispatch:
 
 jobs:
   tests-pinned:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: ["3.11"]
@@ -18,10 +19,6 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: 'pip'
-#      - name: Install g++
-#        run: |
-#          sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-#          sudo apt install -y g++-11
       - name: Run pinned tests
         run: |
           pip install nox

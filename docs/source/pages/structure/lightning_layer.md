@@ -1,12 +1,12 @@
 # Lightning layer
 
 Training deep learning models involves a lot of boilerplate code. From loading the data, to batching, to writing training
-loops, the overhead builds up quite quickly (not to mention the complexity of training on multiple devices/GPUs). And since
-this is a crucial part, a lot of care needs to be given to all of these aspects to do them robustly and efficiently. This
+loops, the overhead builds up quite quickly (not to mention the complexity of training on multiple devices/GPUs). Since
+it is such a crucial part, a lot of care needs to be given to all of these aspects to run efficient and robust training. This
 requires a team of dedicated experts (from machine learning practitioners to software engineers) and no one researcher
 can do this alone.
 
-This is why opted to choose ``lightning`` to handle all of the trainer code in ``physicsml``. ``lightning`` is a library that
+This is why we opted to choose ``lightning`` to handle all of the training code in ``physicsml``. ``lightning`` is a library that
 provides a high level API for training deeplearning models (using ``torch``) which combines both robustness, efficiency,
 and complete flexibility to suite all sorts of applications. For more information, see [Lightning](https://lightning.ai/pytorch-lightning).
 
@@ -18,39 +18,26 @@ There are three main parts: ``modules``, ``datamodules``, and ``Trainers``.
 
 ### ``modules``
 
-The lightning module contains all of the ``torch`` model code for the model to function. It has the familiar ``forward``
-pass (and is a ``torch.nn.Module``). But, there is a lot more functionality built on top. It also defines the ``training_step``
+The lightning ``module`` contains all of the ``torch`` model code for the model to function. It has the familiar ``forward``
+pass (and is a bona fide ``torch.nn.Module``). But, there is a lot more functionality built on top. It defines the ``training_step``
 (and ``validation_step``) which are responsible for computing the loss of a batch passed though the model. ``modules``
 also handle instantiating the optimizers and schedulers and can also perform logging. They also provide complete flexibility
 to modify every part of the training loop via callbacks. For more information, see [Lightning Module](https://lightning.ai/docs/pytorch/stable/common/lightning_module.html)
 and [Lightning callbacks](https://lightning.ai/docs/pytorch/stable/extensions/callbacks.html).
 
-``physicsml`` builds on top of this to provide a tailored module for 3d based physicsml models.
+The ``physicsml`` package builds on top of this to provide a tailored module for 3d based models.
 
 ### ``datamodules``
 
-The lightning datamodule is responsible for handling the data during training. It is essentially a wrapper around what is
-usually the ``train_dataloader`` and the ``validation_dataloader``. For more information, see [Lightning datamodule](https://lightning.ai/docs/pytorch/stable/data/datamodule.html).
+The lightning ``datamodule`` is responsible for handling the data during training. It is essentially a wrapper around what is
+usually the ``train_dataloader`` and the ``validation_dataloader`` to make the data handling more self-contained. For more
+information, see [Lightning datamodule](https://lightning.ai/docs/pytorch/stable/data/datamodule.html).
 
 ### ``Trainers``
 
-The lightning ``Trainer`` is the main object responsible for training. It uses both the ``module`` and the ``datamodule``
+The lightning ``Trainer`` is the main class responsible for training. It uses both the ``module`` and the ``datamodule``
 to run the training. It sets up the training using its specified config and relies on the methods defined in the ``module``
 to run the training. For more information, see [Lightning Trainer](https://lightning.ai/docs/pytorch/stable/common/trainer.html).
-
-
-### Restarting training from a checkpoint
-
-The ``lightning`` ``Trainer`` provides a way yo continue training from a saved checkpoint. We surface this at the ``train``
-method of the model
-
-```python
-model.train(
-  train_data=train_dataset,
-  validation_data=validation_dataset,
-  ckpt_path="path_to_ckpt",
-)
-```
 
 ## Configs
 
@@ -60,7 +47,7 @@ In this section, we go over the configs for the above components.
 ### ``module`` config
 
 The ``module`` configs are specific to each model architecture. They specify the hyperparameters of the models. For more
-information about the config for each model type, see LINK.
+information about the config for each model type, see [models](../models/intro.md).
 
 ### ``datamodule`` config
 
@@ -121,8 +108,8 @@ The ``datamodule`` config controls all aspects of dataloading. It takes in the f
 
 ### ``Trainer`` config
 
-The ``Trainer`` config controls all aspects of training. It is defines in the Lightning [docs](https://lightning.ai/docs/pytorch/stable/common/trainer.html#trainer-class-api)
-but we show the most useful ones here again for convenience
+The ``Trainer`` config controls all aspects of training. It is defined in the Lightning [docs](https://lightning.ai/docs/pytorch/stable/common/trainer.html#trainer-class-api)
+but we show the most useful kwargs here again for convenience
 
 ````{toggle}
 * ``accelerator: str = "auto"``
@@ -161,3 +148,16 @@ but we show the most useful ones here again for convenience
     The value to clip at.
 
 ````
+
+### Restarting training from a checkpoint
+
+The ``lightning`` ``Trainer`` provides a way to continue training from a saved checkpoint. We surface this at the ``train``
+method of the model since it used in the ``Trainer.fit`` method (and not at instantiation)
+
+```python
+model.train(
+  train_data=train_dataset,
+  validation_data=validation_dataset,
+  ckpt_path="path_to_ckpt",
+)
+```
