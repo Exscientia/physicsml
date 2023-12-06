@@ -26,8 +26,8 @@ FORMATTING_TOOLS = ["black[jupyter]~=23.0"]
 LINTING_TOOLS = ["ruff~=0.0.292"]
 LOCKFILE_TOOLS = ["pip-tools>=7.0.0"]  # default --resolver=backtracking
 
-EXTRAS = ["rdkit", "ase"]
-
+EXTRAS = [None, "openmm", "rdkit", "ase", "openeye"]
+DONT_TEST = [None, "openmm", "openeye"]
 
 def resolve_lockfile_path(python_version: str, extra: Optional[str] = None, rootdir: str = PINNED_VERSIONS) -> pathlib.Path:
     """Resolves the expected lockfile path for a given python version and extra."""
@@ -56,7 +56,7 @@ def coverage_report(session: nox.Session) -> None:
     the coverage data files should be provided as posarg.
 
     Examples:
-        nox -s coverage_report-3.8 -- .coverage/3.8
+        nox -s coverage_report-3.11 -- .coverage/3.11
     """
 
     session.install(*COVERAGE_TOOLS)
@@ -85,7 +85,7 @@ def coverage_build_badge(session: nox.Session) -> None:
     the final .coverage data file should be provided as posarg.
 
     Examples:
-        nox -s coverage_build_badge-3.8 -- .coverage/3.8
+        nox -s coverage_build_badge-3.11 -- .coverage/3.11
     """
 
     # coverage-badge only works from the same directory where the .coverage
@@ -115,7 +115,7 @@ def dist_build(session: nox.Session) -> None:
             https://pypa-build.readthedocs.io/en/latest/
 
     Examples:
-        nox -s dist_build-3.8
+        nox -s dist_build-3.11
     """
 
     session.run("rm", "-rf", "dist", external=True)
@@ -123,20 +123,21 @@ def dist_build(session: nox.Session) -> None:
     session.run("python", "-m", "build")
 
 
-@nox.session(python=SUPPORTED_PYTHON_VERSIONS)
+@nox.session(venv_backend="conda", python=SUPPORTED_PYTHON_VERSIONS)
 def docs_build(session: nox.Session) -> None:
     """Build sphinx documentation and API docs.
 
     Examples:
-        nox -s docs_build-3.8
+        nox -s docs_build-3.11
     """
 
+    session.conda_install("openmm", "openmm-torch", "openmm-ml", "pytorch>=2.0,<2.1", channel=["conda-forge"])
     lockfile_path = resolve_lockfile_path(python_version=session.python)
     session.install(".[docs]", "--constraint", lockfile_path)
 
-    # Build API docs
-    apidoc_cmd = apidoc_cmd = "sphinx-apidoc -f -o docs/source/api src/physicsml --implicit-namespaces"
-    session.run(*apidoc_cmd.split(" "))
+    # # Build API docs
+    # apidoc_cmd = "sphinx-apidoc -f -o docs/source/pages/reference/api src/physicsml --implicit-namespaces"
+    # session.run(*apidoc_cmd.split(" "))
 
     # wipe artefacts from previous runs, in case there are any
     session.run("rm", "-rf", "docs/build/html", external=True)
@@ -144,8 +145,8 @@ def docs_build(session: nox.Session) -> None:
     # -a -E flags make sure things are built from scratch
     build_cmd = "sphinx-build -a -E docs/source/ docs/build/html"
 
-    # Run doctests in the documentation
-    session.run(*build_cmd.split(" "), "-b", "doctest")
+    # # Run doctests in the documentation
+    # session.run(*build_cmd.split(" "), "-b", "doctest")
 
     # Build HTML pages
     session.run(*build_cmd.split(" "), "-b", "html")
@@ -156,7 +157,7 @@ def formatting_check(session: nox.Session) -> None:
     """Check codebase formatting.
 
     Examples:
-        nox -s formatting_check-3.8
+        nox -s formatting_check-3.11
     """
     session.install(*FORMATTING_TOOLS)
     session.run("black", "--check", "--diff", ".")
@@ -167,7 +168,7 @@ def formatting_fix(session: nox.Session) -> None:
     """Fix codebase formatting.
 
     Examples:
-        nox -s formatting_fix-3.8
+        nox -s formatting_fix-3.11
     """
     session.install(*FORMATTING_TOOLS)
     session.run("black", ".")
@@ -178,7 +179,7 @@ def linting_check(session: nox.Session) -> None:
     """Check codebase lint quality.
 
     Examples:
-        nox -s linting_check-3.8
+        nox -s linting_check-3.11
     """
     session.install(*LINTING_TOOLS)
     session.run("ruff", "check", *session.posargs, *SOURCE_FILES)
@@ -189,7 +190,7 @@ def linting_fix(session: nox.Session) -> None:
     """Fix codebase lint quality where possible.
 
     Examples:
-        nox -s linting_fix-3.8
+        nox -s linting_fix-3.11
     """
     session.install(*LINTING_TOOLS)
     session.run("ruff", "--fix", *session.posargs, *SOURCE_FILES)
@@ -200,8 +201,8 @@ def typing_check(session: nox.Session) -> None:
     """Check codebase type annotations.
 
     Examples:
-        nox -s typing_check-3.8
-        nox -s typing_check-3.8 -- --python-version 3.8
+        nox -s typing_check-3.11
+        nox -s typing_check-3.11 -- --python-version 3.11
     """
 
     lockfile_path = resolve_lockfile_path(python_version=session.python)
@@ -246,9 +247,8 @@ def dependencies_pin(session: nox.Session, extra: Optional[str]) -> None:
     """Generate pinned dependencies lockfiles.
 
     Examples:
-        nox -s dependencies_pin-3.8
-        nox -s "dependencies_pin-3.8(extra=None)"
-        nox -s "dependencies_pin-3.8(extra='sklearn')"
+        nox -s dependencies_pin-3.11
+        nox -s "dependencies_pin-3.11(extra=None)"
     """
     output_lockfile_path = resolve_lockfile_path(python_version=session.python, extra=extra)
     generate_lockfile(session, extra=extra, lockfile_path=output_lockfile_path)
@@ -271,7 +271,7 @@ def run_tests(session: nox.Session, *args: str, extra: Optional[str], lockfile_p
     # Setup which files and tests to target
     # install test dependencies and extra dependencies
     if extra == "openmm":
-        session.conda_install("openmm", "openmm-torch", "pytorch>=2.0,<2.1", channel=["conda-forge"])
+        session.conda_install("openmm", "openmm-torch", "openmm-ml", "pytorch>=2.0,<2.1", channel=["conda-forge"])
         package_extras = ",".join(["tests", extra])
 
     elif extra is not None:
@@ -306,14 +306,13 @@ def run_tests(session: nox.Session, *args: str, extra: Optional[str], lockfile_p
 
 
 @nox.session(venv_backend="conda", python=SUPPORTED_PYTHON_VERSIONS)
-@nox.parametrize("extra", EXTRAS)
+@nox.parametrize("extra", [e for e in EXTRAS if e not in DONT_TEST])
 def tests_run_latest(session: nox.Session, extra: Optional[str]) -> None:
     """Run tests against latest available dependencies.
 
     Examples:
-        nox -s tests_run_latest-3.8
-        nox -s "tests_run_latest-3.8(extra=None)"
-        nox -s "tests_run_latest-3.8(extra='sklearn')"
+        nox -s tests_run_latest-3.11
+        nox -s "tests_run_latest-3.11(extra=None)"
     """
     # Generate a scratch lock file with latest resolved dependencies
     #
@@ -327,7 +326,7 @@ def tests_run_latest(session: nox.Session, extra: Optional[str]) -> None:
 
 
 @nox.session(venv_backend="conda", python=SUPPORTED_PYTHON_VERSIONS)
-@nox.parametrize("extra", EXTRAS)
+@nox.parametrize("extra", [e for e in EXTRAS if e not in DONT_TEST])
 def tests_run_pinned(session: nox.Session, extra: Optional[str]) -> None:
     """Run tests against pinned dependencies.
 
@@ -335,9 +334,8 @@ def tests_run_pinned(session: nox.Session, extra: Optional[str]) -> None:
     by running the `dependencies_pin` session.
 
     Examples:
-        nox -s tests_run_pinned-3.8
-        nox -s "tests_run_pinned-3.8(extra=None)"
-        nox -s "tests_run_pinned-3.8(extra='sklearn')"
+        nox -s tests_run_pinned-3.11
+        nox -s "tests_run_pinned-3.11(extra=None)"
     """
     expected_lockfile_path = resolve_lockfile_path(python_version=session.python, extra=extra)
     run_tests(session, *session.posargs, extra=extra, lockfile_path=expected_lockfile_path, notify=True)

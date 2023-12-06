@@ -80,9 +80,12 @@ def get_atomic_energies(
         for atom in mol:
             list_atom_counts[idx][atom] += 1
 
-    return {
-        unique_atoms[idx]: energy
-        for idx, energy in enumerate(
-            np.linalg.lstsq(np.array(list_atom_counts), np.array(energies))[0],
-        )
+    least_squares_fit = np.linalg.lstsq(
+        np.array(list_atom_counts),
+        np.array(energies),
+        rcond=None,
+    )[0]
+    self_energy_dict = {
+        unique_atoms[idx]: energy for idx, energy in enumerate(least_squares_fit)
     }
+    return self_energy_dict
