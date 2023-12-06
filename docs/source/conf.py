@@ -37,16 +37,16 @@ exclude_patterns = []
 html_theme = "sphinx_book_theme"
 html_static_path = ["_static"]
 html_baseurl = "https://exscientia.github.io/molflux/"
-# html_favicon = "" Fill in
+html_favicon = "_static/PhysicsML_Logo-01.svg"
 
 html_title = "PhysicsML"
-html_logo = "_static/logo.png"
+html_logo = "_static/PhysicsML_Logo-01.svg"
 
 html_theme_options = {
-    # "logo": {
-    #     "image_dark": "",
-    #     "image_light": "",
-    # },
+    "logo": {
+        "image_dark": "_static/PhysicsML_Logo_PhyML_logo text light.svg",
+        "image_light": "_static/PhysicsML_Logo_PhyML_logo text dark.svg",
+    },
     "repository_url": "https://github.com/Exscientia/physicsml",
     "use_repository_button": True,
     "use_sidenotes": True,
