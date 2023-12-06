@@ -53,10 +53,10 @@ The featuriser is called ``physicsml_features``. To featurise the QM9 dataset fo
 import logging
 logging.disable(logging.CRITICAL)
 
-from molflux.datasets import load_dataset
+from molflux.datasets import load_dataset_from_store
 from molflux.core import featurise_dataset
 
-dataset = load_dataset("gdb9", "rdkit").select(range(1000))
+dataset = load_dataset_from_store("gdb9_trunc.parquet")
 
 featurisation_metadata = {
     "version": 1,

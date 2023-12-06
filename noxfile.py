@@ -131,7 +131,6 @@ def docs_build(session: nox.Session) -> None:
         nox -s docs_build-3.11
     """
 
-    session.conda_install("openmm", "openmm-torch", "openmm-ml", "pytorch>=2.0,<2.1", channel=["conda-forge"])
     lockfile_path = resolve_lockfile_path(python_version=session.python)
     session.install(".[docs]", "--constraint", lockfile_path)
 

@@ -147,7 +147,7 @@ save_model(model, "trained_mace_model", featurisation_metadata)
 Now, we can use this trained model (which is saved in ``trained_mace_model``) in the OpenMM integration. We use the
 alanine dipeptide system in vacuum.
 
-```{code-cell} ipython3
+```{code-block} ipython3
 import openmm as mm
 import openmm.app as app
 from openmmml.mlpotential import MLPotential
@@ -183,5 +183,3 @@ energy = mm_context.getState(getEnergy=True).getPotentialEnergy()
 
 print(energy)
 ```
-
-As you can see, we get an energy prediction!

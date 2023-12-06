@@ -17,9 +17,14 @@ of datasets and direct access to publicly available ones (such as ANI1ccx). It i
 
 As part of the ``molflux`` package, you can access multiple quantum mechanical datasets directly. The dataset files are
 downloaded from source, processed on the fly, and the dataset is constructed and cached for later use. For more information
-about ``molflux`` datasets, please see the docs (TODO: LINK).
+about ``molflux`` datasets, please see the docs (TODO: LINK). All of the datasets below require a kwarg specifying the
+backend to process the molecules, either ``'rdkit'`` or ``'openeye'``
 
-All of the datasets below require a kwarg specifying the backend to process the molecules, either ``'rdkit'`` or ``'openeye'``.
+```python
+from molflux.datasets import load_dataset
+
+dataset = load_dataset("dataset_name", "backend_name")
+```
 
 ## ``ani1x``
 

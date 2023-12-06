@@ -20,13 +20,13 @@ We will train an EGNN model on the ``lumo`` energy of QM9 and then transfer this
 
 ## Pre-trained model
 
-First, let's load the QM9 dataset and select 1000 random datapoints (to speed up this example).
+First, let's load a truncated QM9 dataset with 1000 datapoints
 
 ```{code-cell} ipython3
 import numpy as np
-from molflux.datasets import load_dataset
+from molflux.datasets import load_dataset_from_store
 
-dataset = load_dataset("gdb9", "rdkit")
+dataset = load_dataset_from_store("gdb9_trunc.parquet")
 
 print(dataset)
 

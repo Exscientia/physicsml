@@ -20,14 +20,14 @@ to follow along!
 
 ## Loading the QM9 dataset
 
-First, let's load the QM9 dataset and select 1000 random datapoints for this example. For more information on the loading
+First, let's load a truncated QM9 dataset with 1000 datapoints. For more information on the loading
 and using dataset, see the ``molflux`` documentation (TODO: LINK).
 
 ```{code-cell} ipython3
 import numpy as np
-from molflux.datasets import load_dataset
+from molflux.datasets import load_dataset_from_store
 
-dataset = load_dataset("gdb9", "rdkit")
+dataset = load_dataset_from_store("gdb9_trunc.parquet")
 
 print(dataset)
 
@@ -155,7 +155,7 @@ model = load_model_from_dict(
             ],
             "y_features": ['u0'],
             "which_ani": "ani2",
-            "n_models": 8,
+            "n_models": 3,
             "y_graph_scalars_loss_config": {
                 "name": "MSELoss",
             },
