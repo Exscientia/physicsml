@@ -44,3 +44,13 @@ you.
 
 ## License
 [MIT License](LICENSE)
+
+## Acknowledgements
+
+The ``physicsml`` package has been developed by researchers at Exscientia
+
+* Adam Baskerville
+* Aayush Gupta
+* Ward Haddadin
+* Kavindri Ranasinghe
+* Ben Suutari

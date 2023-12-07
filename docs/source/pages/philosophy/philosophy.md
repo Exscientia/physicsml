@@ -40,3 +40,13 @@ the relevant dependencies.
 
 The modular nature also makes adding new models, features, and datasets much easier. The robust, but simple, abstractions
 can handle simple models and features to complicated ones.
+
+## Acknowledgements
+
+The ``physicsml`` package has been developed by researchers at Exscientia
+
+* Adam Baskerville
+* Aayush Gupta
+* Ward Haddadin
+* Kavindri Ranasinghe
+* Ben Suutari
