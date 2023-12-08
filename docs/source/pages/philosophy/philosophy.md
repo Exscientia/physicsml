@@ -17,8 +17,8 @@ kernelspec:
 PhysicsML is a package for all physics based/related models. It covers the five main pillars of machine learning and is
 tailored to models that act on 3d point clouds.
 
-By building on top of ``molflux`` (TODO: LINK), PhysicsML provides complete and self-contained access to the whole machine learning
-ecosystem to enable you to build machine learning models from scratch.
+By building on top of [``molflux``](https://exscientia.github.io/molflux/index.html), PhysicsML provides complete and
+self-contained access to the whole machine learning ecosystem to enable you to build machine learning models from scratch.
 
 ## The Standard API
 

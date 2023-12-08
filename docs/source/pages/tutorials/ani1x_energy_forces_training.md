@@ -20,7 +20,7 @@ dataset. In this example we choose the ``nequip_model``. We require the ``rdkit`
 ## Loading the ANI1x dataset
 
 First, let's load the ``ani1x`` dataset. We will load a truncated version of the dataset (since it's too large to load
-in the docs). For more information on the loading and using dataset, see the ``molflux`` documentation (TODO: LINK).
+in the docs). For more information on the loading and using dataset, see the ``molflux`` [documentation](https://exscientia.github.io/molflux/pages/datasets/basic_usage.html).
 
 ```{code-cell} ipython3
 from molflux.datasets import load_dataset_from_store
@@ -117,7 +117,7 @@ split_featurised_dataset = next(split_dataset(featurised_dataset, shuffle_strate
 
 print(split_featurised_dataset)
 ```
-For more information about splitting datasets, see the ``molflux`` splitting documentation (TODO: LINK).
+For more information about splitting datasets, see the ``molflux`` splitting [documentation](https://exscientia.github.io/molflux/pages/splits/intro.html).
 
 ## Training the model
 

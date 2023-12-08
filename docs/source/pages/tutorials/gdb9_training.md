@@ -19,7 +19,7 @@ package, so make sure to ``pip install 'physicsml[rdkit]'`` to follow along!
 ## Loading the QM9 dataset
 
 First, let's load a truncated QM9 dataset with 1000 datapoints. For more information on the
-loading and using dataset, see the ``molflux`` documentation (TODO: LINK).
+loading and using dataset, see the ``molflux`` [documentation](https://exscientia.github.io/molflux/pages/datasets/basic_usage.html).
 
 ```{code-cell} ipython3
 import numpy as np
@@ -125,7 +125,7 @@ split_featurised_dataset = next(split_dataset(featurised_dataset, shuffle_strate
 print(split_featurised_dataset)
 ```
 
-For more information about splitting datasets, see the ``molflux`` splitting documentation (TODO: LINK).
+For more information about splitting datasets, see the ``molflux`` splitting [documentation](https://exscientia.github.io/molflux/pages/splits/intro.html).
 
 
 ## Training the model
@@ -187,7 +187,7 @@ save_model(model, "model_path", featurisation_metadata)
 
 This will persist the model artefacts (the model weights checkpoint), the model config, the featurisation metadata, and
 the requirements file of the environment the model was built in for reproducibility. For more on saving models, check out
-the ``molflux`` documentation (TODO: LINK).
+the ``molflux`` [documentation](https://exscientia.github.io/molflux/pages/production/models.html).
 
 After training, we can now compute some predictions and metrics! We load the ``regression`` suite of metrics which can
 generate a variety of regression metrics and use the model predictions and the reference values to compute them.

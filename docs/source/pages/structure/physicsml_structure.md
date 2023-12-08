@@ -1,8 +1,8 @@
 # PhysicsML structure
 
-The ``physicsml`` package is built on top of the ``molflux`` ecosystem (TODO: LINK) which provides a standard API for handling the
-different stages of machine learning pipelines (accessing datasets, featurising, splitting, building models, and computing
-metrics).
+The ``physicsml`` package is built on top of the ``molflux`` [ecosystem](https://exscientia.github.io/molflux/index.html)
+which provides a standard API for handling the different stages of machine learning pipelines (accessing datasets,
+featurising, splitting, building models, and computing metrics).
 
 Apart from that, it also handles and abstracts away the boilerplate code for training ``torch`` models
 via the ``lighthing`` integration ``molflux[lightning]``. For more info about ``lightning``, see their [documentation](https://lightning.ai/pytorch-lightning).

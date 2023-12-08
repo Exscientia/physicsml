@@ -21,7 +21,7 @@ to follow along!
 ## Loading the QM9 dataset
 
 First, let's load a truncated QM9 dataset with 1000 datapoints. For more information on the loading
-and using dataset, see the ``molflux`` documentation (TODO: LINK).
+and using dataset, see the ``molflux`` [documentation](https://exscientia.github.io/molflux/pages/datasets/basic_usage.html).
 
 ```{code-cell} ipython3
 import numpy as np
@@ -127,7 +127,7 @@ split_featurised_dataset = next(split_dataset(featurised_dataset, shuffle_strate
 print(split_featurised_dataset)
 ```
 
-For more information about splitting datasets, see the ``molflux`` splitting documentation (TODO: LINK).
+For more information about splitting datasets, see the ``molflux`` splitting [documentation](https://exscientia.github.io/molflux/pages/splits/intro.html).
 
 ## Training the model
 
@@ -188,7 +188,7 @@ model.train(
 Now that the model is trained, we can inference it to get some predictions! Apart from the usual ``predict`` method (which
 returns the energy predictions), the unceratinty models support ``predict_with_std`` with returns a tuple of energy
 predictions and their corresponding standard deviation prediction. For more information about the uncertainty API in
-``physicsml`` models, see the ``molflux`` documentation (TODO: LINK) on which it is based.
+``physicsml`` models, see the ``molflux`` [documentation](https://exscientia.github.io/molflux/pages/modelzoo/uncertainty.html) on which it is based.
 
 Below we demonstrate how to get predictions and standard deviations and plot them!
 

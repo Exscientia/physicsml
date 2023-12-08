@@ -16,4 +16,5 @@ jobs:
     needs: [ test-run-pinned ]
   publish-package:
     uses: ./.github/workflows/publish-package.yaml
+    secrets: inherit
     needs: [ docs-build-deploy ]

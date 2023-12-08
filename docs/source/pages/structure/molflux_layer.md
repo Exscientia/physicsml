@@ -4,8 +4,8 @@ The ``molflux`` layer handles all the interaction with ``physicsml`` models. All
 inference are handled through its standard API (this does not include interfaces for plugins such as OpenMM, see [plugins](../plugins/openmm.md)
 for that).
 
-For a complete overview of the ``molflux`` API, see its documentation (TODO: LINK). Here, we will discuss the relevant parts for the
-``physicsml`` package.
+For a complete overview of the ``molflux`` API, see its [documentation](https://exscientia.github.io/molflux/pages/standard_api/intro.html).
+Here, we will discuss the relevant parts for the ``physicsml`` package.
 
 The overall pipeline of any model build can be divided into 5 stages
 
@@ -14,7 +14,8 @@ The overall pipeline of any model build can be divided into 5 stages
 Datasets can be accessed via the ``molflux.datasets`` module. There are built in datasets that come available with ``molflux``
 by default (see what is available [here](../datasets/qm_datasets.md)). You can also load preprocessed datasets from disk and remote storage
 (such as ``s3``). If you would like to share your datasets with a wider audience, you can register them in the ``molflux.datasets``
-module and make them available (see the ``molflux`` documentation (TODO: LINK) on how to do that).
+module and make them available (see the ``molflux`` [documentation](https://exscientia.github.io/molflux/pages/datasets/intro.html)
+on how to do that).
 
 ## Featurising datasets
 
@@ -27,7 +28,8 @@ For more information about featurisation, see [PhysicsML features](../features/i
 ## Splitting datasets
 
 The next stage is splitting the datasets for model evaluation and benchmarking. This is done via the ``molflux.splits`` module
-(see docs here (TODO: LINK)). If you already have pre-specified splits for your datasets, then you do not have to worry about this.
+(see docs [here](https://exscientia.github.io/molflux/pages/splits/intro.html)). If you already have pre-specified splits
+for your datasets, then you do not have to worry about this.
 
 ## Model building
 
@@ -94,9 +96,10 @@ save_model(model, "path_to_model", featurisation_metadata)
 
 It is important to persist the ``featurisation_metadata`` so that the model can be inferenced later on. Saving the model
 creates a directory with the model config, featursation config, model artefacts (weights checkpoint), and a frozen requirements
-file to recreate the environment it was trained in. For more information, see the ``molflux`` docs (TODO: LINK).
+file to recreate the environment it was trained in. For more information, see the ``molflux`` [docs](https://exscientia.github.io/molflux/pages/production/models.html).
 
 ## Computing metrics
 
 Once the model is trained, we can finally compute some metrics. This is simply done by computing some predictions and using
-the supplied metrics functionality of ``molflux``. See here for more info (TODO: LINK).
+the supplied metrics functionality of ``molflux``. See [here](https://exscientia.github.io/molflux/pages/metrics/intro.html)
+for more info.

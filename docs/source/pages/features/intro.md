@@ -13,7 +13,8 @@ kernelspec:
 # PhysicsML features
 
 The ``physicsml`` package provides its own featuriser to extract relevant features for 3d models. The featurisers are
-built on top of the ``molflux.features`` (see docs for more info (TODO: LINK)).
+built on top of the ``molflux.features`` (see [docs](https://exscientia.github.io/molflux/pages/features/intro.html)
+for more info).
 
 The featuriser is built on top of either molecules from ``rdkit`` and ``openeye``. It takes in molecule objects or
 their binary serialisation and uses the built-in ``rdkit`` or ``openeye`` functions to extract a bunch of different atom
@@ -21,7 +22,8 @@ and bond features. By default, it will also extract the coordinates of the molec
 
 ## Config template
 
-First, let's take a look at the featurisation config template. This is based on the ``molflux`` config (see (TODO: LINK)).
+First, let's take a look at the featurisation config template. This is based on the ``molflux`` config
+(see [here](https://exscientia.github.io/molflux/pages/production/featurisation.html)).
 
 ```python
 featurisation_metadata = {
