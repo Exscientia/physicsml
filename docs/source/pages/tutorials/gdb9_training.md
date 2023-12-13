@@ -27,15 +27,9 @@ First, let's load a truncated QM9 dataset with 1000 datapoints. For more informa
 loading and using dataset, see the ``molflux`` [documentation](https://exscientia.github.io/molflux/pages/datasets/basic_usage.html).
 
 ```{code-cell} ipython3
-import numpy as np
 from molflux.datasets import load_dataset_from_store
 
 dataset = load_dataset_from_store("gdb9_trunc.parquet")
-
-print(dataset)
-
-idxs = np.random.permutation(range(len(dataset)))
-dataset = dataset.select(idxs[:1000])
 
 print(dataset)
 ```
