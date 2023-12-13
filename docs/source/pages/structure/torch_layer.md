@@ -4,13 +4,13 @@ The lowest layer is the ``torch`` layer. This consists of the ``torch`` dataset,
 
 ## Datasets
 
-In the ``physicsml`` package, most models are graph based meaning that they can all share the same low-level graph dataset.
+In the ``physicsml`` package most models are graph based, meaning that they can all share the same low-level graph dataset.
 Once the featurised data is given to the ``train`` or ``predict`` methods, it is internally converted to a ``torch`` compatible
 dataset. This dataset is built on top of ``torch-geometric`` (see their [docs](https://pytorch-geometric.readthedocs.io/en/latest/)),
 an excellent library for graph-based torch modelling. In general, a model developer will rarely have to worry about this
 (unless they are implementing a special kind of model that requires extra inputs).
 
-The only exception to this is the ANI models. They require a special dataset (which is quite simpler) since the only inputs
+The only exception to this is the ANI models. They require a special dataset (which is simpler) since the only inputs
 they use are ``species`` and ``coordinates``.
 
 ## Dataloaders

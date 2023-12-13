@@ -1,10 +1,10 @@
 # Add your own model architecture
 
-Even though ``physicsml`` ships with a large catalogue of available model-architectures, you can also add you own new
-state-of-the-art architecute and eventually make it available more widely to all users of the package. In this guide,
-we will give an overview of how to do this.
+While ``physicsml`` ships with a large catalogue of available model-architectures, you can also add you own
+state-of-the-art architecture and make it more widely available to all users of the package. In this guide,
+we will provide an overview of how to do this.
 
-There are three main compoenents to adding a new model: The model config, ``molflux`` model API handler, and ``torch`` module
+There are three main components to adding a new model: The model config, ``molflux`` model API handler, and ``torch`` module
 code.
 
 
@@ -33,7 +33,7 @@ whatever your model requires for training and inference. A good simple example t
 ## The ``molflux`` model
 
 The next part is the ``molflux`` model wrapper. This is responsible for handling all the training, inferencing, loading,
-and saving functionality. If you're model is a generic GNN, then this a simple wrapper class
+and saving functionality. If your model is a generic GNN, then this a simple wrapper class
 
 ```python
 from typing import Any, Type
@@ -66,7 +66,7 @@ class MyModel(PhysicsMLModelBase[MyModelConfig]):
 The class inherits the ``PhysicsMLModelBase[MyModelConfig]`` class. The config in the square brackets is an inherited generic
 for typing purposes.
 
-You need to specify the ``ModelInfo`` (which has a deescription of the model and the config), the ``_config_builder`` which
+You need to specify the ``ModelInfo`` (which has a description of the model and the config), the ``_config_builder`` which
 returns the config class (for instantiation internally), and the ``_instantiate_module`` which returns an initialised ``lightning``
 module (more on that below). For a simple example of this, check out the [EGNN model](https://github.com/Exscientia/physicsml/blob/main/src/physicsml/models/egnn/supervised/egnn_model.py).
 

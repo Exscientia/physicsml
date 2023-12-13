@@ -6,7 +6,7 @@ The TensorNet model as proposed in [TensorNet: Cartesian Tensor Representations 
 ## Supervised
 
 The base ``tesnor_net_model`` as proposed in the original paper. It has the ability to output graph scalars,
-node scalars, and a optionally a node vector as the gradient of the graph scalars. The model has the following config
+node scalars, and optionally a node vector as the gradient of the graph scalars. The model has the following config
 
 
 ```{toggle}

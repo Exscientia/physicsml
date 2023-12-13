@@ -35,7 +35,7 @@ a node vector as the gradient of the graph scalars (e.g. force). The model has t
 ## Supervised mean and variance
 
 The ``mean_var_ani_model`` which predicts a mean and variance for the ``y_graph_scalars`` during training and inference.
-It has the same comfig as the ``ani_model`` but without the ability to specify a ``y_graph_scalars_loss_config`` which is
+It has the same config as the ``ani_model`` but without the ability to specify a ``y_graph_scalars_loss_config`` which is
 hardcoded to be the ``torch.nn.GaussianNLLLoss``. The model config is as follows
 
 ```{toggle}
@@ -61,7 +61,7 @@ hardcoded to be the ``torch.nn.GaussianNLLLoss``. The model config is as follows
 
 ## Supervised ensemble
 
-The ``ensemble_ani_model`` which uses a single AEV computer and multiple ANI models. It has the same comfig as the ``ani_model``
+The ``ensemble_ani_model`` which uses a single AEV computer and multiple ANI models. It has the same config as the ``ani_model``
 but with the additional ``n_models`` argument for the number of models in the ensemble. The model config is as follows
 
 ```{toggle}

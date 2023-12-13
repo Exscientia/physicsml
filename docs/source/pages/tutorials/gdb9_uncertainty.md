@@ -132,10 +132,10 @@ For more information about splitting datasets, see the ``molflux`` splitting [do
 ## Training the model
 
 We can now turn to training the model! The ``ensemble_ani_model`` is composed of a single AEV computer and a number of
-neural network heads. These heads is trained from different randomly initialised parameters with the idea that each one
+neural network heads. These heads are trained from different randomly initialised parameters with the idea that each one
 converges to a different minimum of the loss landscape. The final prediction is the mean of the individual predictions
 with a standard deviation computed from their variance. The idea is that if all the models produce a similar prediction for
-a datapoint then it must "more certain", whereas if the predictions are different then the uncertainty is higher.
+a datapoint then it must be "more certain", whereas if the predictions are different then the uncertainty is higher.
 
 We start by specifying the model config and the ``x_features``, the ``y_features``, and the ``n_models`` the number of
 heads to use.
@@ -186,8 +186,8 @@ model.train(
 ```
 
 Now that the model is trained, we can inference it to get some predictions! Apart from the usual ``predict`` method (which
-returns the energy predictions), the unceratinty models support ``predict_with_std`` with returns a tuple of energy
-predictions and their corresponding standard deviation prediction. For more information about the uncertainty API in
+returns the energy predictions), the uncertainty models support ``predict_with_std`` which returns a tuple of energy
+predictions and their corresponding standard deviation predictions. For more information about the uncertainty API in
 ``physicsml`` models, see the ``molflux`` [documentation](https://exscientia.github.io/molflux/pages/modelzoo/uncertainty.html) on which it is based.
 
 Below we demonstrate how to get predictions and standard deviations and plot them!
