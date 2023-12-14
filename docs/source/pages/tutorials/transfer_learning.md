@@ -173,7 +173,7 @@ We now have a dummy pre-trained model.
 
 ## Transfer learning
 
-Finally, we get to the transfer learning part. First, we need to re-featurise the dataset to include the atomic self energies
+Finally, we come to the transfer learning. First, we need to re-featurise the dataset to include the atomic self energies
 for ``'u0'`` and then split it for training (ignoring that this is the same dataset for pretraining and transferring, it's only
 for demonstration).
 
@@ -317,13 +317,13 @@ model_config = {
 ```
 
 As you can see, we first specify the path to the pre-trained model. The EGNN model contains two main submodules: the
-``egnn`` backbone (the message passing part) and the ``pooling_head`` (for pooling and generating predictions). In this
+``egnn`` backbone (message passing) and the ``pooling_head`` (for pooling and generating predictions). In this
 example, we choose to match only the backbone (since the ``lumo`` and ``u0`` tasks are different and the ``pooling_head``
 will not contain any useful learnt information).
 
 Next, we specify a two stage transfer learning. In the first, we choose to freeze the ``egnn`` backbone and to train the
-``pooling_head``. Additionally, we override some kwargs (like the batch size and the learning rate). Notice that you
-only need to specify the kwargs you want to override (like the learning rate) and all the rest will be used from the
+``pooling_head``. Additionally, we override some kwargs (such as batch size and learning rate). Notice that you
+only need to specify the kwargs you want to override (such as learning rate) and all the rest will be used from the
 main config. In the second stage we train the whole model (no frozen modules) at a lower learning rate for less epochs.
 
 

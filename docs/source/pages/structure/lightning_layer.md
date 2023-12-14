@@ -2,13 +2,12 @@
 
 Training deep learning models involves a lot of boilerplate code. From loading the data, to batching, to writing training
 loops, the overhead builds up quite quickly (not to mention the complexity of training on multiple devices/GPUs). Since
-it is such a crucial part, a lot of care needs to be given to all of these aspects to run efficient and robust training. This
-requires a team of dedicated experts (from machine learning practitioners to software engineers) and no one researcher
-can do this alone.
+model training is such a crucial step, a lot of care needs to be given to all of these aspects to do it efficiently and robustly. This
+requires a team of dedicated experts from machine learning practitioners to software engineers.
 
 This is why we opted to choose ``lightning`` to handle all of the training code in ``physicsml``. ``lightning`` is a library that
-provides a high level API for training deeplearning models (using ``torch``) which combines both robustness, efficiency,
-and complete flexibility to suite all sorts of applications. For more information, see [Lightning](https://lightning.ai/pytorch-lightning).
+provides a high level API for training deep learning models (using ``torch``) which combines both robustness, efficiency,
+and complete flexibility to suit all sorts of applications. For more information, see [Lightning](https://lightning.ai/pytorch-lightning).
 
 ## Inner workings
 

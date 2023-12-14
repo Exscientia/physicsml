@@ -73,7 +73,7 @@ model.train(
 )
 ```
 
-The ``validation_data`` is optional (for early stopping and monitoring) and models can in princple be trained on a ``train_data``
+The ``validation_data`` is optional (for early stopping and monitoring) and models can in principle be trained on a ``train_data``
 only.
 
 Under the hood, this sets up a bunch of objects from ``lightning`` to run the training. First, it instantiates the ``torch``
@@ -100,6 +100,6 @@ file to recreate the environment it was trained in. For more information, see th
 
 ## Computing metrics
 
-Once the model is trained, we can finally compute some metrics. This is simply done by computing some predictions and using
+Once the model is trained, we can compute some metrics. This is simply done by computing some predictions and using
 the supplied metrics functionality of ``molflux``. See [here](https://exscientia.github.io/molflux/pages/metrics/intro.html)
 for more info.

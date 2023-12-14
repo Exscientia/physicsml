@@ -13,7 +13,7 @@ kernelspec:
 # MolFlux
 
 The ``physicsml`` package is built on top of ``molflux``, a foundational package for molecular predictive
-modelling. It handles the basic standard API and provides the abstractions on top of which the ``physicsml`` package is built.
+modelling. ``molflux`` handles the basic standard API and provides the abstractions on top of which the ``physicsml`` package is built.
 
-If you are not familiar with the ``molflux`` package, have a look at its [documentation](https://exscientia.github.io/molflux/index.html).
-It will be the main package you will need to use the ``physicsml`` models. The ``physicsml`` package is simply an extension of ``molflux``.
+If you are not familiar with the ``molflux`` package, you can browse its [documentation](https://exscientia.github.io/molflux/index.html).
+``molflux`` will be the main package you will need to use the ``physicsml`` models.

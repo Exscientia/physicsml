@@ -12,8 +12,13 @@ kernelspec:
 
 # QM9 training
 
-In this tutorial we provide a simple example of training the ANI model on the QM9 dataset. We require the ``rdkit``
-package, so make sure to ``pip install 'physicsml[rdkit]'`` to follow along!
+In this tutorial we provide a simple example of training the ANI model on the QM9 dataset. It will take you through
+the steps required from access the dataset to featurisation and model training. The ``physicsml`` package is built as
+an extension to ``molflux`` and so we will be mainly importing functionality from there. Check out the
+``molflux`` [docs](https://exscientia.github.io/molflux/index.html) for more info!
+
+We also require the ``rdkit`` package to handle the molecules and extract molecular information like atomic numbers and
+coordinates, so make sure to ``pip install 'physicsml[rdkit]'`` to follow along!
 
 
 ## Loading the QM9 dataset
@@ -22,21 +27,18 @@ First, let's load a truncated QM9 dataset with 1000 datapoints. For more informa
 loading and using dataset, see the ``molflux`` [documentation](https://exscientia.github.io/molflux/pages/datasets/basic_usage.html).
 
 ```{code-cell} ipython3
-import numpy as np
 from molflux.datasets import load_dataset_from_store
 
 dataset = load_dataset_from_store("gdb9_trunc.parquet")
 
 print(dataset)
-
-idxs = np.random.permutation(range(len(dataset)))
-dataset = dataset.select(idxs[:1000])
-
-print(dataset)
 ```
 
-You can see that there is the ``mol_bytes`` column (which is the ``rdkit`` serialisation of the 3d molecules) and the
-remaining columns of computed properties.
+The QM9 dataset contains multiple computed quantum mechanical properties of small molecules. For more information on
+the individual properties, visit the [original paper](https://www.nature.com/articles/sdata201422). Here, we will focus
+on the ``u0`` property which is the total atomic energy. You can also see that there is the ``mol_bytes`` column
+which is the [``rdkit`` serialisation](https://www.rdkit.org/docs/source/rdkit.Chem.rdchem.html#rdkit.Chem.rdchem.Mol.ToBinary)
+of the 3d molecules.
 
 
 ## Featurising
@@ -97,7 +99,11 @@ You can see that we now have the extra columns for
 * ``physicsml_atom_idxs``: The index of the atoms in the molecules
 * ``physicsml_atom_numbers``: The atomic numbers mapped using the mapping dictionary
 * ``physicsml_coordinates``: The coordinates of the atoms
-* ``physicsml_total_atomic_energy``: The total atomic self energy
+* ``physicsml_total_atomic_energy``: The [total atomic self energy](../features/intro.html#atomic-energies)
+
+The ``"as": "{feature_name}"`` kwarg controls how the computed feature names appear in the dataset. For more information,
+see [Tweaking feature column names](https://exscientia.github.io/molflux/pages/datasets/featurising.html#tweaking-the-featurised-columns-names)
+in the ``molflux`` docs.
 
 ## Splitting
 
@@ -130,54 +136,68 @@ For more information about splitting datasets, see the ``molflux`` splitting [do
 
 ## Training the model
 
-We can now turn to training the model! We start by defining the model config and the ``x_features`` and the
-``y_features``. Once loaded, we can simply train the model by calling the ``.train()`` method
+We can now turn to training the model! ``physicsml`` models are accessed and used via ``molflux.modelzoo`` which defines the
+standard API and handling. For more information, check out the ``molflux.modelzoo`` [docs](https://exscientia.github.io/molflux/pages/modelzoo/intro.html).
+
+The recommended way to load models is by defining a model config (there are other ways, see the ``molflux.modelzoo`` [docs](https://exscientia.github.io/molflux/pages/modelzoo/intro.html)).
+A model config is a dictionary with a ``"name"`` key (for the model name) and a ``"config"`` key (for the model config).
+In the ``"config"``, we specify the ``x_features`` (the computed feature columns for the model), ``y_features`` (the properties
+to fit), and a bunch of model specific kwargs. For a full description of model configs, see [``molflux`` layer](../structure/molflux_layer.html#model-loading).
+
+In general, model configs can have defaults so that users do not need to specify them every time but here we show them
+explicitly for illustration.
+
 
 ```{code-cell} ipython3
 from molflux.modelzoo import load_from_dict as load_model_from_dict
 
 model = load_model_from_dict(
     {
-        "name": "ani_model",
+        "name": "ani_model",                        # model name
         "config": {
-            "x_features": [
+            "x_features": [                         # x features
                 'physicsml_atom_idxs',
                 'physicsml_atom_numbers',
                 'physicsml_coordinates',
                 'physicsml_total_atomic_energy',
             ],
-            "y_features": ['u0'],
-            "which_ani": "ani2",
-            "y_graph_scalars_loss_config": {
+            "y_features": ['u0'],                   # y features
+            "which_ani": "ani2",                    # model specific kwarg to specify which ANI model to use (ani1 or ani2)
+            "y_graph_scalars_loss_config": {        # the loss config for the y graph scalars
                 "name": "MSELoss",
             },
-            "optimizer": {
+            "optimizer": {                          # The optimizer config
                 "name": "AdamW",
                 "config": {
                     "lr": 1e-3,
                 }
             },
-            "datamodule": {
-                "y_graph_scalars": ['u0'],
-                "pre_batch": "in_memory",
-                "train": {"batch_size": 64},
-                "validation": {"batch_size": 128},
+            "datamodule": {                         # The datamodule config
+                "y_graph_scalars": ['u0'],          # specify which y features are graph level scalars
+                "pre_batch": "in_memory",           # pre batch the dataset for faster data loading
+                "train": {"batch_size": 64},        # specify the training batch size
+                "validation": {"batch_size": 128},  # specify the val batch size (which can be different from the train size)
             },
-            "trainer": {
-                "max_epochs": 10,
-                "accelerator": "cpu",
-                "logger": False,
+            "trainer": {                            # the trainer config
+                "max_epochs": 10,                   # the maximum number of epochs
+                "accelerator": "cpu",               # the accelerator, here cpu
+                "logger": False,                    # whether to log losses
             }
         }
     }
 )
+```
 
+
+Once loaded, we can simply train the model by calling the ``.train()`` method
+
+```{code-cell} ipython3
 model.train(
     train_data=split_featurised_dataset["train"]
 )
 ```
 
-Once trained, you can save the model by doing
+Once trained, you can save the model by
 
 ```python
 from molflux.core import save_model
