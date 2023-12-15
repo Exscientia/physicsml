@@ -175,7 +175,8 @@ class NodeOperation(nn.Module):
                 c_hidden=c_hidden,
                 c_out=1,
                 num_layers=num_layers_phi,
-                output_activation="Sigmoid",
+                mlp_activation=mlp_activation,
+                output_activation=None,
             )
         else:
             self.phi_x = None
@@ -207,14 +208,14 @@ class NodeOperation(nn.Module):
         # update nodes with residual connection
         node_feats = self.phi_n(torch.cat([node_feats, m_i], dim=-1)) + node_feats
         if self.modify_coords and (self.phi_x is not None):
-            _, r_ji = compute_lengths_and_vectors(
+            abs_r_ji, r_ji = compute_lengths_and_vectors(
                 positions=coordinates,
                 edge_index=edge_indices,
                 cell=cell,
                 cell_shift_vector=cell_shift_vector,
             )
 
-            delta_coords_ji = r_ji * self.phi_x(m_ji)
+            delta_coords_ji = r_ji / (abs_r_ji + 1) * self.phi_x(m_ji)
             delta_coords_i = scatter(
                 src=delta_coords_ji,
                 index=receiver,
@@ -346,7 +347,7 @@ class EGNN(torch.nn.Module):
             c_in=num_node_feats,
             c_hidden=c_hidden,
             c_out=c_hidden,
-            num_layers=2,
+            num_layers=num_layers_phi,
             dropout=dropout,
             mlp_activation=mlp_activation,
             output_activation=mlp_output_activation,
@@ -359,7 +360,7 @@ class EGNN(torch.nn.Module):
                 c_in=num_edge_feats,
                 c_hidden=c_hidden,
                 c_out=c_hidden,
-                num_layers=2,
+                num_layers=num_layers_phi,
                 dropout=dropout,
                 mlp_activation=mlp_activation,
                 output_activation=mlp_output_activation,
