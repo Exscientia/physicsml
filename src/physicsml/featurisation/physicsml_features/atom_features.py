@@ -104,9 +104,12 @@ def compute_atom_features(
             feat = atom_feature_callables(backend)[feature_name]["method"](atom)
 
             values_dict = atom_feature_callables(backend)[feature_name]["values"]
-            feat_value: int = values_dict[feat]
+            if values_dict is not None:
+                feat_value: int = values_dict[feat]
+            else:
+                feat_value = feat
 
-            if one_hot_encoded:
+            if one_hot_encoded and isinstance(feat_value, int):
                 one_hot_feat: List = [0] * len(values_dict)
                 one_hot_feat[feat_value] = 1
                 atom_features += one_hot_feat
