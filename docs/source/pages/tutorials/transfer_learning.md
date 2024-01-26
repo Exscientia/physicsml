@@ -36,6 +36,17 @@ dataset = dataset.select(idxs[:1000])
 print(dataset)
 ```
 
+````{note}
+The dataset above is a truncated version to run efficiently in the docs. For running this locally, load the entire dataset
+by doing
+
+```{code-block} python
+from molflux.datasets import load_dataset
+
+dataset = load_dataset("gdb9", "rdkit")
+```
+````
+
 You can see that there is the ``mol_bytes`` column (which is the ``rdkit`` serialisation of the 3d molecules) and the
 remaining columns of computes properties.
 

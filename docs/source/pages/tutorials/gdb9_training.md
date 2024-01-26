@@ -34,6 +34,17 @@ dataset = load_dataset_from_store("gdb9_trunc.parquet")
 print(dataset)
 ```
 
+````{note}
+The dataset above is a truncated version to run efficiently in the docs. For running this locally, load the entire dataset
+by doing
+
+```{code-block} python
+from molflux.datasets import load_dataset
+
+dataset = load_dataset("gdb9", "rdkit")
+```
+````
+
 The QM9 dataset contains multiple computed quantum mechanical properties of small molecules. For more information on
 the individual properties, visit the [original paper](https://www.nature.com/articles/sdata201422). Here, we will focus
 on the ``u0`` property which is the total atomic energy. You can also see that there is the ``mol_bytes`` column
