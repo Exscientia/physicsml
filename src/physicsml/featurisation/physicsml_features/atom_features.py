@@ -17,7 +17,7 @@ class DuplicateFilter:
 
 
 dup_filter = DuplicateFilter()
-logger.addFilter(dup_filter)  # type: ignore
+logger.addFilter(dup_filter)
 
 
 def compute_atom_numbers_and_coordinates(
