@@ -4,7 +4,7 @@
 #
 #    nox -s dependencies_pin-3.10(extra=None)
 #
-absl-py==2.0.0
+absl-py==2.1.0
     # via tensorboard
 accessible-pygments==0.0.4
     # via pydata-sphinx-theme
@@ -14,7 +14,7 @@ aiohttp==3.9.1
     #   fsspec
 aiosignal==1.3.1
     # via aiohttp
-alabaster==0.7.13
+alabaster==0.7.16
     # via sphinx
 apeye==1.4.1
     # via sphinx-toolbox
@@ -28,27 +28,27 @@ asttokens==2.4.1
     # via stack-data
 async-timeout==4.0.3
     # via aiohttp
-attrs==23.1.0
+attrs==23.2.0
     # via
     #   aiohttp
     #   jsonschema
     #   jupyter-cache
     #   referencing
-autodocsumm==0.2.11
+autodocsumm==0.2.12
     # via sphinx-toolbox
 babel==2.14.0
     # via
     #   pydata-sphinx-theme
     #   sphinx
-beautifulsoup4==4.12.2
+beautifulsoup4==4.12.3
     # via
     #   pydata-sphinx-theme
     #   sphinx-toolbox
-boto3==1.34.1
+boto3==1.34.29
     # via
     #   cloudpathlib
     #   molflux
-botocore==1.34.1
+botocore==1.34.29
     # via
     #   boto3
     #   molflux
@@ -65,17 +65,17 @@ charset-normalizer==3.3.2
     # via requests
 click==8.1.7
     # via jupyter-cache
-cloudpathlib==0.16.0
+cloudpathlib==0.17.0
     # via molflux
 colorama==0.4.6
     # via molflux
-comm==0.2.0
+comm==0.2.1
     # via
     #   ipykernel
     #   ipywidgets
 contourpy==1.2.0
     # via matplotlib
-coverage==7.3.3
+coverage==7.4.1
     # via
     #   coverage-badge
     #   physicsml (pyproject.toml)
@@ -85,7 +85,7 @@ cssutils==2.9.0
     # via dict2css
 cycler==0.12.1
     # via matplotlib
-datasets==2.15.0
+datasets==2.16.1
     # via
     #   evaluate
     #   molflux
@@ -100,7 +100,7 @@ dill==0.3.7
     #   datasets
     #   evaluate
     #   multiprocess
-docutils==0.18.1
+docutils==0.20.1
     # via
     #   myst-parser
     #   pydata-sphinx-theme
@@ -125,15 +125,16 @@ exceptiongroup==1.2.0
     #   pytest
 executing==2.0.1
     # via stack-data
-fastjsonschema==2.19.0
+fastjsonschema==2.19.1
     # via nbformat
 filelock==3.13.1
     # via
     #   cachecontrol
+    #   datasets
     #   huggingface-hub
     #   sphinx-toolbox
     #   torch
-fonttools==4.46.0
+fonttools==4.47.2
     # via matplotlib
 frozenlist==1.4.1
     # via
@@ -147,7 +148,7 @@ fsspec==2023.10.0
     #   lightning
     #   molflux
     #   pytorch-lightning
-google-auth==2.25.2
+google-auth==2.27.0
     # via
     #   google-auth-oauthlib
     #   tensorboard
@@ -161,7 +162,7 @@ h5py==3.10.0
     #   physicsml (pyproject.toml)
 html5lib==1.1
     # via sphinx-toolbox
-huggingface-hub==0.19.4
+huggingface-hub==0.20.3
     # via
     #   datasets
     #   evaluate
@@ -180,9 +181,9 @@ importlib-metadata==4.13.0
     #   torchani
 iniconfig==2.0.0
     # via pytest
-ipykernel==6.27.1
+ipykernel==6.29.0
     # via myst-nb
-ipython==8.18.1
+ipython==8.20.0
     # via
     #   ipykernel
     #   ipywidgets
@@ -191,7 +192,7 @@ ipywidgets==8.1.1
     # via physicsml (pyproject.toml)
 jedi==0.19.1
     # via ipython
-jinja2==3.1.2
+jinja2==3.1.3
     # via
     #   myst-parser
     #   sphinx
@@ -206,9 +207,9 @@ joblib==1.3.2
     # via
     #   molflux
     #   scikit-learn
-jsonschema==4.20.0
+jsonschema==4.21.1
     # via nbformat
-jsonschema-specifications==2023.11.2
+jsonschema-specifications==2023.12.1
     # via jsonschema
 jupyter-cache==1.0.0
     # via myst-nb
@@ -216,7 +217,7 @@ jupyter-client==8.6.0
     # via
     #   ipykernel
     #   nbclient
-jupyter-core==5.5.0
+jupyter-core==5.7.1
     # via
     #   ipykernel
     #   jupyter-client
@@ -224,27 +225,27 @@ jupyter-core==5.5.0
     #   nbformat
 jupyterlab-widgets==3.0.9
     # via ipywidgets
-jupytext==1.16.0
+jupytext==1.16.1
     # via physicsml (pyproject.toml)
 kiwisolver==1.4.5
     # via matplotlib
 lark-parser==0.12.0
     # via torchani
-lightning==2.1.2
+lightning==2.1.3
     # via physicsml (pyproject.toml)
-lightning-utilities==0.10.0
+lightning-utilities==0.10.1
     # via
     #   lightning
     #   pytorch-lightning
     #   torchmetrics
-markdown==3.5.1
+markdown==3.5.2
     # via tensorboard
 markdown-it-py==3.0.0
     # via
     #   jupytext
     #   mdit-py-plugins
     #   myst-parser
-markupsafe==2.1.3
+markupsafe==2.1.4
     # via
     #   jinja2
     #   sphinx-jinja2-compat
@@ -267,7 +268,7 @@ mergedeep==1.3.4
     # via molflux
 molflux==0.0.1
     # via physicsml (pyproject.toml)
-more-itertools==10.1.0
+more-itertools==10.2.0
     # via molflux
 mpmath==1.3.0
     # via sympy
@@ -297,11 +298,11 @@ nbformat==5.9.2
     #   jupytext
     #   myst-nb
     #   nbclient
-nest-asyncio==1.5.8
+nest-asyncio==1.6.0
     # via ipykernel
 networkx==3.2.1
     # via torch
-numpy==1.26.2
+numpy==1.26.3
     # via
     #   ase
     #   contourpy
@@ -343,7 +344,7 @@ packaging==23.2
     #   pytorch-lightning
     #   sphinx
     #   torchmetrics
-pandas==2.1.4
+pandas==2.2.0
     # via
     #   datasets
     #   evaluate
@@ -352,7 +353,7 @@ parso==0.8.3
     # via jedi
 pexpect==4.9.0
     # via ipython
-pillow==10.1.0
+pillow==10.2.0
     # via
     #   matplotlib
     #   rdkit
@@ -360,13 +361,13 @@ platformdirs==4.1.0
     # via
     #   apeye
     #   jupyter-core
-pluggy==1.3.0
+pluggy==1.4.0
     # via pytest
 prompt-toolkit==3.0.43
     # via ipython
 protobuf==4.23.4
     # via tensorboard
-psutil==5.9.6
+psutil==5.9.8
     # via
     #   ipykernel
     #   torch-geometric
@@ -374,7 +375,7 @@ ptyprocess==0.7.0
     # via pexpect
 pure-eval==0.2.2
     # via stack-data
-pyarrow==14.0.1
+pyarrow==15.0.0
     # via
     #   datasets
     #   molflux
@@ -386,9 +387,9 @@ pyasn1==0.5.1
     #   rsa
 pyasn1-modules==0.3.0
     # via google-auth
-pydantic==1.10.13
+pydantic==1.10.14
     # via molflux
-pydata-sphinx-theme==0.14.4
+pydata-sphinx-theme==0.15.2
     # via sphinx-book-theme
 pygments==2.17.2
     # via
@@ -402,7 +403,7 @@ pyparsing==3.1.1
     # via
     #   matplotlib
     #   torch-geometric
-pytest==7.4.3
+pytest==7.4.4
     # via physicsml (pyproject.toml)
 python-dateutil==2.8.2
     # via
@@ -411,7 +412,7 @@ python-dateutil==2.8.2
     #   matplotlib
     #   molflux
     #   pandas
-pytorch-lightning==2.1.2
+pytorch-lightning==2.1.3
     # via lightning
 pytz==2023.3.post1
     # via pandas
@@ -434,11 +435,11 @@ qlient==1.0.0
     # via molflux
 qlient-core==1.0.1
     # via qlient
-rapidfuzz==3.5.2
+rapidfuzz==3.6.1
     # via thefuzz
-rdkit==2023.9.2
+rdkit==2023.9.4
     # via physicsml (pyproject.toml)
-referencing==0.32.0
+referencing==0.32.1
     # via
     #   jsonschema
     #   jsonschema-specifications
@@ -462,7 +463,7 @@ requests-oauthlib==1.3.1
     # via google-auth-oauthlib
 responses==0.18.0
     # via evaluate
-rpds-py==0.13.2
+rpds-py==0.17.1
     # via
     #   jsonschema
     #   referencing
@@ -472,13 +473,13 @@ ruamel-yaml==0.18.5
     # via sphinx-toolbox
 ruamel-yaml-clib==0.2.8
     # via ruamel-yaml
-s3transfer==0.9.0
+s3transfer==0.10.0
     # via boto3
-scikit-learn==1.3.2
+scikit-learn==1.4.0
     # via
     #   molflux
     #   torch-geometric
-scipy==1.11.4
+scipy==1.12.0
     # via
     #   ase
     #   e3nn
@@ -495,7 +496,7 @@ snowballstemmer==2.2.0
     # via sphinx
 soupsieve==2.5
     # via beautifulsoup4
-sphinx==6.2.1
+sphinx==7.2.6
     # via
     #   autodocsumm
     #   myst-nb
@@ -511,14 +512,9 @@ sphinx==6.2.1
     #   sphinx-tabs
     #   sphinx-togglebutton
     #   sphinx-toolbox
-    #   sphinxcontrib-applehelp
-    #   sphinxcontrib-devhelp
-    #   sphinxcontrib-htmlhelp
-    #   sphinxcontrib-qthelp
-    #   sphinxcontrib-serializinghtml
-sphinx-autodoc-typehints==1.23.0
+sphinx-autodoc-typehints==1.25.3
     # via sphinx-toolbox
-sphinx-book-theme==1.0.1
+sphinx-book-theme==1.1.0
     # via physicsml (pyproject.toml)
 sphinx-design==0.5.0
     # via physicsml (pyproject.toml)
@@ -526,29 +522,29 @@ sphinx-inline-tabs==2023.4.21
     # via physicsml (pyproject.toml)
 sphinx-jinja2-compat==0.2.0.post1
     # via sphinx-toolbox
-sphinx-prompt==1.6.0
+sphinx-prompt==1.8.0
     # via sphinx-toolbox
 sphinx-sitemap==2.5.1
     # via physicsml (pyproject.toml)
-sphinx-tabs==3.4.4
+sphinx-tabs==3.4.5
     # via sphinx-toolbox
 sphinx-togglebutton==0.3.2
     # via physicsml (pyproject.toml)
 sphinx-toolbox==3.5.0
     # via physicsml (pyproject.toml)
-sphinxcontrib-applehelp==1.0.7
+sphinxcontrib-applehelp==1.0.8
     # via sphinx
-sphinxcontrib-devhelp==1.0.5
+sphinxcontrib-devhelp==1.0.6
     # via sphinx
-sphinxcontrib-htmlhelp==2.0.4
+sphinxcontrib-htmlhelp==2.0.5
     # via sphinx
 sphinxcontrib-jsmath==1.0.1
     # via sphinx
-sphinxcontrib-qthelp==1.0.6
+sphinxcontrib-qthelp==1.0.7
     # via sphinx
-sphinxcontrib-serializinghtml==1.1.9
+sphinxcontrib-serializinghtml==1.1.10
     # via sphinx
-sqlalchemy==2.0.23
+sqlalchemy==2.0.25
     # via jupyter-cache
 stack-data==0.6.3
     # via ipython
@@ -566,7 +562,7 @@ tensorboard==2.15.1
     # via physicsml (pyproject.toml)
 tensorboard-data-server==0.7.2
     # via tensorboard
-thefuzz==0.20.0
+thefuzz==0.22.1
     # via molflux
 threadpoolctl==3.2.0
     # via scikit-learn
@@ -589,7 +585,7 @@ torch-geometric==2.4.0
     # via physicsml (pyproject.toml)
 torchani==2.2.3
     # via physicsml (pyproject.toml)
-torchmetrics==1.2.1
+torchmetrics==1.3.0.post0
     # via
     #   lightning
     #   pytorch-lightning
@@ -606,7 +602,7 @@ tqdm==4.66.1
     #   molflux
     #   pytorch-lightning
     #   torch-geometric
-traitlets==5.14.0
+traitlets==5.14.1
     # via
     #   comm
     #   ipykernel
@@ -631,14 +627,14 @@ typing-extensions==4.9.0
     #   sphinx-toolbox
     #   sqlalchemy
     #   torch
-tzdata==2023.3
+tzdata==2023.4
     # via pandas
 urllib3==2.0.7
     # via
     #   botocore
     #   requests
     #   responses
-wcwidth==0.2.12
+wcwidth==0.2.13
     # via prompt-toolkit
 webencodings==0.5.1
     # via html5lib

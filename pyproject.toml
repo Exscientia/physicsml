@@ -43,26 +43,12 @@ openeye = [
 rdkit = [
     'rdkit'
 ]
-dvc = [
-    'aiobotocore[boto3]>=2.5.2',  # boto fixed by dvc[s3], errors without this (aibotocore 2.4.1)
-    'botocore>=1.29.161',
-    'dvc[s3]>=3.33.4',
-    'dvc-s3',  # improves version pinning
-]
 ase = [
     'rdkit',
-    'aiobotocore[boto3]>=2.5.2',  # boto fixed by dvc[s3], errors without this (aibotocore 2.4.1)
-    'botocore>=1.29.161',
-    'dvc[s3]>=3.33.4',
-    'dvc-s3',  # improves version pinning
     'ase',
 ]
 openmm = [
     'rdkit',
-    'aiobotocore[boto3]>=2.5.2',  # boto fixed by dvc[s3], errors without this (aibotocore 2.4.1)
-    'botocore>=1.29.161',
-    'dvc[s3]>=3.33.4',
-    'dvc-s3',  # improves version pinning
 ]
 dev = [
     'nox',
