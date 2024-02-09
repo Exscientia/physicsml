@@ -496,6 +496,7 @@ class PoolingHead(torch.nn.Module):
                 index=data["batch"],
                 dim=0,
                 dim_size=int(data["num_graphs"]),
+                reduce=self.pool_type,
             )
 
             list_of_pooled_feats.append(pooled_node_feats)
@@ -511,12 +512,14 @@ class PoolingHead(torch.nn.Module):
                 index=receiver,
                 dim=0,
                 dim_size=num_nodes,
+                reduce=self.pool_type,
             )
             pooled_edge_feats = scatter(
                 src=pooled_edge_feats,
                 index=data["batch"],
                 dim=0,
                 dim_size=int(data["num_graphs"]),
+                reduce=self.pool_type,
             )  # [n_graphs,]
 
             list_of_pooled_feats.append(pooled_edge_feats)
