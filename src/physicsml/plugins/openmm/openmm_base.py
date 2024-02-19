@@ -124,5 +124,5 @@ class OpenMMModuleBase(PhysicsMLModuleBase):
 
         return clone
 
-    def compute_loss(self, input: Any, target: Any) -> torch.Tensor:
-        return torch.empty(0)
+    def compute_loss(self, input: Any, target: Any) -> Dict[str, torch.Tensor]:
+        return {"loss": torch.empty(0)}
