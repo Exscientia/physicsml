@@ -102,13 +102,17 @@ class PooledAllegroModule(PhysicsMLModuleBase):
 
         return output
 
-    def compute_loss(self, input: Any, target: Any) -> torch.Tensor:
+    def compute_loss(self, input: Any, target: Any) -> Dict[str, torch.Tensor]:
+        loss_dict: Dict[str, torch.Tensor] = {}
         total_loss: torch.Tensor = torch.zeros(1, device=self.device)
         for y_key, loss in self.losses.items():
             if target.get(y_key, None) is not None:
-                total_loss += loss(input, target)
+                key_loss = loss(input, target)
+                loss_dict[y_key] = key_loss
+                total_loss += key_loss
 
-        return total_loss
+        loss_dict["loss"] = total_loss
+        return loss_dict
 
     def configure_losses(self) -> Any:
         losses: Dict[str, Optional[Any]] = {}

@@ -143,8 +143,8 @@ class PrismLightningBase(PhysicsMLModuleBase):
     def __init__(self) -> None:
         super().__init__(model_config=None)  # type: ignore
 
-    def compute_loss(self, input: Any, target: Any) -> torch.Tensor:
-        return torch.empty(0)
+    def compute_loss(self, input: Any, target: Any) -> Dict[str, torch.Tensor]:
+        return {"loss": torch.empty(0)}
 
     def predict_step(self, batch: Any, batch_idx: int, dataloader_idx: int = 0) -> Any:
         """method for doing a predict step"""

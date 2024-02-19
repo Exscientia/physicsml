@@ -22,7 +22,7 @@ class PhysicsMLModuleBase(
         self.model_config = model_config
 
     @abstractmethod
-    def compute_loss(self, input: Any, target: Any) -> torch.Tensor:
+    def compute_loss(self, input: Any, target: Any) -> Dict[str, torch.Tensor]:
         """a method to compute the loss for a model"""
 
     def compute_forces_by_gradient(
@@ -92,9 +92,9 @@ class PhysicsMLModuleBase(
         else:
             output = self(batch_dict)
 
-        loss = self.compute_loss(output, batch_dict)
+        loss_dict = self.compute_loss(output, batch_dict)
 
-        return loss, {"loss": loss}, single_source_batch.ptr.shape[0] - 1
+        return loss_dict["loss"], loss_dict, single_source_batch.ptr.shape[0] - 1
 
     def _validation_step_on_single_source_batch(
         self,
@@ -125,9 +125,9 @@ class PhysicsMLModuleBase(
         else:
             output = self(batch_dict)
 
-        loss = self.compute_loss(output, batch_dict)
+        loss_dict = self.compute_loss(output, batch_dict)
 
-        return loss, {"loss": loss}, single_source_batch.ptr.shape[0] - 1
+        return loss_dict["loss"], loss_dict, single_source_batch.ptr.shape[0] - 1
 
     def predict_step(self, batch: Any, batch_idx: int, dataloader_idx: int = 0) -> Any:
         """method for doing a predict step"""

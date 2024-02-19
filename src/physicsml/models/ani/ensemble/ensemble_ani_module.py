@@ -104,36 +104,31 @@ class PooledEnsembleANIModule(PhysicsMLModuleBase):
 
         return output
 
-    def compute_loss(self, input: Any, target: Any, split: str) -> torch.Tensor:  # type: ignore
+    def compute_loss(self, input: Any, target: Any) -> Dict[str, torch.Tensor]:
+        loss_dict: Dict[str, torch.Tensor] = {}
         total_loss: torch.Tensor = torch.zeros(1, device=self.device)
         for y_key, loss in self.losses.items():
             if y_key == "y_graph_scalars":
                 comb_loss: torch.Tensor = torch.zeros(1, device=self.device)
                 for i in range(self.n_models):
                     model_i_loss = loss(
-                        {
-                            "y_graph_scalars": input["y_graph_scalars::stacked"][
-                                :,
-                                :,
-                                i,
-                            ],
-                        },
+                        {"y_graph_scalars": input["y_graph_scalars::stacked"][:, :, i]},
                         target,
                     )
-                    self.log(
-                        f"{split}/model_{i}",
-                        model_i_loss,
-                        logger=True,
-                    )
+                    loss_dict[f"{y_key}/model_{i}"] = model_i_loss
                     comb_loss += model_i_loss
 
                 comb_loss = comb_loss / self.n_models
+                loss_dict[y_key] = comb_loss
                 total_loss += comb_loss
 
             elif target.get(y_key, None) is not None:
-                total_loss += loss(input, target)
+                key_loss = loss(input, target)
+                loss_dict[y_key] = key_loss
+                total_loss += key_loss
 
-        return total_loss
+        loss_dict["loss"] = total_loss
+        return loss_dict
 
     def configure_losses(self) -> Any:
         losses: Dict[str, Optional[Any]] = {}
@@ -189,9 +184,9 @@ class PooledEnsembleANIModule(PhysicsMLModuleBase):
         else:
             output = self(single_source_batch)
 
-        loss = self.compute_loss(output, single_source_batch, "train")
+        loss_dict = self.compute_loss(output, single_source_batch)
 
-        return loss, {"loss": loss}, single_source_batch["species"].shape[0]
+        return loss_dict["loss"], loss_dict, single_source_batch["species"].shape[0]
 
     def _validation_step_on_single_source_batch(
         self,
@@ -228,9 +223,9 @@ class PooledEnsembleANIModule(PhysicsMLModuleBase):
         else:
             output = self(single_source_batch)
 
-        loss = self.compute_loss(output, single_source_batch, "val")
+        loss_dict = self.compute_loss(output, single_source_batch)
 
-        return loss, {"loss": loss}, single_source_batch["species"].shape[0]
+        return loss_dict["loss"], loss_dict, single_source_batch["species"].shape[0]
 
     def predict_step(self, batch: Any, batch_idx: int, dataloader_idx: int = 0) -> Any:
         """fit method for doing a predict step"""
