@@ -2,7 +2,7 @@ from typing import Optional
 
 import torch
 from e3nn import nn, o3
-from torch_geometric.utils.scatter import scatter
+from torch_geometric.utils import scatter
 
 from ._activation import Activation
 from .irreps_tools import reshape_irreps, tp_out_irreps_with_instructions

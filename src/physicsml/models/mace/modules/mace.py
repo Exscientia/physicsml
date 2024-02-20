@@ -2,7 +2,7 @@ from typing import Any, Dict
 
 import torch
 from e3nn import o3
-from torch_geometric.utils.scatter import scatter
+from torch_geometric.utils import scatter
 
 from physicsml.models.mace.modules.blocks import (
     InteractionBlock,

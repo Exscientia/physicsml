@@ -1,7 +1,7 @@
 from typing import Dict, List, Optional
 
 import torch
-from torch_geometric.utils.scatter import scatter
+from torch_geometric.utils import scatter
 
 from physicsml.models.tensor_net.modules.utils import (
     decompose_irrep_tensor,

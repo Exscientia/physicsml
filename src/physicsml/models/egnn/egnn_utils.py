@@ -2,7 +2,7 @@ from typing import Dict, List, Literal, Optional, Tuple
 
 import torch
 import torch.nn as nn
-from torch_geometric.utils.scatter import scatter
+from torch_geometric.utils import scatter
 
 from physicsml.models.utils import compute_lengths_and_vectors, make_mlp
 
