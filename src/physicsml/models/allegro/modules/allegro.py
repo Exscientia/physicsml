@@ -3,7 +3,7 @@ from typing import Dict, List, Optional
 
 import torch
 from e3nn import o3
-from torch_geometric.utils.scatter import scatter
+from torch_geometric.utils import scatter
 
 from physicsml.models.allegro.modules.channels import MakeWeightedChannels
 from physicsml.models.allegro.modules.contract import Contractor

@@ -3,7 +3,7 @@ from typing import Dict, List, Optional
 import torch
 from e3nn import o3
 from e3nn.nn import FullyConnectedNet
-from torch_geometric.utils.scatter import scatter
+from torch_geometric.utils import scatter
 
 
 class InteractionBlock(torch.nn.Module):

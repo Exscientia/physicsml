@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Union
 import datasets
 from molflux.features.info import RepresentationInfo
 from molflux.modelzoo.models.lightning.config import DataModuleConfig, TrainerConfig
-from torch_geometric.utils.scatter import scatter
+from torch_geometric.utils import scatter
 
 from physicsml.models.prism import PhysicsMLPrismBase, PrismLightningBase
 

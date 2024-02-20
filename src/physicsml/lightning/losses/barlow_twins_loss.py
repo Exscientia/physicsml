@@ -1,7 +1,7 @@
 from typing import Dict, Optional, Tuple
 
 import torch
-from torch_geometric.utils.scatter import scatter
+from torch_geometric.utils import scatter
 
 
 def scatter_mean_std(

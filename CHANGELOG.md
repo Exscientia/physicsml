@@ -10,6 +10,12 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---------------------------------------------------------
 
+## [0.1.1] - 2024-02-20
+
+## Fixed
+
+* fixed import names for `torch_geometric>=2.5.0`
+
 ## [0.1.0] - 2024-02-19
 
 ## Added

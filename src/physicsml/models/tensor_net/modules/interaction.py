@@ -1,7 +1,7 @@
 from typing import Dict, List
 
 import torch
-from torch_geometric.utils.scatter import scatter
+from torch_geometric.utils import scatter
 
 from physicsml.models.tensor_net.modules.embedding import MLP
 from physicsml.models.tensor_net.modules.utils import (
