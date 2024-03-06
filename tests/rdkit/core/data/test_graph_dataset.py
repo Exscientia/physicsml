@@ -32,8 +32,6 @@ def test_graph_dataset_atom_num_only(featurised_gdb9_atomic_nums):
         self_interaction=False,
         pbc=None,
         cell=None,
-        use_scaled_positions=False,
-        max_nbins=int(1e6),
     )
 
     assert len(graph_dataset) == 100
@@ -85,8 +83,6 @@ def test_graph_dataset(featurised_gdb9_atomic_nums_and_feats_and_bond_feats):
         self_interaction=False,
         pbc=None,
         cell=None,
-        use_scaled_positions=False,
-        max_nbins=int(1e6),
     )
 
     assert len(graph_dataset) == 100
@@ -140,8 +136,6 @@ def test_graph_dataset_no_bonds(featurised_gdb9_atomic_nums_and_feats):
         self_interaction=False,
         pbc=None,
         cell=None,
-        use_scaled_positions=False,
-        max_nbins=int(1e6),
     )
 
     assert len(graph_dataset) == 100
