@@ -66,8 +66,6 @@ class PhysicsMLDataModule(LightningDataModule):
             pbc=self.model_config.datamodule.pbc,
             cell=self.model_config.datamodule.cell,
             cut_off=self.model_config.datamodule.cut_off,
-            use_scaled_positions=self.model_config.datamodule.use_scaled_positions,
-            max_nbins=self.model_config.datamodule.max_nbins,
         )
 
     def _get_one_train_dataloader(

@@ -23,8 +23,6 @@ class OpenMMGraph(OpenMMModuleBase):
         self.cut_off = self.model_config.datamodule.cut_off
         self.num_elements = self.model_config.datamodule.num_elements
         self.self_interaction = self.model_config.datamodule.self_interaction
-        self.use_scaled_positions = self.model_config.datamodule.use_scaled_positions
-        self.max_nbins = self.model_config.datamodule.max_nbins
 
         self.batch_dict = self.make_batch(self.datapoint)
 
@@ -154,8 +152,6 @@ class OpenMMGraph(OpenMMModuleBase):
             pbc=pbc,
             cutoff=self.cut_off,
             self_interaction=self.self_interaction,
-            use_scaled_positions=self.use_scaled_positions,
-            max_nbins=self.max_nbins,
         )
         if edge_attrs is not None:
             edge_attrs = edge_attrs * 1.0

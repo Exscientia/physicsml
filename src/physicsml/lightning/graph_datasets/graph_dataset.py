@@ -165,8 +165,6 @@ class GraphDataset(Dataset):
         pbc: Optional[Tuple[bool, bool, bool]],
         cell: Optional[List],
         cut_off: float,
-        use_scaled_positions: bool,
-        max_nbins: int,
     ) -> None:
         super().__init__()
 
@@ -194,8 +192,6 @@ class GraphDataset(Dataset):
         else:
             self.cell_ten = None
         self.self_interaction = self_interaction
-        self.use_scaled_positions = use_scaled_positions
-        self.max_nbins = max_nbins
 
         if self.with_y_features and (self.y_features is not None):
             # assert that all cols exist in y_features and sort features
@@ -300,8 +296,6 @@ class GraphDataset(Dataset):
             cell=self.cell_ten,
             cutoff=self.cutoff,
             self_interaction=self.self_interaction,
-            use_scaled_positions=self.use_scaled_positions,
-            max_nbins=self.max_nbins,
         )
 
         if edge_attrs is not None:
