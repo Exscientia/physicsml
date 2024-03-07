@@ -10,6 +10,12 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---------------------------------------------------------
 
+## [0.2.0] - 2024-03-07
+
+## Fixed
+
+* Improved neighbour list computation (10x faster)
+
 ## [0.1.1] - 2024-02-20
 
 ## Fixed
