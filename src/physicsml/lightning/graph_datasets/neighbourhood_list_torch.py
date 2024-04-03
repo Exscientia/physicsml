@@ -5,7 +5,10 @@ from torch_geometric.utils import (
     coalesce,
     to_undirected,
 )
-from torch_nl import compute_neighborlist
+
+from physicsml.lightning.graph_datasets.torch_nl_vendored.neighbor_list import (
+    compute_neighborlist,
+)
 
 # tracing torch geom funcs to ensure that they use the required overloading
 to_undirected_ts = torch.jit.trace(

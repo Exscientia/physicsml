@@ -27,7 +27,7 @@ LINTING_TOOLS = ["ruff~=0.0.292"]
 LOCKFILE_TOOLS = ["pip-tools>=7.0.0"]  # default --resolver=backtracking
 
 EXTRAS = [None, "openmm", "rdkit", "ase", "openeye"]
-DONT_TEST = [None, "openmm", "openeye"]
+DONT_TEST = [None, "openeye"]
 
 def resolve_lockfile_path(python_version: str, extra: Optional[str] = None, rootdir: str = PINNED_VERSIONS) -> pathlib.Path:
     """Resolves the expected lockfile path for a given python version and extra."""

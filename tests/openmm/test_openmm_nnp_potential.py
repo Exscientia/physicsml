@@ -3,13 +3,19 @@ from typing import Dict
 
 import pytest
 import torch
-from openmmml.mlpotential import MLPotential
 
-import openmm as mm
-import openmm.app as app
-from physicsml.plugins.openmm.physicsml_potential import (
-    PhysicsMLPotentialImplFactory,  # noqa F401
-)
+try:
+    from openmmml.mlpotential import MLPotential
+
+    import openmm as mm
+    import openmm.app as app
+    from physicsml.plugins.openmm.physicsml_potential import (
+        PhysicsMLPotentialImplFactory,  # noqa F401
+    )
+
+    OPENMM_ = True
+except:  # noqa
+    OPENMM_ = False
 
 NNP_MODELS = [
     {
@@ -44,6 +50,7 @@ NNP_MODELS = [
 ALANINE_DIPEPTIDE_PATH = "tests/data/alanine-dipeptide-truncated.pdb"
 
 
+@pytest.mark.skipif(not OPENMM_, reason="no openmm")
 @pytest.mark.parametrize("model_properties", NNP_MODELS)
 def test_nnp_potential_system_cpu(
     model_properties: Dict,
@@ -81,6 +88,7 @@ def test_nnp_potential_system_cpu(
     assert energy._value == pytest.approx(model_properties["total_value"], 1e-4)
 
 
+@pytest.mark.skipif(not OPENMM_, reason="no openmm")
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="no gpus")
 @pytest.mark.parametrize("model_properties", NNP_MODELS)
 def test_nnp_potential_system_gpu(
@@ -119,6 +127,7 @@ def test_nnp_potential_system_gpu(
     assert energy._value == pytest.approx(model_properties["total_value"], 1e-4)
 
 
+@pytest.mark.skipif(not OPENMM_, reason="no openmm")
 @pytest.mark.parametrize("model_properties", NNP_MODELS)
 def test_nnp_mixed_potential_system_cpu(
     model_properties: str,
@@ -175,6 +184,7 @@ def test_nnp_mixed_potential_system_cpu(
     assert mixed_energy._value == pytest.approx(model_properties["mixed_value"], 1e-4)
 
 
+@pytest.mark.skipif(not OPENMM_, reason="no openmm")
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="no gpus")
 @pytest.mark.parametrize("model_properties", NNP_MODELS)
 def test_nnp_mixed_potential_system_gpu(
