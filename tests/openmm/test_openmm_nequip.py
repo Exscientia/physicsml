@@ -249,6 +249,124 @@ def test_openmm_nequip_64(featurised_ani1x_atomic_nums):
         )
 
 
+def test_openmm_nequip_cell(featurised_ani1x_atomic_nums):
+    dataset_feated, x_features, featurisation_metadata = featurised_ani1x_atomic_nums
+
+    # specify the model config
+    model_config = {
+        "name": "nequip_model",  # the model name
+        "config": {
+            "x_features": x_features,
+            "y_features": [
+                "wb97x_dz.energy",
+                "wb97x_dz.forces",
+            ],
+            "datamodule": {
+                "y_graph_scalars": ["wb97x_dz.energy"],
+                "y_node_vector": "wb97x_dz.forces",
+                "num_elements": 4,
+            },
+            "num_node_feats": 4,
+            "num_layers": 2,
+            "max_ell": 2,
+            "parity": True,
+            "num_features": 4,
+            "mlp_irreps": "8x0e",
+            "num_bessel": 8,
+            "bessel_basis_trainable": True,
+            "num_polynomial_cutoff": 6,
+            "self_connection": True,
+            "resnet": True,
+            "avg_num_neighbours": 10.0,
+            "compute_forces": True,
+            "y_graph_scalars_loss_config": {
+                "name": "MSELoss",
+                "weight": 1.0,
+            },
+            "y_node_vector_loss_config": {
+                "name": "MSELoss",
+                "weight": 1.0,
+            },
+        },
+    }
+
+    model = mz.load_from_dict(model_config)
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        model.train(
+            train_data=dataset_feated,
+            validation_data=dataset_feated,
+            trainer_config={
+                "accelerator": "gpu" if torch.cuda.is_available() else "cpu",
+                "max_epochs": 10,
+                "default_root_dir": tmpdir,
+                "precision": "64",
+            },
+            datamodule_config={
+                "train": {"batch_size": 4},
+                "num_workers": 0,
+            },
+        )
+
+        core.save_model(model, tmpdir, featurisation_metadata)
+
+        openmm_module = deepcopy(model).to_openmm(  # type: ignore
+            physicsml_model=model,
+            featurisation_metadata=featurisation_metadata,
+            atom_list=[6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            precision="64",
+            cell=[[32, 0, 0], [0, 32, 0], [0, 0, 32]],
+            pbc=(True, True, True),
+        )
+        torchscript_module = to_openmm_torchscript(
+            model_path=tmpdir,
+            atom_list=[6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            device="cuda" if torch.cuda.is_available() else "cpu",
+            precision="64",
+            cell=[[32, 0, 0], [0, 32, 0], [0, 0, 32]],
+            pbc=(True, True, True),
+        )
+
+    preds = model.predict(
+        dataset_feated,
+        trainer_config={"accelerator": "gpu" if torch.cuda.is_available() else "cpu"},
+    )
+
+    assert "nequip_model::wb97x_dz.energy" in preds.keys()
+    assert len(preds) == 2
+    assert len(preds["nequip_model::wb97x_dz.energy"]) == 88
+
+    pos = torch.tensor(dataset_feated[0]["physicsml_coordinates"]).double()
+    pos = pos.to("cuda" if torch.cuda.is_available() else "cpu")
+    pos.requires_grad = True
+    out = openmm_module(pos)
+    ts_out = torchscript_module(pos)
+
+    assert torch.allclose(
+        torch.tensor(preds["nequip_model::wb97x_dz.energy"][0] * 627).type(
+            torch.float64,
+        ),
+        ts_out * 627,
+        rtol=1e-7,
+    )
+    assert torch.allclose(out * 627, ts_out * 627, rtol=1e-7)
+
+    with torch.enable_grad():
+        for _ in range(10):
+            energy = torchscript_module(pos)
+            grad_outputs = [torch.ones_like(energy)]
+            torch.autograd.grad(
+                outputs=[energy],  # [n_graphs, ]
+                inputs=[pos],  # [n_nodes, 3]
+                grad_outputs=grad_outputs,
+                retain_graph=False,  # Make sure the graph is not destroyed during training
+                create_graph=False,  # Create graph for second derivative
+                allow_unused=True,
+            )[
+                0
+            ]  # [n_nodes, 3]
+
+
 def test_openmm_nequip_boxvectors(featurised_ani1x_atomic_nums):
     dataset_feated, x_features, featurisation_metadata = featurised_ani1x_atomic_nums
     # specify the model config

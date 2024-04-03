@@ -9,6 +9,11 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ---------------------------------------------------------
+## [0.2.1] - 2024-04-03
+
+## Fixed
+
+* Fixed bug in neighbour list with torchscript
 
 ## [0.2.0] - 2024-03-07
 

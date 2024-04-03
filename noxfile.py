@@ -27,7 +27,7 @@ LINTING_TOOLS = ["ruff~=0.0.292"]
 LOCKFILE_TOOLS = ["pip-tools>=7.0.0"]  # default --resolver=backtracking
 
 EXTRAS = [None, "openmm", "rdkit", "ase", "openeye"]
-DONT_TEST = [None, "openmm", "openeye"]
+DONT_TEST = [None, "openeye", "openmm"]
 
 def resolve_lockfile_path(python_version: str, extra: Optional[str] = None, rootdir: str = PINNED_VERSIONS) -> pathlib.Path:
     """Resolves the expected lockfile path for a given python version and extra."""
@@ -269,11 +269,7 @@ def run_tests(session: nox.Session, *args: str, extra: Optional[str], lockfile_p
 
     # Setup which files and tests to target
     # install test dependencies and extra dependencies
-    if extra == "openmm":
-        session.conda_install("openmm", "openmm-torch", "openmm-ml", "pytorch>=2.0,<2.1", channel=["conda-forge"])
-        package_extras = ",".join(["tests", extra])
-
-    elif extra is not None:
+    if extra is not None:
         package_extras = ",".join(["tests", extra])
 
     else:
