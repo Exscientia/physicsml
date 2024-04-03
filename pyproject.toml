@@ -165,6 +165,10 @@ module = "physicsml.models.allegro.modules.*"
 ignore_errors = true
 
 [[tool.mypy.overrides]]
+module = "physicsml.lightning.graph_datasets.torch_nl_vendored.*"
+ignore_errors = true
+
+[[tool.mypy.overrides]]
 check_untyped_defs = true
 disallow_untyped_defs = false
 module = 'tests.*'
