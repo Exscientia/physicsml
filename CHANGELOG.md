@@ -9,6 +9,12 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ---------------------------------------------------------
+## [0.2.2] - 2024-04-05
+
+## Fixed
+
+* Fixed problem with openmm precision (force cast positions to model dtype)
+
 ## [0.2.1] - 2024-04-03
 
 ## Fixed

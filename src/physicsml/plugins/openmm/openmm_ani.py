@@ -55,6 +55,7 @@ class OpenMMANI(OpenMMModuleBase):
             batch_dict_clone["species"] = batch_dict_clone["species"].unsqueeze(0)
 
         # scale positions
+        positions = positions.type(self.model_dtype)
         positions = positions * self.position_scaling
 
         # truncate positions tensor if using mixed system

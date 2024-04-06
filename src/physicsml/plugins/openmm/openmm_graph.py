@@ -124,6 +124,7 @@ class OpenMMGraph(OpenMMModuleBase):
         batch_dict_clone = self.clone_batch_dict_to_device()
 
         # scale positions
+        positions = positions.type(self.model_dtype)
         positions = positions * self.position_scaling
 
         # truncate positions tensor if using mixed system

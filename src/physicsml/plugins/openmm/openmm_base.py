@@ -52,6 +52,7 @@ class OpenMMModuleBase(PhysicsMLModuleBase):
             self.module.double()
         else:
             raise KeyError(f"Precision {precision} unknown. Use either '32' or '64'.")
+        self.model_dtype = self.dtype
         logger.warning(f"Model is of dtype {self.dtype}")
 
         # get scaling values for output and input
