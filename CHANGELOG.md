@@ -9,6 +9,12 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ---------------------------------------------------------
+## [0.2.3] - 2024-04-09
+
+## Changed
+
+* Remove torch < 2.1 pin
+
 ## [0.2.2] - 2024-04-05
 
 ## Fixed

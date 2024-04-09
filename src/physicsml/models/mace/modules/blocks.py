@@ -254,4 +254,5 @@ class ScaleShiftBlock(torch.nn.Module):
             self.register_buffer("shift", torch.tensor(0.0))
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return self.scale * x + self.shift
+        scaled_shifted_x: torch.Tensor = self.scale * x + self.shift
+        return scaled_shifted_x
