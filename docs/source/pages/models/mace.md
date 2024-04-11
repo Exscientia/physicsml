@@ -41,10 +41,10 @@ node scalars, and a node vector. The model has the following config
     The highest correlation order.
 * ``scaling_mean: float = 0.0``
 
-    The scaling mean of the model output.
+    The scaling mean of the model output. This is usually computed as the mean of `(molecule_energy - molecule_self_energy) / molecule_num_atoms`
 * ``scaling_std: float = 1.0``
 
-    The scaling std of the model output.
+    The scaling std of the model output. This is usually computed as the std of `(molecule_energy - molecule_self_energy)`
 * ``compute_forces: bool = False``
 
     Whether to compute forces as the gradient of the ``y_graph_scalars`` and use those as the ``y_node_vector`` output.
@@ -101,10 +101,10 @@ hardcoded to be the ``torch.nn.GaussianNLLLoss``. The model config is as follows
     The highest correlation order.
 * ``scaling_mean: float = 0.0``
 
-    The scaling mean of the model output.
+    The scaling mean of the model output. This is usually computed as the mean of `(molecule_energy - molecule_self_energy) / molecule_num_atoms`
 * ``scaling_std: float = 1.0``
 
-    The scaling std of the model output.
+    The scaling std of the model output. This is usually computed as the std of `(molecule_energy - molecule_self_energy)`
 * ``compute_forces: bool = False``
 
     Whether to compute forces as the gradient of the ``y_graph_scalars`` and use those as the ``y_node_vector`` output.
@@ -158,10 +158,10 @@ useful for transfer learning. The config is the same as the ``mace_model``. The 
     The highest correlation order.
 * ``scaling_mean: float = 0.0``
 
-    The scaling mean of the model output.
+    The scaling mean of the model output. This is usually computed as the mean of `(molecule_energy - molecule_self_energy) / molecule_num_atoms`
 * ``scaling_std: float = 1.0``
 
-    The scaling std of the model output.
+    The scaling std of the model output. This is usually computed as the std of `(molecule_energy - molecule_self_energy)`
 * ``compute_forces: bool = False``
 
     Whether to compute forces as the gradient of the ``y_graph_scalars`` and use those as the ``y_node_vector`` output.
@@ -225,10 +225,10 @@ as follows
     The starting value of the s parameter for combining the outputs from the adapters and the message passing backbone.
 * ``scaling_mean: float = 0.0``
 
-    The scaling mean of the model output.
+    The scaling mean of the model output. This is usually computed as the mean of `(molecule_energy - molecule_self_energy) / molecule_num_atoms`
 * ``scaling_std: float = 1.0``
 
-    The scaling std of the model output.
+    The scaling std of the model output. This is usually computed as the std of `(molecule_energy - molecule_self_energy)`
 * ``compute_forces: bool = False``
 
     Whether to compute forces as the gradient of the ``y_graph_scalars`` and use those as the ``y_node_vector`` output.

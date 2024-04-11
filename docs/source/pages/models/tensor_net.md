@@ -36,10 +36,10 @@ node scalars, and optionally a node vector as the gradient of the graph scalars.
     The scalar output MLP's hidden dimensions.
 * ``scaling_mean: float = 0.0``
 
-    The scaling mean of the model output.
+    The scaling mean of the model output. This is usually computed as the mean of `(molecule_energy - molecule_self_energy)`
 * ``scaling_std: float = 1.0``
 
-    The scaling std of the model output.
+    The scaling std of the model output. This is usually computed as the std of `(molecule_energy - molecule_self_energy)`
 * ``compute_forces: bool = False``
 
     Whether to compute forces as the gradient of the ``y_graph_scalars`` and use those as the ``y_node_vector`` output.
