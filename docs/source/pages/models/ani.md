@@ -17,10 +17,10 @@ a node vector as the gradient of the graph scalars (e.g. force). The model has t
     * ``"ani_spice"`` is for H, C, N, O, F, P, S, Cl, Br, I
 * ``scaling_mean: float = 0.0``
 
-    The scaling mean for the output predictions.
+    The scaling mean of the model output. This is usually computed as the mean of `(molecule_energy - molecule_self_energy)`
 * ``scaling_std: float = 1.0``
 
-    The scaling std for the output predictions
+    The scaling std of the model output. This is usually computed as the std of `(molecule_energy - molecule_self_energy)`
 * ``compute_forces: bool = False``
 
     Whether to compute forces as the gradient of the ``y_graph_scalars`` and use those as the ``y_node_vector`` output.
@@ -47,10 +47,10 @@ hardcoded to be the ``torch.nn.GaussianNLLLoss``. The model config is as follows
     * ``"ani_spice"`` is for H, C, N, O, F, P, S, Cl, Br, I
 * ``scaling_mean: float = 0.0``
 
-    The scaling mean for the output predictions.
+    The scaling mean of the model output. This is usually computed as the mean of `(molecule_energy - molecule_self_energy)`
 * ``scaling_std: float = 1.0``
 
-    The scaling std for the output predictions
+    The scaling std of the model output. This is usually computed as the std of `(molecule_energy - molecule_self_energy)`
 * ``compute_forces: bool = False``
 
     Whether to compute forces as the gradient of the ``y_graph_scalars`` and use those as the ``y_node_vector`` output.
@@ -76,10 +76,10 @@ but with the additional ``n_models`` argument for the number of models in the en
     The number of models in the ensemble.
 * ``scaling_mean: float = 0.0``
 
-    The scaling mean for the output predictions.
+    The scaling mean of the model output. This is usually computed as the mean of `(molecule_energy - molecule_self_energy)`
 * ``scaling_std: float = 1.0``
 
-    The scaling std for the output predictions
+    The scaling std of the model output. This is usually computed as the std of `(molecule_energy - molecule_self_energy)`
 * ``compute_forces: bool = False``
 
     Whether to compute forces as the gradient of the ``y_graph_scalars`` and use those as the ``y_node_vector`` output.
