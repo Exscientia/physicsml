@@ -21,13 +21,13 @@ TEST_REPORTS_DIR = "test-reports"
 
 # all external utility tools used by our nox sessions
 BUILD_TOOLS = ["build"]
-COVERAGE_TOOLS = ["coverage[toml]", "coverage-badge"]
+COVERAGE_TOOLS = ["coverage[toml]<7.5", "coverage-badge"]
 FORMATTING_TOOLS = ["black[jupyter]~=23.0"]
 LINTING_TOOLS = ["ruff~=0.0.292"]
 LOCKFILE_TOOLS = ["pip-tools>=7.0.0"]  # default --resolver=backtracking
 
 EXTRAS = [None, "openmm", "rdkit", "ase", "openeye"]
-DONT_TEST = [None, "openeye", "openmm"]
+DONT_TEST = [None, "openeye"]
 
 def resolve_lockfile_path(python_version: str, extra: Optional[str] = None, rootdir: str = PINNED_VERSIONS) -> pathlib.Path:
     """Resolves the expected lockfile path for a given python version and extra."""
@@ -278,9 +278,12 @@ def run_tests(session: nox.Session, *args: str, extra: Optional[str], lockfile_p
     # all tests requiring the extra are in their own dir and
     tests_target_dirs = [f"tests/{extra}"]
 
-    # Run tests
     session.install(f".[{package_extras}]", "--constraint", str(lockfile_path))
 
+    if extra == "openmm":
+        session.conda_install("openmm-ml", channel=["conda-forge"])
+
+    # Run tests
     coverage_datafile_path = resolve_coverage_datafile_path(python_version=session.python, extra=extra)
     junitxml_path = resolve_junitxml_path(python_version=session.python, extra=extra)
     session.run(
