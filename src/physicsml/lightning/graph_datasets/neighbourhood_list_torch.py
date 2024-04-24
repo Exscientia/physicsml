@@ -63,11 +63,18 @@ def construct_edge_indices_and_attrs(
     self_interaction: bool,
 ) -> Tuple[torch.Tensor, Optional[torch.Tensor], torch.Tensor]:
     if (pbc is not None) and (cell is not None):
+        cell = cell.type(positions.dtype).to(positions.device)
+
+        # solve pos = coefs^T @ cell
+        # pos = pos - torch.floor(coefs) @ cell
+        coefs = torch.floor(torch.matmul(positions, torch.inverse(cell)))
+        wrapped_positions = positions - torch.matmul(coefs, cell)
+
         # find edge indices
         nbhd_edge_indices, _, nbhd_cell_shift_vector = compute_neighborlist(
             cutoff=cutoff,
-            pos=positions,
-            cell=cell.type(positions.dtype).to(positions.device),
+            pos=wrapped_positions,
+            cell=cell,
             pbc=torch.tensor(pbc).to(positions.device),
             batch=torch.zeros(
                 positions.shape[0],
@@ -76,6 +83,11 @@ def construct_edge_indices_and_attrs(
             ),
             self_interaction=self_interaction,
         )
+
+        if nbhd_cell_shift_vector.numel() > 0:
+            nbhd_cell_shift_vector = nbhd_cell_shift_vector + (
+                coefs[nbhd_edge_indices[0]] - coefs[nbhd_edge_indices[1]]
+            )
     else:
         nbhd_edge_indices, nbhd_cell_shift_vector = compute_neighborlist_n2_no_cell(
             cutoff=cutoff,

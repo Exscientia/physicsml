@@ -9,6 +9,12 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ---------------------------------------------------------
+ ## [0.2.4] - 2024-04-24
+
+### Fixed
+
+* Added coordinate wrapping in the neighbour list computations of ANI and graphs
+
 ## [0.2.3] - 2024-04-09
 
 ## Changed
