@@ -54,6 +54,7 @@ class PhysicsMLDataModule(LightningDataModule):
             node_idxs_col=self.model_config.datamodule.node_idxs_col,
             edge_idxs_col=self.model_config.datamodule.edge_idxs_col,
             coordinates_col=self.model_config.datamodule.coordinates_col,
+            graph_attrs_cols=self.model_config.datamodule.graph_attrs_cols,
             total_atomic_energy_col=self.model_config.datamodule.total_atomic_energy_col,
             y_node_scalars=self.model_config.datamodule.y_node_scalars,
             y_node_vector=self.model_config.datamodule.y_node_vector,
