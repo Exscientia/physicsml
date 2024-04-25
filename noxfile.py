@@ -27,7 +27,7 @@ LINTING_TOOLS = ["ruff~=0.0.292"]
 LOCKFILE_TOOLS = ["pip-tools>=7.0.0"]  # default --resolver=backtracking
 
 EXTRAS = [None, "openmm", "rdkit", "ase", "openeye"]
-DONT_TEST = [None, "openeye"]
+DONT_TEST = [None, "openeye", "openmm"]
 
 def resolve_lockfile_path(python_version: str, extra: Optional[str] = None, rootdir: str = PINNED_VERSIONS) -> pathlib.Path:
     """Resolves the expected lockfile path for a given python version and extra."""
@@ -280,9 +280,6 @@ def run_tests(session: nox.Session, *args: str, extra: Optional[str], lockfile_p
 
     session.install(f".[{package_extras}]", "--constraint", str(lockfile_path))
 
-    if extra == "openmm":
-        session.conda_install("openmm-ml", channel=["conda-forge"])
-
     # Run tests
     coverage_datafile_path = resolve_coverage_datafile_path(python_version=session.python, extra=extra)
     junitxml_path = resolve_junitxml_path(python_version=session.python, extra=extra)
@@ -303,7 +300,7 @@ def run_tests(session: nox.Session, *args: str, extra: Optional[str], lockfile_p
         session.notify(f"coverage_report-{session.python}", [datafiles_dir])
 
 
-@nox.session(venv_backend="conda", python=SUPPORTED_PYTHON_VERSIONS)
+@nox.session(python=SUPPORTED_PYTHON_VERSIONS)
 @nox.parametrize("extra", [e for e in EXTRAS if e not in DONT_TEST])
 def tests_run_latest(session: nox.Session, extra: Optional[str]) -> None:
     """Run tests against latest available dependencies.
@@ -323,7 +320,7 @@ def tests_run_latest(session: nox.Session, extra: Optional[str]) -> None:
         run_tests(session, *session.posargs, extra=extra, lockfile_path=scratch_output_lockfile_path, notify=False)
 
 
-@nox.session(venv_backend="conda", python=SUPPORTED_PYTHON_VERSIONS)
+@nox.session(python=SUPPORTED_PYTHON_VERSIONS)
 @nox.parametrize("extra", [e for e in EXTRAS if e not in DONT_TEST])
 def tests_run_pinned(session: nox.Session, extra: Optional[str]) -> None:
     """Run tests against pinned dependencies.
