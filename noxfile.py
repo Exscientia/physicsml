@@ -21,7 +21,7 @@ TEST_REPORTS_DIR = "test-reports"
 
 # all external utility tools used by our nox sessions
 BUILD_TOOLS = ["build"]
-COVERAGE_TOOLS = ["coverage[toml]", "coverage-badge"]
+COVERAGE_TOOLS = ["coverage[toml]<7.5", "coverage-badge"]
 FORMATTING_TOOLS = ["black[jupyter]~=23.0"]
 LINTING_TOOLS = ["ruff~=0.0.292"]
 LOCKFILE_TOOLS = ["pip-tools>=7.0.0"]  # default --resolver=backtracking
@@ -278,9 +278,9 @@ def run_tests(session: nox.Session, *args: str, extra: Optional[str], lockfile_p
     # all tests requiring the extra are in their own dir and
     tests_target_dirs = [f"tests/{extra}"]
 
-    # Run tests
     session.install(f".[{package_extras}]", "--constraint", str(lockfile_path))
 
+    # Run tests
     coverage_datafile_path = resolve_coverage_datafile_path(python_version=session.python, extra=extra)
     junitxml_path = resolve_junitxml_path(python_version=session.python, extra=extra)
     session.run(
@@ -300,7 +300,7 @@ def run_tests(session: nox.Session, *args: str, extra: Optional[str], lockfile_p
         session.notify(f"coverage_report-{session.python}", [datafiles_dir])
 
 
-@nox.session(venv_backend="conda", python=SUPPORTED_PYTHON_VERSIONS)
+@nox.session(python=SUPPORTED_PYTHON_VERSIONS)
 @nox.parametrize("extra", [e for e in EXTRAS if e not in DONT_TEST])
 def tests_run_latest(session: nox.Session, extra: Optional[str]) -> None:
     """Run tests against latest available dependencies.
@@ -320,7 +320,7 @@ def tests_run_latest(session: nox.Session, extra: Optional[str]) -> None:
         run_tests(session, *session.posargs, extra=extra, lockfile_path=scratch_output_lockfile_path, notify=False)
 
 
-@nox.session(venv_backend="conda", python=SUPPORTED_PYTHON_VERSIONS)
+@nox.session(python=SUPPORTED_PYTHON_VERSIONS)
 @nox.parametrize("extra", [e for e in EXTRAS if e not in DONT_TEST])
 def tests_run_pinned(session: nox.Session, extra: Optional[str]) -> None:
     """Run tests against pinned dependencies.

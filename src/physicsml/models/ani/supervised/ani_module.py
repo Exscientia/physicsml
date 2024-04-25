@@ -7,7 +7,6 @@ from molflux.modelzoo.models.lightning.module import (
     SingleBatchStepOutput,
 )
 from torchani import ANIModel
-from torchani.aev import AEVComputer
 
 from physicsml.lightning.losses.construct_loss import construct_loss
 from physicsml.lightning.module import PhysicsMLModuleBase
@@ -15,6 +14,7 @@ from physicsml.models.ani.ani_1_2_defaults import (
     ani_1_2_aev_configs,
     ani_1_2_net_sizes_dict,
 )
+from physicsml.models.ani.modules.aev import AEVComputer  # type: ignore
 from physicsml.models.ani.supervised.default_configs import ANIModelConfig
 
 

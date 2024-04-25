@@ -4,11 +4,9 @@
 #
 #    nox -s dependencies_pin-3.8(extra='ase')
 #
-absl-py==2.1.0
-    # via tensorboard
 accessible-pygments==0.0.4
     # via pydata-sphinx-theme
-aiohttp==3.9.3
+aiohttp==3.9.5
     # via
     #   datasets
     #   fsspec
@@ -49,19 +47,17 @@ beautifulsoup4==4.12.3
     # via
     #   pydata-sphinx-theme
     #   sphinx-toolbox
-boto3==1.34.82
+boto3==1.34.91
     # via
     #   cloudpathlib
     #   molflux
-botocore==1.34.82
+botocore==1.34.91
     # via
     #   boto3
     #   molflux
     #   s3transfer
 cachecontrol==0.14.0
     # via sphinx-toolbox
-cachetools==5.3.3
-    # via google-auth
 certifi==2024.2.2
     # via requests
 charset-normalizer==3.3.2
@@ -78,17 +74,17 @@ comm==0.2.2
     #   ipywidgets
 contourpy==1.1.1
     # via matplotlib
-coverage==7.4.4
+coverage==7.5.0
     # via
     #   coverage-badge
     #   physicsml (pyproject.toml)
-coverage-badge==1.1.0
+coverage-badge==1.1.1
     # via physicsml (pyproject.toml)
 cssutils==2.10.2
     # via dict2css
 cycler==0.12.1
     # via matplotlib
-datasets==2.18.0
+datasets==2.19.0
     # via
     #   evaluate
     #   molflux
@@ -121,7 +117,7 @@ e3nn==0.5.1
     # via physicsml (pyproject.toml)
 evaluate==0.4.1
     # via molflux
-exceptiongroup==1.2.0
+exceptiongroup==1.2.1
     # via pytest
 executing==2.0.1
     # via stack-data
@@ -140,7 +136,7 @@ frozenlist==1.4.1
     # via
     #   aiohttp
     #   aiosignal
-fsspec==2024.2.0
+fsspec==2024.3.1
     # via
     #   datasets
     #   evaluate
@@ -148,15 +144,8 @@ fsspec==2024.2.0
     #   lightning
     #   molflux
     #   pytorch-lightning
+    #   torch
     #   torch-geometric
-google-auth==2.29.0
-    # via
-    #   google-auth-oauthlib
-    #   tensorboard
-google-auth-oauthlib==1.0.0
-    # via tensorboard
-grpcio==1.62.1
-    # via tensorboard
 h5py==3.11.0
     # via
     #   molflux
@@ -179,7 +168,6 @@ importlib-metadata==4.13.0
     #   domdf-python-tools
     #   jupyter-cache
     #   jupyter-client
-    #   markdown
     #   myst-nb
     #   qlient-core
     #   sphinx
@@ -241,15 +229,13 @@ kiwisolver==1.4.5
     # via matplotlib
 lark-parser==0.12.0
     # via torchani
-lightning==2.2.1
+lightning==2.2.3
     # via physicsml (pyproject.toml)
 lightning-utilities==0.11.2
     # via
     #   lightning
     #   pytorch-lightning
     #   torchmetrics
-markdown==3.6
-    # via tensorboard
 markdown-it-py==2.2.0
     # via
     #   jupytext
@@ -259,12 +245,11 @@ markupsafe==2.1.5
     # via
     #   jinja2
     #   sphinx-jinja2-compat
-    #   werkzeug
 matplotlib==3.7.5
     # via
     #   ase
     #   physicsml (pyproject.toml)
-matplotlib-inline==0.1.6
+matplotlib-inline==0.1.7
     # via
     #   ipykernel
     #   ipython
@@ -329,11 +314,8 @@ numpy==1.24.4
     #   rdkit
     #   scikit-learn
     #   scipy
-    #   tensorboard
     #   torch-geometric
     #   torchmetrics
-oauthlib==3.2.2
-    # via requests-oauthlib
 opt-einsum==3.3.0
     # via opt-einsum-fx
 opt-einsum-fx==0.1.4
@@ -371,16 +353,14 @@ pillow==10.3.0
     #   rdkit
 pkgutil-resolve-name==1.3.10
     # via jsonschema
-platformdirs==4.2.0
+platformdirs==4.2.1
     # via
     #   apeye
     #   jupyter-core
-pluggy==1.4.0
+pluggy==1.5.0
     # via pytest
 prompt-toolkit==3.0.43
     # via ipython
-protobuf==5.26.1
-    # via tensorboard
 psutil==5.9.8
     # via
     #   ipykernel
@@ -389,18 +369,12 @@ ptyprocess==0.7.0
     # via pexpect
 pure-eval==0.2.2
     # via stack-data
-pyarrow==15.0.2
+pyarrow==16.0.0
     # via
     #   datasets
     #   molflux
 pyarrow-hotfix==0.6
     # via datasets
-pyasn1==0.6.0
-    # via
-    #   pyasn1-modules
-    #   rsa
-pyasn1-modules==0.4.0
-    # via google-auth
 pydantic==1.10.15
     # via molflux
 pydata-sphinx-theme==0.14.4
@@ -426,7 +400,7 @@ python-dateutil==2.9.0.post0
     #   matplotlib
     #   molflux
     #   pandas
-pytorch-lightning==2.2.1
+pytorch-lightning==2.2.3
     # via lightning
 pytz==2024.1
     # via
@@ -443,7 +417,7 @@ pyyaml==6.0.1
     #   myst-nb
     #   myst-parser
     #   pytorch-lightning
-pyzmq==25.1.2
+pyzmq==26.0.2
     # via
     #   ipykernel
     #   jupyter-client
@@ -455,7 +429,7 @@ rapidfuzz==3.8.1
     # via thefuzz
 rdkit==2023.9.5
     # via physicsml (pyproject.toml)
-referencing==0.34.0
+referencing==0.35.0
     # via
     #   jsonschema
     #   jsonschema-specifications
@@ -468,22 +442,16 @@ requests==2.31.0
     #   huggingface-hub
     #   molflux
     #   qlient
-    #   requests-oauthlib
     #   responses
     #   sphinx
-    #   tensorboard
     #   torch-geometric
     #   torchani
-requests-oauthlib==2.0.0
-    # via google-auth-oauthlib
 responses==0.18.0
     # via evaluate
 rpds-py==0.18.0
     # via
     #   jsonschema
     #   referencing
-rsa==4.9
-    # via google-auth
 ruamel-yaml==0.18.6
     # via sphinx-toolbox
 ruamel-yaml-clib==0.2.8
@@ -572,10 +540,6 @@ tabulate==0.9.0
     #   sphinx-toolbox
 tenacity==8.2.3
     # via molflux
-tensorboard==2.14.0
-    # via physicsml (pyproject.toml)
-tensorboard-data-server==0.7.2
-    # via tensorboard
 thefuzz==0.22.1
     # via molflux
 threadpoolctl==3.4.0
@@ -586,7 +550,7 @@ tomli==2.0.1
     # via
     #   coverage
     #   pytest
-torch==2.0.1
+torch==2.3.0
     # via
     #   e3nn
     #   lightning
@@ -595,7 +559,7 @@ torch==2.0.1
     #   pytorch-lightning
     #   torchani
     #   torchmetrics
-torch-geometric==2.5.2
+torch-geometric==2.5.3
     # via physicsml (pyproject.toml)
 torchani==2.2.3
     # via physicsml (pyproject.toml)
@@ -616,7 +580,7 @@ tqdm==4.66.2
     #   molflux
     #   pytorch-lightning
     #   torch-geometric
-traitlets==5.14.2
+traitlets==5.14.3
     # via
     #   comm
     #   ipykernel
@@ -656,14 +620,10 @@ wcwidth==0.2.13
     # via prompt-toolkit
 webencodings==0.5.1
     # via html5lib
-websocket-client==1.7.0
+websocket-client==1.8.0
     # via qlient
-werkzeug==3.0.2
-    # via tensorboard
 wheel==0.43.0
-    # via
-    #   sphinx-togglebutton
-    #   tensorboard
+    # via sphinx-togglebutton
 widgetsnbextension==4.0.10
     # via ipywidgets
 xxhash==3.4.1

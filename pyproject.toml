@@ -32,7 +32,6 @@ dependencies = [
     'torch-geometric>=2.5.0',
     'e3nn',
     'torchani!=2.2.4', # bug in torchani where it tries to import cuaev when not built
-    'tensorboard',
 ]
 
 [project.optional-dependencies]

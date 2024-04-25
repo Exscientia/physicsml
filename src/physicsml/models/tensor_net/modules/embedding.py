@@ -27,7 +27,7 @@ class RadialEmbedding(torch.nn.Module):
         self.register_buffer("beta_k", beta_k.unsqueeze(0))
 
     def forward(self, r_ji: torch.Tensor) -> torch.Tensor:
-        rbf = torch.exp(-self.beta_k * (torch.exp(-r_ji) - self.mu_k) ** 2)  # type: ignore
+        rbf = torch.exp(-self.beta_k * (torch.exp(-r_ji) - self.mu_k) ** 2)
         return rbf
 
 
