@@ -40,6 +40,9 @@ A ``torch-geometric`` batch contains the following key-value pairs
 
     The edge attributes (i.e. initial edge features). It is a good idea to keep these distinct from edge features
     (for downstream operations which require the original edge attributes).
+* ``graph_attrs: Shape = torch.Size([num_graphs, dim_graph_attrs]) Type = torch.float32``
+
+    The graph attributes.
 * ``coordinates: Shape = torch.Size([num_nodes, 3]) Type = torch.float32``
 
     The coordinates.
