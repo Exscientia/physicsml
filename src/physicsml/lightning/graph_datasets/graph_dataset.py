@@ -18,6 +18,7 @@ class GraphDatum(Data):
     edge_index: Optional[torch.Tensor]
     node_attrs: Optional[torch.Tensor]
     edge_attrs: Optional[torch.Tensor]
+    graph_attrs: Optional[torch.Tensor]
     y_node_scalars: Optional[torch.Tensor]
     y_node_vector: Optional[torch.Tensor]
     y_edge_scalars: Optional[torch.Tensor]
@@ -36,6 +37,7 @@ class GraphDatum(Data):
         edge_index: Optional[torch.Tensor],  # [2, n_edges]
         node_attrs: Optional[torch.Tensor],  # [n_nodes, n_node_attrs]
         edge_attrs: Optional[torch.Tensor],  # [n_edges, n_edge_attrs]
+        graph_attrs: Optional[torch.Tensor],  # [1, n_graph_attrs]
         y_node_scalars: Optional[torch.Tensor],  # [n_nodes, n_scalars]
         y_node_vector: Optional[torch.Tensor],  # [n_nodes, dim_vector]
         y_edge_scalars: Optional[torch.Tensor],  # [n_edges, n_scalars]
@@ -82,6 +84,7 @@ class GraphDatum(Data):
             "edge_index": edge_index,
             "node_attrs": node_attrs,
             "edge_attrs": edge_attrs,
+            "graph_attrs": graph_attrs,
             "y_node_scalars": y_node_scalars,
             "y_node_vector": y_node_vector,
             "y_edge_scalars": y_edge_scalars,
@@ -152,6 +155,7 @@ class GraphDataset(Dataset):
         edge_attrs_col: str,
         node_idxs_col: str,
         edge_idxs_col: str,
+        graph_attrs_cols: Optional[List[str]],
         coordinates_col: str,
         total_atomic_energy_col: str,
         y_node_scalars: Optional[List[str]],
@@ -178,6 +182,11 @@ class GraphDataset(Dataset):
         self.edge_attrs_col = edge_attrs_col
         self.node_idxs_col = node_idxs_col
         self.edge_idxs_col = edge_idxs_col
+        self.graph_attrs_cols = graph_attrs_cols
+        # sort alphabetically
+        if self.graph_attrs_cols is not None:
+            self.graph_attrs_cols = sorted(self.graph_attrs_cols)
+
         self.coordinates_col = coordinates_col
         self.total_atomic_energy_col = total_atomic_energy_col
 
@@ -247,6 +256,22 @@ class GraphDataset(Dataset):
         initial_edge_indices = datapoint.get(self.edge_idxs_col, None)
         coordinates = datapoint[self.coordinates_col]
         total_atomic_energy = datapoint.get(self.total_atomic_energy_col, None)
+
+        if self.graph_attrs_cols is not None:
+            graph_attrs_list = []
+            for graph_attrs_col in self.graph_attrs_cols:
+                feat = datapoint[graph_attrs_col]
+                if isinstance(feat, list):
+                    graph_attrs_list += feat
+                elif isinstance(feat, float):
+                    graph_attrs_list.append(feat)
+                else:
+                    raise RuntimeError(
+                        f"Unsupported type {type(feat)} for graph attributes.",
+                    )
+            graph_attrs = torch.tensor(graph_attrs_list).unsqueeze(0) * 1.0
+        else:
+            graph_attrs = None
 
         if raw_atomic_numbers is not None:
             raw_atomic_numbers = torch.tensor(raw_atomic_numbers)
@@ -352,6 +377,7 @@ class GraphDataset(Dataset):
             cell_shift_vector=cell_shift_vector,
             node_attrs=node_attrs,
             edge_attrs=edge_attrs,
+            graph_attrs=graph_attrs,
             y_node_scalars=y_node_scalars,
             y_node_vector=y_node_vector,
             y_edge_scalars=y_edge_scalars,

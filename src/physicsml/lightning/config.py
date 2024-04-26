@@ -35,6 +35,7 @@ class PhysicsMLDataModuleConfig(DataModuleConfig):
     edge_attrs_col: str = "physicsml_bond_features"
     node_idxs_col: str = "physicsml_atom_idxs"
     edge_idxs_col: str = "physicsml_bond_idxs"
+    graph_attrs_cols: Optional[List[str]] = None
     total_atomic_energy_col: str = "physicsml_total_atomic_energy"
     cut_off: float = 5.0
     pbc: Optional[Tuple[bool, bool, bool]] = None

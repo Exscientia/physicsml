@@ -9,7 +9,13 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ---------------------------------------------------------
- ## [0.2.4] - 2024-04-24
+ ## [0.3.0] - 2024-04-25
+
+### Added
+
+* Added graph attrs in graph datasets/loaders
+
+## [0.2.4] - 2024-04-24
 
 ### Fixed
 

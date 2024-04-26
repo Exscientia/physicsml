@@ -69,6 +69,9 @@ The ``datamodule`` config controls all aspects of dataloading. It takes in the f
 * ``num_elements: int = 0``
 
     The number of atomic elements used (for example 4 in ANI1x).
+* ``graph_attrs_cols: Optional[List[str]] = None
+
+    The names of the graph attributes in the input dataset to be concatenated and added to the batch.
 * ``y_node_scalars: Optional[List[str]] = None``
 
     The subset of ``y_features`` which are node level scalars (for example partial charges).
