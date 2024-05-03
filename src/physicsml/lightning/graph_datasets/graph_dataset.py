@@ -17,6 +17,7 @@ class GraphDatum(Data):
     atomic_numbers: Optional[torch.Tensor]
     edge_index: Optional[torch.Tensor]
     node_attrs: Optional[torch.Tensor]
+    node_vector: Optional[torch.Tensor]
     edge_attrs: Optional[torch.Tensor]
     y_node_scalars: Optional[torch.Tensor]
     y_node_vector: Optional[torch.Tensor]
@@ -35,6 +36,7 @@ class GraphDatum(Data):
         atomic_numbers: Optional[torch.Tensor],  # [n_nodes]
         edge_index: Optional[torch.Tensor],  # [2, n_edges]
         node_attrs: Optional[torch.Tensor],  # [n_nodes, n_node_attrs]
+        node_vector: Optional[torch.Tensor], # [n_nodes, n_vectors, dim_vector]
         edge_attrs: Optional[torch.Tensor],  # [n_edges, n_edge_attrs]
         y_node_scalars: Optional[torch.Tensor],  # [n_nodes, n_scalars]
         y_node_vector: Optional[torch.Tensor],  # [n_nodes, dim_vector]
@@ -81,6 +83,7 @@ class GraphDatum(Data):
             "atomic_numbers": atomic_numbers,
             "edge_index": edge_index,
             "node_attrs": node_attrs,
+            "node_vector": node_vector,
             "edge_attrs": edge_attrs,
             "y_node_scalars": y_node_scalars,
             "y_node_vector": y_node_vector,
@@ -100,6 +103,7 @@ class GraphDatum(Data):
             "raw_atomic_numbers",
             "atomic_numbers",
             "node_attrs",
+            "node_vector",
             "y_node_scalars",
             "y_node_vector",
             "coordinates",
@@ -149,6 +153,7 @@ class GraphDataset(Dataset):
         with_y_features: bool,
         atomic_numbers_col: str,
         node_attrs_col: str,
+        node_vector_col: str,
         edge_attrs_col: str,
         node_idxs_col: str,
         edge_idxs_col: str,
@@ -175,6 +180,7 @@ class GraphDataset(Dataset):
         # columns
         self.atomic_numbers_col = atomic_numbers_col
         self.node_attrs_col = node_attrs_col
+        self.node_vector_col = node_vector_col
         self.edge_attrs_col = edge_attrs_col
         self.node_idxs_col = node_idxs_col
         self.edge_idxs_col = edge_idxs_col
@@ -243,6 +249,7 @@ class GraphDataset(Dataset):
         # Extract data from datapoint
         raw_atomic_numbers = datapoint.get(self.atomic_numbers_col, None)
         node_attrs = datapoint.get(self.node_attrs_col, None)
+        node_vector = datapoint.get(self.node_vector_col, None)
         initial_edge_attrs = datapoint.get(self.edge_attrs_col, None)
         initial_edge_indices = datapoint.get(self.edge_idxs_col, None)
         coordinates = datapoint[self.coordinates_col]
@@ -274,6 +281,9 @@ class GraphDataset(Dataset):
             node_attrs = atomic_numbers * 1.0
         else:
             node_attrs = None
+
+        if node_vector is not None:
+            node_vector = torch.tensor(node_vector)
 
         if initial_edge_attrs == []:
             # dataset will return list when in torch format with empty edge_attrs
@@ -351,6 +361,7 @@ class GraphDataset(Dataset):
             edge_index=edge_indices,
             cell_shift_vector=cell_shift_vector,
             node_attrs=node_attrs,
+            node_vector=node_vector,
             edge_attrs=edge_attrs,
             y_node_scalars=y_node_scalars,
             y_node_vector=y_node_vector,

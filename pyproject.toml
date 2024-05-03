@@ -88,6 +88,7 @@ egnn_model = 'physicsml.models.egnn.supervised.egnn_model:EGNNModel'
 mace_model = 'physicsml.models.mace.supervised.mace_model:MACEModel'
 nequip_model = 'physicsml.models.nequip.supervised.nequip_model:NequipModel'
 tensor_net_model = 'physicsml.models.tensor_net.supervised.tensor_net_model:TensorNetModel'
+modified_mace_model = 'physicsml.models.modified_mace.supervised.mace_model:ModifiedMACEModel'
 
 adapter_egnn_model = 'physicsml.models.egnn.adapter.adapter_egnn_model:AdapterEGNNModel'
 adapter_mace_model = 'physicsml.models.mace.adapter.adapter_mace_model:AdapterMACEModel'
