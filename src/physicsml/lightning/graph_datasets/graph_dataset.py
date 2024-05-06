@@ -153,7 +153,7 @@ class GraphDataset(Dataset):
         with_y_features: bool,
         atomic_numbers_col: str,
         node_attrs_col: str,
-        node_vector_col: Optional[List[str]],
+        node_vector_col: str,
         edge_attrs_col: str,
         node_idxs_col: str,
         edge_idxs_col: str,
