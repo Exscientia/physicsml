@@ -50,6 +50,7 @@ class PhysicsMLDataModule(LightningDataModule):
             with_y_features=(split != "predict"),
             atomic_numbers_col=self.model_config.datamodule.atomic_numbers_col,
             node_attrs_col=self.model_config.datamodule.node_attrs_col,
+            node_vector_col=self.model_config.datamodule.node_vector_col,
             edge_attrs_col=self.model_config.datamodule.edge_attrs_col,
             node_idxs_col=self.model_config.datamodule.node_idxs_col,
             edge_idxs_col=self.model_config.datamodule.edge_idxs_col,
