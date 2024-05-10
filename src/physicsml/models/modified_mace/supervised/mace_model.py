@@ -6,7 +6,7 @@ from physicsml.lightning.model import PhysicsMLModelBase
 from physicsml.models.modified_mace.supervised.default_configs import (
     ModifiedMACEModelConfig,
 )
-from physicsml.models.mace.supervised.mace_module import PooledMACEModule
+from physicsml.models.modified_mace.supervised.mace_module import PooledMACEModule
 
 
 class ModifiedMACEModel(PhysicsMLModelBase[ModifiedMACEModelConfig]):

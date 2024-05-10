@@ -39,6 +39,7 @@ class PooledMACEModule(PhysicsMLModuleBase):
             max_ell=model_config.max_ell,
             num_interactions=model_config.num_interactions,
             num_node_feats=model_config.num_node_feats,
+            num_node_vectors=model_config.num_node_vectors,
             num_edge_feats=model_config.num_edge_feats,
             hidden_irreps=model_config.hidden_irreps,
             avg_num_neighbours=model_config.avg_num_neighbours or 1.0,
