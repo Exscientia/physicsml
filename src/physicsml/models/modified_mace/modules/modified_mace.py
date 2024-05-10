@@ -12,7 +12,7 @@ from physicsml.models.mace.modules.blocks import (
     RadialEmbeddingBlock,
     ScaleShiftBlock,
 )
-from physicsml.models.utils import compute_lengths_and_vectors
+from physicsml.models.utils import compute_lengths, compute_lengths_and_vectors
 
 
 class ModifiedMACE(torch.nn.Module):
@@ -29,6 +29,7 @@ class ModifiedMACE(torch.nn.Module):
         max_ell: int,
         num_interactions: int,
         num_node_feats: int,
+        num_node_vectors: int,
         num_edge_feats: int,
         hidden_irreps: str,
         avg_num_neighbours: float,
@@ -43,7 +44,7 @@ class ModifiedMACE(torch.nn.Module):
         self.hidden_irreps = o3.Irreps(hidden_irreps)
         num_0e_features = self.hidden_irreps.count(o3.Irrep(0, 1))
 
-        node_attr_irreps = o3.Irreps(f"{num_node_feats}x0e")
+        node_attr_irreps = o3.Irreps(f"{num_node_feats + num_node_vectors}x0e")
         node_feats_irreps = o3.Irreps(f"{num_0e_features}x0e")
         edge_feats_irreps = o3.Irreps(f"{num_bessel + num_edge_feats}x0e")
 
@@ -69,6 +70,12 @@ class ModifiedMACE(torch.nn.Module):
         # Interactions, tensor products, and readouts
         interaction_irreps = (
             (self.spherical_harmonics.irreps_out * num_0e_features)
+            .sort()
+            .irreps.simplify()
+        )
+
+        node_vectors_attrs_irreps = (
+            (self.spherical_harmonics.irreps_out * num_node_vectors)
             .sort()
             .irreps.simplify()
         )
@@ -103,6 +110,7 @@ class ModifiedMACE(torch.nn.Module):
                 InteractionBlock(
                     node_feats_irreps=node_feats_irreps_tmp,
                     node_attrs_irreps=node_attr_irreps,
+                    node_vectors_attrs_irreps=node_vectors_attrs_irreps,
                     edge_attrs_irreps=self.spherical_harmonics.irreps_out,
                     edge_feats_irreps=edge_feats_irreps,
                     interaction_irreps=interaction_irreps,
@@ -146,7 +154,10 @@ class ModifiedMACE(torch.nn.Module):
             cell_shift_vector=cell_shift_vector,
         )
 
-        node_feats = self.node_embedding(data["node_attrs"])
+        node_vectors_length = compute_lengths(data["node_vectors"])
+        node_attrs = torch.cat([data["node_attrs"], node_vectors_length], dim=-1)
+        node_feats = self.node_embedding(node_attrs)
+        node_vectors_attrs = self.spherical_harmonics(data["node_vectors"])
         edge_attrs = self.spherical_harmonics(vectors)
         edge_feats = self.radial_embedding(lengths)
         if "edge_attrs" in data:
@@ -158,6 +169,7 @@ class ModifiedMACE(torch.nn.Module):
             a_i = interaction(
                 node_feats=node_feats,
                 node_attrs=data["node_attrs"],
+                node_vectors_attrs=node_vectors_attrs,
                 edge_attrs=edge_attrs,
                 edge_feats=edge_feats,
                 edge_index=data["edge_index"],

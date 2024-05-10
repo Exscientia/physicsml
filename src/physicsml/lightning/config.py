@@ -32,7 +32,7 @@ class PhysicsMLDataModuleConfig(DataModuleConfig):
     atomic_numbers_col: str = "physicsml_atom_numbers"
     coordinates_col: str = "physicsml_coordinates"
     node_attrs_col: str = "physicsml_atom_features"
-    node_vector_col: str = "physicsml_node_vectors"
+    node_vectors_col: str = "prev"
     edge_attrs_col: str = "physicsml_bond_features"
     node_idxs_col: str = "physicsml_atom_idxs"
     edge_idxs_col: str = "physicsml_bond_idxs"

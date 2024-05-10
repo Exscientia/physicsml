@@ -128,6 +128,7 @@ class InteractionBlock(torch.nn.Module):
         self,
         node_feats_irreps: o3.Irreps,
         node_attrs_irreps: o3.Irreps,
+        node_vectors_attrs_irreps: o3.Irreps,
         edge_attrs_irreps: o3.Irreps,
         edge_feats_irreps: o3.Irreps,
         interaction_irreps: o3.Irreps,
@@ -155,6 +156,12 @@ class InteractionBlock(torch.nn.Module):
             interaction_irreps,
         )
 
+        tp_out_irreps_vec, instructions_vec = tp_out_irreps_with_instructions(
+            tp_out_irreps,
+            node_vectors_attrs_irreps,
+            interaction_irreps,
+        )
+
         # net to compute R_n -> R_k_l1_l2_l3
         self.net_R_channels = nn.FullyConnectedNet(
             [edge_feats_irreps.dim, 64, 64, 64, tp_out_irreps.num_irreps],
@@ -172,11 +179,27 @@ class InteractionBlock(torch.nn.Module):
             internal_weights=False,
         )
 
+        self.conv_tp_vec = o3.TensorProduct(
+            tp_out_irreps,
+            node_vectors_attrs_irreps,
+            tp_out_irreps_vec,
+            instructions=instructions_vec,
+            shared_weights=False,
+            internal_weights=False,
+        )
+
         # linear to take the tp_out_irreps (which are a subset of interaction_irreps,
         # since prod node_feats_irreps and edge_attrs_irreps doesn't necessarily
         # give all interaction_irreps
         self.linear = o3.Linear(
             tp_out_irreps.simplify(),
+            interaction_irreps,
+            internal_weights=True,
+            shared_weights=True,
+        )
+
+        self.linear_vec = o3.Linear(
+            tp_out_irreps_vec.simplify(),
             interaction_irreps,
             internal_weights=True,
             shared_weights=True,
@@ -198,6 +221,7 @@ class InteractionBlock(torch.nn.Module):
         self,
         node_feats: torch.Tensor,
         node_attrs: torch.Tensor,
+        node_vectors_attrs: torch.Tensor,
         edge_attrs: torch.Tensor,
         edge_feats: torch.Tensor,
         edge_index: torch.Tensor,
@@ -217,6 +241,12 @@ class InteractionBlock(torch.nn.Module):
             w_h_j_k_l2_m2[sender],
             edge_attrs,
             r_ij_k_l1_l2_l3,
+        )
+
+        tp_a_ij_k_l3_m3 = self.conv_tp_vec(
+            tp_a_ij_k_l3_m3,
+            node_vectors_attrs,
+            tp_a_ij_k_l3_m3
         )
 
         # sum over neighbours, shape = [n_nodes, irreps]

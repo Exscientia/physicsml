@@ -10,6 +10,7 @@ from physicsml.lightning.config import ConfigDict, PhysicsMLModelConfig
 @dataclass(config=ConfigDict)
 class ModifiedMACEModelConfig(PhysicsMLModelConfig):
     num_node_feats: int = 0
+    num_node_vectors: int = 0
     num_edge_feats: int = 0
     num_bessel: int = 8
     num_polynomial_cutoff: int = 5
