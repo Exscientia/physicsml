@@ -36,7 +36,7 @@ class GraphDatum(Data):
         atomic_numbers: Optional[torch.Tensor],  # [n_nodes]
         edge_index: Optional[torch.Tensor],  # [2, n_edges]
         node_attrs: Optional[torch.Tensor],  # [n_nodes, n_node_attrs]
-        node_vectors: Optional[torch.Tensor], # [n_nodes, n_vectors, dim_vector]
+        node_vectors: Optional[torch.Tensor], # [n_nodes, n_vectors, 3]
         edge_attrs: Optional[torch.Tensor],  # [n_edges, n_edge_attrs]
         y_node_scalars: Optional[torch.Tensor],  # [n_nodes, n_scalars]
         y_node_vector: Optional[torch.Tensor],  # [n_nodes, dim_vector]
@@ -249,7 +249,7 @@ class GraphDataset(Dataset):
         # Extract data from datapoint
         raw_atomic_numbers = datapoint.get(self.atomic_numbers_col, None)
         node_attrs = datapoint.get(self.node_attrs_col, None)
-        node_vectors = datapoint.get(self.node_vectors_col, None)
+        node_vectors = datapoint[self.node_vectors_col]
         initial_edge_attrs = datapoint.get(self.edge_attrs_col, None)
         initial_edge_indices = datapoint.get(self.edge_idxs_col, None)
         coordinates = datapoint[self.coordinates_col]
