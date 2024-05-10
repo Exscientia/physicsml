@@ -4,7 +4,7 @@ import torch
 from e3nn import o3
 from torch_geometric.utils import scatter
 
-from physicsml.models.mace.modules.blocks import (
+from physicsml.models.modified_mace.modules.blocks import (
     InteractionBlock,
     MessageBlock,
     NodeUpdateBlock,
