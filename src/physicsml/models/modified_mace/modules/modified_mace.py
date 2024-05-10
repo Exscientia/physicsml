@@ -154,7 +154,7 @@ class ModifiedMACE(torch.nn.Module):
             cell_shift_vector=cell_shift_vector,
         )
 
-        node_vectors_length = torch.transpose(compute_lengths(data["node_vectors"]), 0, 1)
+        node_vectors_length = torch.transpose(compute_lengths(data["node_vectors"]), -2, -1)
         node_attrs = torch.cat([data["node_attrs"], node_vectors_length], dim=-1)
         node_feats = self.node_embedding(node_attrs)
         node_vectors_attrs = self.spherical_harmonics(data["node_vectors"])
