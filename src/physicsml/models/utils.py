@@ -97,7 +97,7 @@ def compute_lengths_and_vectors(
 def compute_lengths(
     vectors: torch.Tensor,
 ) -> torch.Tensor:
-    abs_r = torch.norm(vectors, dim=-1).unsqueeze(-1).clamp(min=1e-8)
+    abs_r = torch.norm(vectors, dim=-1).clamp(min=1e-8)
 
     return abs_r
 
