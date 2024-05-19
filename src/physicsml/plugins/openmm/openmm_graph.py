@@ -37,6 +37,10 @@ class OpenMMGraph(OpenMMModuleBase):
             self.model_config.datamodule.node_attrs_col,
             None,
         )
+        node_vectors = datapoint.get(
+            self.model_config.datamodule.node_vectors_col,
+            None,
+        )
         initial_edge_attrs = datapoint.get(
             self.model_config.datamodule.edge_attrs_col,
             None,
@@ -99,6 +103,8 @@ class OpenMMGraph(OpenMMModuleBase):
             batch_dict["total_atomic_energy"] = total_atomic_energy.type(self.dtype)
         if node_attrs is not None:
             batch_dict["node_attrs"] = node_attrs.type(self.dtype)
+        if node_vectors["node_vectors"] is not None:
+            batch_dict["node_vectors"] = torch.tensor(node_vectors)
         if self.cell is not None:
             batch_dict["cell"] = torch.tensor(self.cell)
 

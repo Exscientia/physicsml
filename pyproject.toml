@@ -113,6 +113,7 @@ allegro = 'physicsml.models.allegro.allegro_prism:Allegro'
 ani = 'physicsml.models.ani.ani_prism:ANI'
 egnn = 'physicsml.models.egnn.egnn_prism:EGNN'
 mace = 'physicsml.models.mace.mace_prism:MACE'
+modified_mace = 'physicsml.models.modified_mace.mace_prism:MACE'
 nequip = 'physicsml.models.nequip.nequip_prism:Nequip'
 
 [project.urls]
