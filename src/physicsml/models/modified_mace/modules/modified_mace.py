@@ -154,10 +154,10 @@ class ModifiedMACE(torch.nn.Module):
             cell_shift_vector=cell_shift_vector,
         )
 
-        node_vectors_length = torch.transpose(compute_lengths(data["node_vectors"]), -2, -1)
+        node_vectors_length = compute_lengths(data["node_vectors"])
         node_attrs = torch.cat([data["node_attrs"], node_vectors_length], dim=-1)
         node_feats = self.node_embedding(node_attrs)
-        node_vectors_attrs = self.spherical_harmonics(data["node_vectors"])
+        node_vectors_attrs = self.spherical_harmonics(data["node_vectors"]).flatten(-2,-1)
         edge_attrs = self.spherical_harmonics(vectors)
         edge_feats = self.radial_embedding(lengths)
         if "edge_attrs" in data:
@@ -168,19 +168,19 @@ class ModifiedMACE(torch.nn.Module):
         ):
             a_i = interaction(
                 node_feats=node_feats,
-                node_attrs=data["node_attrs"],
+                node_attrs=node_attrs,
                 node_vectors_attrs=node_vectors_attrs,
                 edge_attrs=edge_attrs,
                 edge_feats=edge_feats,
                 edge_index=data["edge_index"],
             )
 
-            m_i = message(a_i=a_i, node_attrs=data["node_attrs"])
+            m_i = message(a_i=a_i, node_attrs=node_attrs)
 
             node_feats = node_update(
                 m_i=m_i,
                 node_feats=node_feats,
-                node_attrs=data["node_attrs"],
+                node_attrs=node_attrs,
             )
 
             data[f"node_feats_{idx}"] = node_feats

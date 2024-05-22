@@ -150,15 +150,15 @@ class InteractionBlock(torch.nn.Module):
         # find the only possible results from the tensor prod of node feats with edge attrs into targets
         # only do the tensor prod for these possibilities
 
-        tp_out_irreps, instructions = tp_out_irreps_with_instructions(
+        tp_out_irreps_vec, instructions_vec = tp_out_irreps_with_instructions(
             node_feats_irreps,
-            edge_attrs_irreps,
+            node_vectors_attrs_irreps,
             interaction_irreps,
         )
 
-        tp_out_irreps_vec, instructions_vec = tp_out_irreps_with_instructions(
-            tp_out_irreps,
-            node_vectors_attrs_irreps,
+        tp_out_irreps, instructions = tp_out_irreps_with_instructions(
+            tp_out_irreps_vec,
+            edge_attrs_irreps,
             interaction_irreps,
         )
 
@@ -168,22 +168,22 @@ class InteractionBlock(torch.nn.Module):
             torch.nn.SiLU(),
         )
 
-        # product to do
-        # \sum_{l1_l2_m1_m2} (CGs) (R_ij_k_l1_l2_l3) (Y_ij_l1_m1) (W h)_j_k_l2_m2 -> A_ij_k_l3_m3
-        self.conv_tp = o3.TensorProduct(
-            node_feats_irreps,
-            edge_attrs_irreps,
-            tp_out_irreps,
-            instructions=instructions,
-            shared_weights=False,
-            internal_weights=False,
-        )
-
         self.conv_tp_vec = o3.TensorProduct(
-            tp_out_irreps,
+            node_feats_irreps,
             node_vectors_attrs_irreps,
             tp_out_irreps_vec,
             instructions=instructions_vec,
+            shared_weights=True,
+            internal_weights=True,
+        )
+
+        # product to do
+        # \sum_{l1_l2_m1_m2} (CGs) (R_ij_k_l1_l2_l3) (Y_ij_l1_m1) (W h)_j_k_l2_m2 -> A_ij_k_l3_m3
+        self.conv_tp = o3.TensorProduct(
+            tp_out_irreps_vec,
+            edge_attrs_irreps,
+            tp_out_irreps,
+            instructions=instructions,
             shared_weights=False,
             internal_weights=False,
         )
@@ -198,12 +198,12 @@ class InteractionBlock(torch.nn.Module):
             shared_weights=True,
         )
 
-        self.linear_vec = o3.Linear(
-            tp_out_irreps_vec.simplify(),
-            interaction_irreps,
-            internal_weights=True,
-            shared_weights=True,
-        )
+        # self.linear_vec = o3.Linear(
+        #     tp_out_irreps.simplify(),
+        #     interaction_irreps,
+        #     internal_weights=True,
+        #     shared_weights=True,
+        # )
 
         if mix_with_node_attrs:
             self.mix_layer = o3.FullyConnectedTensorProduct(
@@ -233,21 +233,22 @@ class InteractionBlock(torch.nn.Module):
         # compute (W h)_j_k_l2_m2
         w_h_j_k_l2_m2 = self.linear_node_feats(node_feats)
 
+        w_h_j_k_l2_m2_idk = self.conv_tp_vec(
+            w_h_j_k_l2_m2,
+            node_vectors_attrs,
+        )
+
         # compute R_ij_k_l1_l2_l3
         r_ij_k_l1_l2_l3 = self.net_R_channels(edge_feats)
 
+
         # compute A_ij_k_l3_m3. Remember that edge_attrs = Y_ij_l1_m1. shape = [n_edges, irreps]
         tp_a_ij_k_l3_m3 = self.conv_tp(
-            w_h_j_k_l2_m2[sender],
+            w_h_j_k_l2_m2_idk[sender],
             edge_attrs,
             r_ij_k_l1_l2_l3,
         )
 
-        tp_a_ij_k_l3_m3 = self.conv_tp_vec(
-            tp_a_ij_k_l3_m3,
-            node_vectors_attrs,
-            tp_a_ij_k_l3_m3
-        )
 
         # sum over neighbours, shape = [n_nodes, irreps]
         tp_a_i_k_l3_m3 = scatter(
