@@ -128,3 +128,13 @@ def generate_random_mask(
     )
 
     return node_mask, edge_mask
+
+
+def merge_spherical_harmonics(sph: torch.Tensor, max_ell):
+    merged = torch.empty([sph.shape[0],sph.shape[1]*sph.shape[2]])
+    # keep the representations of the same l next to each other
+    for i in range(max_ell+1):
+        for j in range(sph.shape[1]):
+            merged[:,(i**2)*sph.shape[1]+((i+1)**2-i**2)*j:(i**2)*sph.shape[1]+((i+1)**2-i**2)*j+(i+1)**2-i**2] = sph[:,j,i**2:(i+1)**2]
+    return merged
+

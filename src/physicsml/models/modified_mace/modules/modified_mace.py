@@ -12,7 +12,7 @@ from physicsml.models.modified_mace.modules.blocks import (
     RadialEmbeddingBlock,
     ScaleShiftBlock,
 )
-from physicsml.models.utils import compute_lengths, compute_lengths_and_vectors
+from physicsml.models.utils import compute_lengths, compute_lengths_and_vectors, merge_spherical_harmonics
 
 
 class ModifiedMACE(torch.nn.Module):
@@ -39,6 +39,7 @@ class ModifiedMACE(torch.nn.Module):
         super().__init__()
 
         self.r_max = cut_off
+        self.max_ell = max_ell
 
         # defining irreps
         self.hidden_irreps = o3.Irreps(hidden_irreps)
@@ -157,7 +158,7 @@ class ModifiedMACE(torch.nn.Module):
         node_vectors_length = compute_lengths(data["node_vectors"])
         node_attrs = torch.cat([data["node_attrs"], node_vectors_length], dim=-1)
         node_feats = self.node_embedding(node_attrs)
-        node_vectors_attrs = self.spherical_harmonics(data["node_vectors"]).flatten(-2,-1)
+        node_vectors_attrs = merge_spherical_harmonics(self.spherical_harmonics(data["node_vectors"]), max_ell=self.max_ell)
         edge_attrs = self.spherical_harmonics(vectors)
         edge_feats = self.radial_embedding(lengths)
         if "edge_attrs" in data:
