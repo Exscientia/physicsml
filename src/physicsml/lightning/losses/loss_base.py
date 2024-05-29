@@ -21,10 +21,14 @@ class LossBase(torch.nn.Module):
         pred: Dict[str, torch.Tensor],
         ref: Dict[str, torch.Tensor],
     ) -> torch.Tensor:
-        loss: torch.Tensor = self.weight * self.loss_func(
+        loss_vec: torch.Tensor = self.loss_func(
             pred[self.column_name],
             ref[self.column_name],
         )
+        loss = torch.Tensor([0])
+        for i in range(len(self.weight)):
+            for j in range(3):
+                loss += loss_vec[i][j] * self.weight[i]
 
         return loss
 
