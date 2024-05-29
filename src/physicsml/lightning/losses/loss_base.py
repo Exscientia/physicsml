@@ -25,7 +25,7 @@ class LossBase(torch.nn.Module):
             pred[self.column_name],
             ref[self.column_name],
         )
-        loss = torch.Tensor([0])
+        loss = 0
         for i in range(len(self.weight)):
             for j in range(3):
                 loss += loss_vec[i][j] * self.weight[i]
