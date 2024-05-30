@@ -62,7 +62,7 @@ def construct_edge_indices_and_attrs(
     cell: Optional[torch.Tensor],
     self_interaction: bool,
 ) -> Tuple[torch.Tensor, Optional[torch.Tensor], torch.Tensor]:
-    if (pbc is not None) and (cell is not None):
+    if (pbc is not None) and all(pbc) and (cell is not None):
         cell = cell.type(positions.dtype).to(positions.device)
 
         # solve pos = coefs^T @ cell
