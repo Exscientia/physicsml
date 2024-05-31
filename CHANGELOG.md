@@ -9,6 +9,12 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ---------------------------------------------------------
+ ## [0.3.1] - 2024-05-31
+
+### Fixed
+
+* check pbc is True
+
  ## [0.3.0] - 2024-04-25
 
 ### Added
