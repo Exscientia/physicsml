@@ -30,7 +30,7 @@ class LossBase(torch.nn.Module):
             for j in range(3):
                 loss += loss_vec[i][j] * self.weight[i]
 
-        return loss
+        return loss/len(loss_vec)
 
 
 _AVAILABLE_LOSSES["LossBase"] = LossBase
