@@ -4,8 +4,8 @@ from typing import Any, Dict, List, Literal, Optional, Tuple
 from molflux.modelzoo.models.lightning.config import (
     DataModuleConfig,
 )
-from pydantic import validator
-from pydantic.dataclasses import dataclass
+from pydantic.v1 import validator
+from pydantic.v1 import dataclasses
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +16,7 @@ class ConfigDict:
     smart_union = True
 
 
-@dataclass(config=ConfigDict)
+@dataclasses.dataclass(config=ConfigDict)
 class ANIDataModuleConfig(DataModuleConfig):
     y_node_scalars: Optional[List[str]] = None
     y_node_vector: Optional[str] = None

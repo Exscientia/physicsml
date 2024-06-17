@@ -8,8 +8,8 @@ from molflux.modelzoo.models.lightning.config import (
     OptimizerConfig,
     SchedulerConfig,
 )
-from pydantic import validator
-from pydantic.dataclasses import dataclass
+from pydantic.v1 import validator
+from pydantic.v1 import dataclasses
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +20,7 @@ class ConfigDict:
     smart_union = True
 
 
-@dataclass(config=ConfigDict)
+@dataclasses.dataclass(config=ConfigDict)
 class PhysicsMLDataModuleConfig(DataModuleConfig):
     num_elements: int = 0
     y_node_scalars: Optional[List[str]] = None
@@ -94,7 +94,7 @@ class PhysicsMLDataModuleConfig(DataModuleConfig):
         return validation_batch_size
 
 
-@dataclass(config=ConfigDict)
+@dataclasses.dataclass(config=ConfigDict)
 class PhysicsMLModelConfig(LightningConfig):
     compute_forces: bool = False
     datamodule: PhysicsMLDataModuleConfig = field(
