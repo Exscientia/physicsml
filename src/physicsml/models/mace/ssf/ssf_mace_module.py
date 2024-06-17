@@ -1,8 +1,8 @@
 from typing import Any, Dict, Optional
 
 import torch
-from e3nn import o3
 from class_resolver.contrib.torch import optimizer_resolver
+from e3nn import o3
 
 from physicsml.lightning.losses.construct_loss import construct_loss
 from physicsml.lightning.module import PhysicsMLModuleBase

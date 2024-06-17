@@ -8,8 +8,7 @@ from molflux.modelzoo.models.lightning.config import (
     OptimizerConfig,
     SchedulerConfig,
 )
-from pydantic.v1 import validator
-from pydantic.v1 import dataclasses
+from pydantic.v1 import dataclasses, validator
 
 logger = logging.getLogger(__name__)
 

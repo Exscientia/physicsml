@@ -4,8 +4,7 @@ from typing import Any, Dict, List, Literal, Optional, Tuple
 from molflux.modelzoo.models.lightning.config import (
     DataModuleConfig,
 )
-from pydantic.v1 import validator
-from pydantic.v1 import dataclasses
+from pydantic.v1 import dataclasses, validator
 
 logger = logging.getLogger(__name__)
 

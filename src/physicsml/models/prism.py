@@ -7,6 +7,7 @@ import molflux.core as molflux_core
 import torch
 from molflux.features.bases import RepresentationBase
 from molflux.features.typing import MolArray
+from molflux.features.utils import assert_n_positional_args
 from molflux.modelzoo.models.lightning.config import DataModuleConfig, TrainerConfig
 
 from physicsml.backends.backend_selector import to_mol, to_mol_bytes
@@ -89,7 +90,7 @@ class PhysicsMLPrismBase(RepresentationBase):
 
     def _featurise(
         self,
-        samples: MolArray,
+        *columns: MolArray,
         datamodule_config: Union[DataModuleConfig, Dict[str, Any], None] = None,
         trainer_config: Union[TrainerConfig, Dict[str, Any], None] = None,
         **kwargs: Any,
@@ -103,6 +104,8 @@ class PhysicsMLPrismBase(RepresentationBase):
 
         Returns: a dict of the features as torch tensors
         """
+        assert_n_positional_args(*columns, expected_size=1)
+        samples = columns[0]
 
         samples = [to_mol(self.backend)(sample) for sample in samples]
 

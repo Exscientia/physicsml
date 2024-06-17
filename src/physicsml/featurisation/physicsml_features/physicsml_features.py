@@ -3,6 +3,7 @@ from typing import Any, Dict, List, Optional
 from molflux.features.bases import RepresentationBase
 from molflux.features.info import RepresentationInfo
 from molflux.features.typing import MolArray
+from molflux.features.utils import assert_n_positional_args
 
 from physicsml.backends.backend_selector import BackendT, to_mol
 from physicsml.featurisation.physicsml_features.atom_features import (
@@ -96,9 +97,12 @@ class PhysicsMLFeatures(RepresentationBase):
 
     def _featurise(
         self,
-        samples: MolArray,
+        *columns: MolArray,
         **kwargs: Any,
     ) -> Dict[str, Any]:
+        assert_n_positional_args(*columns, expected_size=1)
+        samples = columns[0]
+
         mols = (to_mol(self.backend)(sample) for sample in samples)
 
         list_of_feature_dicts = []
