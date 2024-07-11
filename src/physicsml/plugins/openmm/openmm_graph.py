@@ -80,7 +80,7 @@ class OpenMMGraph(OpenMMModuleBase):
             initial_edge_indices = torch.empty(0, 2)
 
         # setting up the batch
-        batch_dict = {}
+        batch_dict: Dict[str, torch.Tensor] = {}
         batch_dict["num_graphs"] = torch.tensor(1)
         if raw_atomic_numbers is not None:
             batch_dict["raw_atomic_numbers"] = raw_atomic_numbers

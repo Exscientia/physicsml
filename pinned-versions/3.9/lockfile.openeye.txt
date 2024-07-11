@@ -60,6 +60,8 @@ certifi==2024.7.4
     # via requests
 charset-normalizer==3.3.2
     # via requests
+class-resolver==0.4.3
+    # via molflux
 click==8.1.7
     # via jupyter-cache
 cloudpathlib==0.18.1
@@ -72,7 +74,7 @@ comm==0.2.2
     #   ipywidgets
 contourpy==1.2.1
     # via matplotlib
-coverage==7.5.4
+coverage==7.6.0
     # via
     #   coverage-badge
     #   physicsml (pyproject.toml)
@@ -142,7 +144,9 @@ fsspec==2024.5.0
     #   datasets
     #   evaluate
     #   huggingface-hub
+    #   lightning
     #   molflux
+    #   pytorch-lightning
     #   torch
     #   torch-geometric
 h5py==3.11.0
@@ -164,6 +168,7 @@ imagesize==1.4.1
     # via sphinx
 importlib-metadata==4.13.0
     # via
+    #   class-resolver
     #   jupyter-cache
     #   jupyter-client
     #   myst-nb
@@ -224,6 +229,13 @@ kiwisolver==1.4.5
     # via matplotlib
 lark-parser==0.12.0
     # via torchani
+lightning==2.3.3
+    # via molflux
+lightning-utilities==0.11.3.post0
+    # via
+    #   lightning
+    #   pytorch-lightning
+    #   torchmetrics
 markdown-it-py==3.0.0
     # via
     #   jupytext
@@ -294,15 +306,18 @@ numpy==1.26.4
     #   datasets
     #   evaluate
     #   h5py
+    #   lightning
     #   matplotlib
     #   molflux
     #   opt-einsum
     #   pandas
     #   pyarrow
+    #   pytorch-lightning
     #   rdkit
     #   scikit-learn
     #   scipy
     #   torch-geometric
+    #   torchmetrics
 openeye-toolkits==2024.1.0
     # via physicsml (pyproject.toml)
 opt-einsum==3.3.0
@@ -316,11 +331,15 @@ packaging==24.1
     #   huggingface-hub
     #   ipykernel
     #   jupytext
+    #   lightning
+    #   lightning-utilities
     #   matplotlib
     #   opt-einsum-fx
     #   pydata-sphinx-theme
     #   pytest
+    #   pytorch-lightning
     #   sphinx
+    #   torchmetrics
 pandas==2.2.2
     # via
     #   datasets
@@ -383,6 +402,8 @@ python-dateutil==2.9.0.post0
     #   matplotlib
     #   molflux
     #   pandas
+pytorch-lightning==2.3.3
+    # via lightning
 pytz==2024.1
     # via pandas
 pyyaml==6.0.1
@@ -391,9 +412,11 @@ pyyaml==6.0.1
     #   huggingface-hub
     #   jupyter-cache
     #   jupytext
+    #   lightning
     #   molflux
     #   myst-nb
     #   myst-parser
+    #   pytorch-lightning
 pyzmq==26.0.3
     # via
     #   ipykernel
@@ -527,12 +550,20 @@ tomli==2.0.1
 torch==2.3.1
     # via
     #   e3nn
+    #   lightning
+    #   molflux
     #   opt-einsum-fx
+    #   pytorch-lightning
     #   torchani
+    #   torchmetrics
 torch-geometric==2.5.3
     # via physicsml (pyproject.toml)
 torchani==2.2.3
     # via physicsml (pyproject.toml)
+torchmetrics==1.4.0.post0
+    # via
+    #   lightning
+    #   pytorch-lightning
 tornado==6.4.1
     # via
     #   ipykernel
@@ -542,7 +573,9 @@ tqdm==4.66.4
     #   datasets
     #   evaluate
     #   huggingface-hub
+    #   lightning
     #   molflux
+    #   pytorch-lightning
     #   torch-geometric
 traitlets==5.14.3
     # via
@@ -561,11 +594,14 @@ typing-extensions==4.12.2
     #   domdf-python-tools
     #   huggingface-hub
     #   ipython
+    #   lightning
+    #   lightning-utilities
     #   molflux
     #   myst-nb
     #   pydantic
     #   pydantic-core
     #   pydata-sphinx-theme
+    #   pytorch-lightning
     #   sphinx-toolbox
     #   sqlalchemy
     #   torch
