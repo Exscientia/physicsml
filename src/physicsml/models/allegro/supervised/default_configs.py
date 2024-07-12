@@ -2,12 +2,12 @@ from dataclasses import field
 from typing import Dict, List, Optional
 
 from molflux.modelzoo.models.lightning.config import OptimizerConfig, SchedulerConfig
-from pydantic.dataclasses import dataclass
+from pydantic.v1 import dataclasses
 
 from physicsml.lightning.config import ConfigDict, PhysicsMLModelConfig
 
 
-@dataclass(config=ConfigDict)
+@dataclasses.dataclass(config=ConfigDict)
 class AllegroModelConfig(PhysicsMLModelConfig):
     num_node_feats: int = 0
     num_edge_feats: int = 0

@@ -19,7 +19,7 @@ class OpenMMANI(OpenMMModuleBase):
         del self.model_config
 
     def make_batch(self, datapoint: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
-        batch_dict = {}
+        batch_dict: Dict[str, torch.Tensor] = {}
 
         species = datapoint[self.model_config.datamodule.atomic_numbers_col].unsqueeze(
             0,

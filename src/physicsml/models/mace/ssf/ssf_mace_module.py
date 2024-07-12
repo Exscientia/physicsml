@@ -1,10 +1,8 @@
 from typing import Any, Dict, Optional
 
 import torch
+from class_resolver.contrib.torch import optimizer_resolver
 from e3nn import o3
-from molflux.modelzoo.models.lightning.trainer.optimizers.stock_optimizers import (
-    AVAILABLE_OPTIMIZERS,
-)
 
 from physicsml.lightning.losses.construct_loss import construct_loss
 from physicsml.lightning.module import PhysicsMLModuleBase
@@ -160,9 +158,10 @@ class PooledSSFMACEModule(PhysicsMLModuleBase):
         ]
 
         optimizer_config = self.model_config.optimizer
-        optimizer = AVAILABLE_OPTIMIZERS[optimizer_config.name](
-            params=params_list,
+        optimizer = optimizer_resolver.make(
+            optimizer_config.name,
             **optimizer_config.config,
+            params=params_list,
         )
         out["optimizer"] = optimizer
 

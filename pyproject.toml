@@ -26,9 +26,7 @@ classifiers = [
 dynamic = ['version']
 
 dependencies = [
-    'molflux',
-    'torch>=2.0',
-    'lightning>=2.1',
+    'molflux[lightning]>=0.5.0',
     'torch-geometric>=2.5.0',
     'e3nn',
     'torchani!=2.2.4', # bug in torchani where it tries to import cuaev when not built

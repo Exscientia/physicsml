@@ -15,7 +15,7 @@ The most basic part of adding a new model is defining the model config. The gene
 ```python
 from typing import Dict, Literal, Optional
 
-from pydantic.dataclasses import dataclass
+from pydantic.v1.dataclasses import dataclass
 
 from physicsml.lightning.config import ConfigDict, PhysicsMLModelConfig
 
