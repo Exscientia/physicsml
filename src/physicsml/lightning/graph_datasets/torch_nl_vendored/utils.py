@@ -18,7 +18,7 @@ def ase2data(frames, device="cpu"):
     pbc = torch.cat(pbc)
     stride = torch.from_numpy(np.cumsum(n_atoms))
     batch = torch.zeros(pos.shape[0], dtype=torch.long)
-    for ii, (st, dd) in enumerate(zip(stride[:-1], stride[1:])):
+    for ii, (st, dd) in enumerate(zip(stride[:-1], stride[1:], strict=False)):
         batch[st:dd] = ii
     n_atoms = torch.Tensor(n_atoms[1:]).to(dtype=torch.long)
     return (

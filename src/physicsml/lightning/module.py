@@ -2,7 +2,7 @@ import gc
 import os
 import shutil
 from abc import abstractmethod
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import torch
 from molflux.modelzoo.models.lightning.module import (
@@ -22,7 +22,7 @@ class PhysicsMLModuleBase(
         self.model_config = model_config
 
     @abstractmethod
-    def compute_loss(self, input: Any, target: Any) -> Dict[str, torch.Tensor]:
+    def compute_loss(self, input: Any, target: Any) -> dict[str, torch.Tensor]:
         """a method to compute the loss for a model"""
 
     def compute_forces_by_gradient(
@@ -31,7 +31,7 @@ class PhysicsMLModuleBase(
         coordinates: torch.Tensor,
     ) -> torch.Tensor:
         # compute forces as gradient of energy
-        grad_outputs: Optional[List[Optional[torch.Tensor]]] = [torch.ones_like(energy)]
+        grad_outputs: list[torch.Tensor | None] | None = [torch.ones_like(energy)]
         gradient = torch.autograd.grad(
             outputs=[energy],  # [n_graphs, ]
             inputs=[coordinates],  # [n_nodes, 3]
@@ -39,9 +39,7 @@ class PhysicsMLModuleBase(
             retain_graph=self.training,  # Make sure the graph is not destroyed during training
             create_graph=self.training,  # Create graph for second derivative
             allow_unused=True,
-        )[
-            0
-        ]  # [n_nodes, 3]
+        )[0]  # [n_nodes, 3]
 
         if gradient is None:
             raise RuntimeWarning("Gradient is None")
@@ -49,8 +47,8 @@ class PhysicsMLModuleBase(
 
         return forces
 
-    def graph_batch_to_batch_dict(self, graph_batch: Batch) -> Dict[str, torch.Tensor]:
-        batch_dict: Dict[str, Any] = graph_batch.to_dict()
+    def graph_batch_to_batch_dict(self, graph_batch: Batch) -> dict[str, torch.Tensor]:
+        batch_dict: dict[str, Any] = graph_batch.to_dict()
         batch_dict["num_graphs"] = torch.tensor(graph_batch.num_graphs)
         batch_dict["num_nodes"] = torch.tensor(batch_dict["num_nodes"])
 
@@ -67,7 +65,7 @@ class PhysicsMLModuleBase(
     def _training_step_on_single_source_batch(
         self,
         single_source_batch: Any,
-        source_name: Optional[str],
+        source_name: str | None,
         batch_idx: int,
         *args: Any,
         **kwargs: Any,
@@ -99,7 +97,7 @@ class PhysicsMLModuleBase(
     def _validation_step_on_single_source_batch(
         self,
         single_source_batch: Any,
-        source_name: Optional[str],
+        source_name: str | None,
         batch_idx: int,
         *args: Any,
         **kwargs: Any,

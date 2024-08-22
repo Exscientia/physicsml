@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional
+from typing import Any
 
 import torch
 from e3nn import o3
@@ -59,7 +59,7 @@ class PooledMeanVarAllegroModule(PhysicsMLModuleBase):
         )
 
         if model_config.datamodule.y_node_scalars is not None:
-            self.node_scalars_head: Optional[torch.nn.Module] = ReadoutHead(
+            self.node_scalars_head: torch.nn.Module | None = ReadoutHead(
                 irrreps_in=self.allegro.irreps_layer_out,
                 mlp_irreps=o3.Irreps(model_config.mlp_irreps),
                 mlp_latent_dimensions=model_config.mlp_latent_dimensions,
@@ -93,7 +93,7 @@ class PooledMeanVarAllegroModule(PhysicsMLModuleBase):
         else:
             raise ValueError("Must specify 'y_graph_scalars' for mean var models")
 
-    def forward(self, data: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
+    def forward(self, data: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
         data = self.allegro(data)
 
         output = {}
@@ -116,8 +116,8 @@ class PooledMeanVarAllegroModule(PhysicsMLModuleBase):
 
         return output
 
-    def compute_loss(self, input: Any, target: Any) -> Dict[str, torch.Tensor]:
-        loss_dict: Dict[str, torch.Tensor] = {}
+    def compute_loss(self, input: Any, target: Any) -> dict[str, torch.Tensor]:
+        loss_dict: dict[str, torch.Tensor] = {}
         total_loss: torch.Tensor = torch.zeros(1, device=self.device)
         for y_key, loss in self.losses.items():
             if y_key == "y_graph_scalars":
@@ -137,7 +137,7 @@ class PooledMeanVarAllegroModule(PhysicsMLModuleBase):
         return loss_dict
 
     def configure_losses(self) -> Any:
-        losses: Dict[str, Optional[Any]] = {}
+        losses: dict[str, Any | None] = {}
 
         if self.model_config.y_node_vector_loss_config is not None:
             losses["y_node_vector"] = construct_loss(

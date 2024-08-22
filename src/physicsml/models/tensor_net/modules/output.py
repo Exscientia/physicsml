@@ -1,5 +1,3 @@
-from typing import Dict, List
-
 import torch
 from torch_geometric.utils import scatter
 
@@ -14,7 +12,7 @@ class NodeScalarOutput(torch.nn.Module):
     def __init__(
         self,
         num_features: int,
-        mlp_hidden_dims: List[int],
+        mlp_hidden_dims: list[int],
         num_tasks: int,
     ):
         super().__init__()
@@ -26,7 +24,7 @@ class NodeScalarOutput(torch.nn.Module):
             c_out=num_tasks,
         )
 
-    def forward(self, data: Dict[str, torch.Tensor]) -> torch.Tensor:
+    def forward(self, data: dict[str, torch.Tensor]) -> torch.Tensor:
         X_i = data["X_i"]
 
         # [num_nodes, num_feats, 3, 3]
@@ -48,7 +46,7 @@ class ScalarOutput(torch.nn.Module):
     def __init__(
         self,
         num_features: int,
-        mlp_hidden_dims: List[int],
+        mlp_hidden_dims: list[int],
         num_tasks: int,
     ):
         super().__init__()
@@ -60,7 +58,7 @@ class ScalarOutput(torch.nn.Module):
             c_out=num_tasks,
         )
 
-    def forward(self, data: Dict[str, torch.Tensor]) -> torch.Tensor:
+    def forward(self, data: dict[str, torch.Tensor]) -> torch.Tensor:
         X_i = data["X_i"]
 
         # [num_nodes, num_feats, 3, 3]

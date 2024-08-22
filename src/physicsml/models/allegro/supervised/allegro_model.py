@@ -1,4 +1,4 @@
-from typing import Any, Type
+from typing import Any
 
 from molflux.modelzoo.info import ModelInfo
 
@@ -17,7 +17,7 @@ class AllegroModel(PhysicsMLModelBase[AllegroModelConfig]):
         )
 
     @property
-    def _config_builder(self) -> Type[AllegroModelConfig]:
+    def _config_builder(self) -> type[AllegroModelConfig]:
         return AllegroModelConfig
 
     def _instantiate_module(self) -> Any:

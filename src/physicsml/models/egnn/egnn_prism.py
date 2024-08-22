@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union
+from typing import TYPE_CHECKING, Any
 
 import datasets
 from molflux.features.info import RepresentationInfo
@@ -22,7 +22,7 @@ class EGNNFeaturiser(PrismLightningBase):
         self.module = module
         self.which_rep = which_rep
 
-    def forward(self, x: Dict[str, Any]) -> Any:
+    def forward(self, x: dict[str, Any]) -> Any:
         x = self.module(x)
 
         node_feats = x["node_feats"]
@@ -66,7 +66,7 @@ class EGNN(PhysicsMLPrismBase):
     def __init__(
         self,
         which_rep: str = "graph_embedding_mean",
-        which_block: Optional[int] = None,
+        which_block: int | None = None,
         **kwargs: Any,
     ) -> None:
         """
@@ -107,10 +107,10 @@ class EGNN(PhysicsMLPrismBase):
     def _extract_features(
         self,
         dataset_feated: datasets.Dataset,
-        datamodule_config: Union[DataModuleConfig, Dict[str, Any], None] = None,
-        trainer_config: Union[TrainerConfig, Dict[str, Any], None] = None,
+        datamodule_config: DataModuleConfig | dict[str, Any] | None = None,
+        trainer_config: TrainerConfig | dict[str, Any] | None = None,
         **kwargs: Any,
-    ) -> List:
+    ) -> list:
         """
 
         Takes 2D molecules (as SMILES, OEMols or OEMolBytes).
@@ -122,7 +122,7 @@ class EGNN(PhysicsMLPrismBase):
         Returns: a dict of the features as torch tensors
         """
 
-        batched_features: List[torch.Tensor] = self.model._predict_batched(
+        batched_features: list[torch.Tensor] = self.model._predict_batched(
             data=dataset_feated,
             datamodule_config=datamodule_config,
             trainer_config=trainer_config,

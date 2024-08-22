@@ -9,19 +9,29 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ---------------------------------------------------------
- ## [0.4.0] - 2024-06-17
+## [0.5.0] - 2024-09-02
+
+### Removed
+
+* removed support for python 3.8, 3.9
+
+### Added
+
+*  Added multi-graph EGNN
+
+## [0.4.0] - 2024-06-17
 
 ### Fixed
 
 * updated some imports for pydantic and `molflux==0.5.0`
 
- ## [0.3.1] - 2024-05-31
+## [0.3.1] - 2024-05-31
 
 ### Fixed
 
 * check pbc is True
 
- ## [0.3.0] - 2024-04-25
+## [0.3.0] - 2024-04-25
 
 ### Added
 

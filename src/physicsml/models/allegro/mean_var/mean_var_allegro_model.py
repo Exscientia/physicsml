@@ -1,4 +1,4 @@
-from typing import Any, Type
+from typing import Any
 
 from molflux.modelzoo.info import ModelInfo
 
@@ -19,7 +19,7 @@ class MeanVarAllegroModel(PhysicsMLUncertaintyModelBase[MeanVarAllegroModelConfi
         )
 
     @property
-    def _config_builder(self) -> Type[MeanVarAllegroModelConfig]:
+    def _config_builder(self) -> type[MeanVarAllegroModelConfig]:
         return MeanVarAllegroModelConfig
 
     def _instantiate_module(self) -> Any:

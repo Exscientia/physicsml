@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional
+from typing import Any
 
 import torch
 
@@ -52,7 +52,7 @@ class PooledTensorNetModule(PhysicsMLModuleBase):
             )
 
         if model_config.datamodule.y_node_scalars is not None:
-            self.node_scalar_output: Optional[NodeScalarOutput] = NodeScalarOutput(
+            self.node_scalar_output: NodeScalarOutput | None = NodeScalarOutput(
                 num_features=model_config.num_features,
                 mlp_hidden_dims=model_config.scalar_output_mlp_hidden_dims,
                 num_tasks=len(model_config.datamodule.y_node_scalars),
@@ -61,7 +61,7 @@ class PooledTensorNetModule(PhysicsMLModuleBase):
             self.node_scalar_output = None
 
         if model_config.datamodule.y_graph_scalars is not None:
-            self.scalar_output: Optional[ScalarOutput] = ScalarOutput(
+            self.scalar_output: ScalarOutput | None = ScalarOutput(
                 num_features=model_config.num_features,
                 mlp_hidden_dims=model_config.scalar_output_mlp_hidden_dims,
                 num_tasks=len(model_config.datamodule.y_graph_scalars),
@@ -69,7 +69,7 @@ class PooledTensorNetModule(PhysicsMLModuleBase):
         else:
             self.scalar_output = None
 
-    def forward(self, data: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
+    def forward(self, data: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
         data = self.embedding(data)
 
         for interaction in self.interactions:
@@ -96,8 +96,8 @@ class PooledTensorNetModule(PhysicsMLModuleBase):
 
         return output
 
-    def compute_loss(self, input: Any, target: Any) -> Dict[str, torch.Tensor]:
-        loss_dict: Dict[str, torch.Tensor] = {}
+    def compute_loss(self, input: Any, target: Any) -> dict[str, torch.Tensor]:
+        loss_dict: dict[str, torch.Tensor] = {}
         total_loss: torch.Tensor = torch.zeros(1, device=self.device)
         for y_key, loss in self.losses.items():
             if target.get(y_key, None) is not None:
@@ -109,7 +109,7 @@ class PooledTensorNetModule(PhysicsMLModuleBase):
         return loss_dict
 
     def configure_losses(self) -> Any:
-        losses: Dict[str, Optional[Any]] = {}
+        losses: dict[str, Any | None] = {}
 
         if self.model_config.y_node_vector_loss_config is not None:
             losses["y_node_vector"] = construct_loss(

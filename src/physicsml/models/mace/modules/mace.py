@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any
 
 import torch
 from e3nn import o3
@@ -16,7 +16,6 @@ from physicsml.models.utils import compute_lengths_and_vectors
 
 
 class MACE(torch.nn.Module):
-
     """
     Class for mace model
     """
@@ -131,7 +130,7 @@ class MACE(torch.nn.Module):
 
             self.out_irreps.append(hidden_irreps_tmp)
 
-    def forward(self, data: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
+    def forward(self, data: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
         if "cell" in data:
             cell = data["cell"]
             cell_shift_vector = data["cell_shift_vector"]
@@ -153,7 +152,7 @@ class MACE(torch.nn.Module):
             edge_feats = torch.cat([edge_feats, data["edge_attrs"]], dim=-1)
 
         for idx, (interaction, message, node_update) in enumerate(
-            zip(self.interactions, self.messages, self.node_updates),
+            zip(self.interactions, self.messages, self.node_updates, strict=False),
         ):
             a_i = interaction(
                 node_feats=node_feats,
@@ -201,7 +200,7 @@ class ReadoutHead(torch.nn.Module):
 
         self.scale_shift = ScaleShiftBlock(scale=scaling_std, shift=scaling_mean)
 
-    def forward(self, data: Dict[str, torch.Tensor]) -> torch.Tensor:
+    def forward(self, data: dict[str, torch.Tensor]) -> torch.Tensor:
         node_feats_list = []
         for idx, readout in enumerate(self.readouts):
             node_feats = readout(data[f"node_feats_{idx}"])
@@ -240,7 +239,7 @@ class PooledReadoutHead(torch.nn.Module):
 
         self.scale_shift = ScaleShiftBlock(scale=scaling_std, shift=scaling_mean)
 
-    def forward(self, data: Dict[str, torch.Tensor]) -> torch.Tensor:
+    def forward(self, data: dict[str, torch.Tensor]) -> torch.Tensor:
         node_feats_list = []
         for idx, readout in enumerate(self.readouts):
             node_feats = readout(data[f"node_feats_{idx}"])

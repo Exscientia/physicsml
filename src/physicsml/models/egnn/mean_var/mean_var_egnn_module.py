@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional
+from typing import Any
 
 import torch
 
@@ -44,7 +44,7 @@ class PooledMeanVarEGNNModule(PhysicsMLModuleBase):
         )
 
         if model_config.datamodule.y_node_scalars is not None:
-            self.node_mlp: Optional[torch.nn.Module] = make_mlp(
+            self.node_mlp: torch.nn.Module | None = make_mlp(
                 c_in=model_config.c_hidden,
                 c_hidden=model_config.c_hidden,
                 c_out=len(model_config.datamodule.y_node_scalars),
@@ -57,7 +57,7 @@ class PooledMeanVarEGNNModule(PhysicsMLModuleBase):
             self.node_mlp = None
 
         if model_config.datamodule.y_edge_scalars is not None:
-            self.edge_mlp: Optional[torch.nn.Module] = make_mlp(
+            self.edge_mlp: torch.nn.Module | None = make_mlp(
                 c_in=model_config.c_hidden,
                 c_hidden=model_config.c_hidden,
                 c_out=len(model_config.datamodule.y_edge_scalars),
@@ -97,8 +97,8 @@ class PooledMeanVarEGNNModule(PhysicsMLModuleBase):
 
     def forward(
         self,
-        data: Dict[str, torch.Tensor],
-    ) -> Dict[str, torch.Tensor]:
+        data: dict[str, torch.Tensor],
+    ) -> dict[str, torch.Tensor]:
         data = self.egnn(data)
 
         output = {}
@@ -131,8 +131,8 @@ class PooledMeanVarEGNNModule(PhysicsMLModuleBase):
 
         return output
 
-    def compute_loss(self, input: Any, target: Any) -> Dict[str, torch.Tensor]:
-        loss_dict: Dict[str, torch.Tensor] = {}
+    def compute_loss(self, input: Any, target: Any) -> dict[str, torch.Tensor]:
+        loss_dict: dict[str, torch.Tensor] = {}
         total_loss: torch.Tensor = torch.zeros(1, device=self.device)
         for y_key, loss in self.losses.items():
             if y_key == "y_graph_scalars":
@@ -152,7 +152,7 @@ class PooledMeanVarEGNNModule(PhysicsMLModuleBase):
         return loss_dict
 
     def configure_losses(self) -> Any:
-        losses: Dict[str, Optional[Any]] = {}
+        losses: dict[str, Any | None] = {}
 
         if self.model_config.y_node_vector_loss_config is not None:
             losses["y_node_vector"] = construct_loss(

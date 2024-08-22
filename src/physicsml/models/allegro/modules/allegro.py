@@ -1,5 +1,4 @@
 import math
-from typing import Dict, List, Optional
 
 import torch
 from e3nn import o3
@@ -44,16 +43,16 @@ class Allegro(torch.nn.Module):
         parity: bool,
         num_polynomial_cutoff: int,
         cut_off: float,
-        latent_mlp_latent_dimensions: List[int],
-        two_body_latent_mlp_latent_dimensions: List[int],
-        env_embed_mlp_latent_dimensions: List[int],
+        latent_mlp_latent_dimensions: list[int],
+        two_body_latent_mlp_latent_dimensions: list[int],
+        env_embed_mlp_latent_dimensions: list[int],
         env_embed_multiplicity: int,
         embed_initial_edge: bool,
-        per_layer_cutoffs: Optional[List[float]],
+        per_layer_cutoffs: list[float] | None,
         latent_resnet: bool,
-        latent_resnet_update_ratios: Optional[List[float]],
+        latent_resnet_update_ratios: list[float] | None,
         latent_resnet_update_ratios_learnable: bool,
-        sparse_mode: Optional[str],
+        sparse_mode: str | None,
     ):
         super().__init__()
         SCALAR = o3.Irrep("0e")
@@ -183,7 +182,7 @@ class Allegro(torch.nn.Module):
 
         # # == Build TPs ==
         for layer_idx, (arg_irreps, out_irreps) in enumerate(
-            zip(tps_irreps_in, tps_irreps_out),
+            zip(tps_irreps_in, tps_irreps_out, strict=False),
         ):
             self.env_linears.append(torch.nn.Identity())
 
@@ -317,8 +316,8 @@ class Allegro(torch.nn.Module):
             )
             # The sigmoid is mostly saturated at ±6, keep it in a reasonable range
             latent_resnet_update_params.clamp_(-6.0, 6.0)
-        assert latent_resnet_update_params.shape == (
-            num_layers,
+        assert (
+            latent_resnet_update_params.shape == (num_layers,)
         ), f"There must be {num_layers} layer resnet update ratios (layer0:layer1, layer1:layer2)"
         if latent_resnet_update_ratios_learnable:
             self._latent_resnet_update_params = torch.nn.Parameter(
@@ -335,8 +334,8 @@ class Allegro(torch.nn.Module):
             per_layer_cutoffs = torch.full((num_layers + 1,), self.r_max)
         self.register_buffer("per_layer_cutoffs", torch.as_tensor(per_layer_cutoffs))
         assert torch.all(self.per_layer_cutoffs <= self.r_max)
-        assert self.per_layer_cutoffs.shape == (
-            num_layers + 1,
+        assert (
+            self.per_layer_cutoffs.shape == (num_layers + 1,)
         ), "Must be one per-layer cutoff for layer 0 and every layer for a total of {num_layers} cutoffs (the first applies to the two body latent, which is 'layer 0')"
         assert (
             self.per_layer_cutoffs[1:] <= self.per_layer_cutoffs[:-1]
@@ -351,7 +350,7 @@ class Allegro(torch.nn.Module):
         # Set the irreps_out dictionary
         self.irreps_layer_out = o3.Irreps([(self.final_latent.out_features, (0, 1))])
 
-    def forward(self, data: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
+    def forward(self, data: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
         if "cell" in data:
             cell = data["cell"]
             cell_shift_vector = data["cell_shift_vector"]
@@ -451,6 +450,7 @@ class Allegro(torch.nn.Module):
             self.env_linears,
             self.tps,
             self.linears,
+            strict=False,
         ):
             # Determine which edges are still in play
             cutoff_coeffs = cutoff_coeffs_all[layer_index]
@@ -580,7 +580,7 @@ class ReadoutHead(torch.nn.Module):
         self,
         irrreps_in: o3.Irreps,
         mlp_irreps: o3.Irreps,
-        mlp_latent_dimensions: List[int],
+        mlp_latent_dimensions: list[int],
         num_tasks: int,
         avg_num_neighbours: float,
         scaling_std: float,
@@ -598,7 +598,7 @@ class ReadoutHead(torch.nn.Module):
         self.inv_factor = 1.0 / math.sqrt(avg_num_neighbours)
         self.scale_shift = ScaleShiftBlock(scale=scaling_std, shift=scaling_mean)
 
-    def forward(self, data: Dict[str, torch.Tensor]) -> torch.Tensor:
+    def forward(self, data: dict[str, torch.Tensor]) -> torch.Tensor:
         edge_feats = self.scalar_mlp(data)
 
         # Sum over edges in graph to get graph embeddings
@@ -620,7 +620,7 @@ class PooledReadoutHead(torch.nn.Module):
         self,
         irrreps_in: o3.Irreps,
         mlp_irreps: o3.Irreps,
-        mlp_latent_dimensions: List[int],
+        mlp_latent_dimensions: list[int],
         num_tasks: int,
         avg_num_neighbours: float,
         scaling_std: float,
@@ -638,7 +638,7 @@ class PooledReadoutHead(torch.nn.Module):
         self.inv_factor = 1.0 / math.sqrt(avg_num_neighbours)
         self.scale_shift = ScaleShiftBlock(scale=scaling_std, shift=scaling_mean)
 
-    def forward(self, data: Dict[str, torch.Tensor]) -> torch.Tensor:
+    def forward(self, data: dict[str, torch.Tensor]) -> torch.Tensor:
         edge_feats = self.scalar_mlp(data)
 
         # Sum over edges in graph to get graph embeddings

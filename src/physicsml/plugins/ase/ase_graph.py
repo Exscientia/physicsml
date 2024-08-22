@@ -1,5 +1,7 @@
 import logging
-from typing import Any, List, Optional, Tuple
+from typing import Any
+
+import torch
 
 import ase
 from ase.calculators.calculator import all_changes
@@ -14,10 +16,10 @@ class GraphASECalculator(PhysicsMLASECalculatorBase):
 
     def calculate(
         self,
-        atoms: Optional[ase.Atoms] = None,
-        properties: Optional[List[str]] = None,
-        system_changes: Optional[List[str]] = all_changes,
-    ) -> Tuple:
+        atoms: ase.Atoms | None = None,
+        properties: list[str] | None = None,
+        system_changes: list[str] | None = all_changes,
+    ) -> tuple:
         super().calculate(atoms, properties, system_changes)
 
         # create system
@@ -37,6 +39,13 @@ class GraphASECalculator(PhysicsMLASECalculatorBase):
         )
 
         batch_dict = self.module.graph_batch_to_batch_dict(batch.to(self.module.device))
+
+        # add total molecular charge as graph attribute
+        if self.total_charge is not None:
+            batch_dict["graph_attrs"] = torch.as_tensor(
+                [[self.total_charge]],
+                dtype=torch.float,
+            ).to(self.module.device)
 
         # Calculate energy and forces
         batch_dict["coordinates"].requires_grad = True

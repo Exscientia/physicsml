@@ -1,4 +1,4 @@
-from typing import Any, Type
+from typing import Any
 
 from molflux.modelzoo.info import ModelInfo
 
@@ -17,7 +17,7 @@ class MACEModel(PhysicsMLModelBase[MACEModelConfig]):
         )
 
     @property
-    def _config_builder(self) -> Type[MACEModelConfig]:
+    def _config_builder(self) -> type[MACEModelConfig]:
         return MACEModelConfig
 
     def _instantiate_module(self) -> Any:

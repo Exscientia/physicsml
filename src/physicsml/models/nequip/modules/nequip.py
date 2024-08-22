@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any
 
 import torch
 from e3nn import o3
@@ -96,7 +96,7 @@ class Nequip(torch.nn.Module):
 
             self.out_irreps.append(interaction_irreps_in)
 
-    def forward(self, data: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
+    def forward(self, data: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
         # Embeddings
         data["node_feats"] = self.node_embedding(data["node_attrs"])
 
@@ -142,7 +142,7 @@ class ReadoutHead(torch.nn.Module):
         self.output_layer = o3.Linear(irreps_in=mlp_irreps, irreps_out=out_irreps)
         self.scale_shift = ScaleShiftBlock(scale=scaling_std, shift=scaling_mean)
 
-    def forward(self, data: Dict[str, torch.Tensor]) -> torch.Tensor:
+    def forward(self, data: dict[str, torch.Tensor]) -> torch.Tensor:
         node_feats = self.linear(data["node_feats"])
         node_feats = self.output_layer(node_feats)
         node_feats_out: torch.Tensor = self.scale_shift(node_feats)
@@ -165,7 +165,7 @@ class PooledReadoutHead(torch.nn.Module):
         self.output_layer = o3.Linear(irreps_in=mlp_irreps, irreps_out=out_irreps)
         self.scale_shift = ScaleShiftBlock(scale=scaling_std, shift=scaling_mean)
 
-    def forward(self, data: Dict[str, torch.Tensor]) -> torch.Tensor:
+    def forward(self, data: dict[str, torch.Tensor]) -> torch.Tensor:
         node_feats = self.linear(data["node_feats"])
         node_feats = self.output_layer(node_feats)
         node_feats = self.scale_shift(node_feats)

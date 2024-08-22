@@ -1,5 +1,3 @@
-from typing import Optional
-
 import torch
 from e3nn import nn, o3
 from torch_geometric.utils import scatter
@@ -240,7 +238,7 @@ class InteractionBlock(torch.nn.Module):
 
 
 class ScaleShiftBlock(torch.nn.Module):
-    def __init__(self, scale: Optional[float], shift: Optional[float]) -> None:
+    def __init__(self, scale: float | None, shift: float | None) -> None:
         super().__init__()
 
         if scale is not None:

@@ -1,4 +1,4 @@
-from typing import Any, Type
+from typing import Any
 
 from molflux.modelzoo.info import ModelInfo
 
@@ -17,7 +17,7 @@ class SsfMACEModel(PhysicsMLModelBase[SSFMACEModelConfig]):
         )
 
     @property
-    def _config_builder(self) -> Type[SSFMACEModelConfig]:
+    def _config_builder(self) -> type[SSFMACEModelConfig]:
         return SSFMACEModelConfig
 
     def _instantiate_module(self) -> Any:

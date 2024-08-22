@@ -1,5 +1,4 @@
 import math
-from typing import Dict, List, Optional
 
 import torch
 from e3nn import o3
@@ -20,9 +19,9 @@ class ScalarMLP(torch.nn.Module):
         self,
         irreps_in: o3.Irreps,
         irreps_out: o3.Irreps,
-        mlp_latent_dimensions: List[int],
+        mlp_latent_dimensions: list[int],
         mlp_output_dimension: int = 1,
-        mlp_nonlinearity: Optional[str] = None,
+        mlp_nonlinearity: str | None = None,
         mlp_initialization: str = "uniform",
         mlp_dropout_p: float = 0.0,
         mlp_batchnorm: bool = False,
@@ -45,7 +44,7 @@ class ScalarMLP(torch.nn.Module):
         irreps_out = o3.Irreps([(self._module.out_features, (0, 1))])
         self.irreps_out = irreps_out
 
-    def forward(self, data: Dict[str, torch.Tensor]) -> torch.Tensor:
+    def forward(self, data: dict[str, torch.Tensor]) -> torch.Tensor:
         outputs = self._module(data["edge_feats"])
         return outputs
 
@@ -58,10 +57,10 @@ class ScalarMLPFunction(CodeGenMixin, torch.nn.Module):
 
     def __init__(
         self,
-        mlp_input_dimension: Optional[int],
-        mlp_latent_dimensions: List[int],
-        mlp_output_dimension: Optional[int],
-        mlp_nonlinearity: Optional[str],
+        mlp_input_dimension: int | None,
+        mlp_latent_dimensions: list[int],
+        mlp_output_dimension: int | None,
+        mlp_nonlinearity: str | None,
         mlp_initialization: str = "uniform",
         mlp_dropout_p: float = 0.0,
         mlp_batchnorm: bool = False,
@@ -101,7 +100,9 @@ class ScalarMLPFunction(CodeGenMixin, torch.nn.Module):
 
         base = torch.nn.Module()
 
-        for layer, (h_in, h_out) in enumerate(zip(dimensions, dimensions[1:])):
+        for layer, (h_in, h_out) in enumerate(
+            zip(dimensions, dimensions[1:], strict=False),
+        ):
             # do dropout
             if mlp_dropout_p > 0:
                 # only dropout if it will do something

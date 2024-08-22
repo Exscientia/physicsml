@@ -1,5 +1,3 @@
-from typing import Tuple
-
 import torch
 from e3nn.util.jit import compile_mode
 from packaging import version
@@ -23,7 +21,7 @@ if not _USE_PYG_SPARSE:
 
     # TODO: support csr with similar method; wait for 1.10 probably
     @torch.jit.script
-    def _remake_sparse_coo(i, v, shape: Tuple[int, int]):
+    def _remake_sparse_coo(i, v, shape: tuple[int, int]):
         out = torch.sparse_coo_tensor(
             indices=i,
             values=v,
@@ -39,7 +37,7 @@ if not _USE_PYG_SPARSE:
 
     @compile_mode("trace")
     class ExplicitGradSpmmCOO(torch.nn.Module):
-        shape: Tuple[int, int]
+        shape: tuple[int, int]
 
         def __init__(self, mat: torch.Tensor):
             super().__init__()
@@ -82,7 +80,7 @@ if not _USE_PYG_SPARSE:
     if _TORCH_IS_GE_1_10:
 
         @torch.jit.script
-        def _remake_sparse_csr(crow, col, v, shape: Tuple[int, int]) -> torch.Tensor:
+        def _remake_sparse_csr(crow, col, v, shape: tuple[int, int]) -> torch.Tensor:
             return torch.sparse_csr_tensor(
                 crow_indices=crow,
                 col_indices=col,
@@ -95,7 +93,7 @@ if not _USE_PYG_SPARSE:
 
         @compile_mode("trace")
         class ExplicitGradSpmmCSR(torch.nn.Module):
-            shape: Tuple[int, int]
+            shape: tuple[int, int]
 
             def __init__(self, mat: torch.Tensor):
                 super().__init__()

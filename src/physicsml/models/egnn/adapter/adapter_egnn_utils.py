@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional
-
 import torch
 
 from physicsml.models.egnn.egnn_utils import EGNNBlock
@@ -13,11 +11,11 @@ class Adapter(torch.nn.Module):
         self,
         c_hidden: int,
         ratio_adapter_down: int,
-        mlp_activation: Optional[str],
+        mlp_activation: str | None,
     ) -> None:
         super().__init__()
 
-        list_modules: List[torch.nn.Module] = []
+        list_modules: list[torch.nn.Module] = []
         list_modules.append(torch.nn.Linear(c_hidden, c_hidden // ratio_adapter_down))
 
         if mlp_activation is not None:
@@ -48,9 +46,9 @@ class AdapterEGNN(torch.nn.Module):
         c_hidden: int,
         ratio_adapter_down: int,
         initial_s: float,
-        dropout: Optional[float],
-        mlp_activation: Optional[str],
-        mlp_output_activation: Optional[str],
+        dropout: float | None,
+        mlp_activation: str | None,
+        mlp_output_activation: str | None,
         num_rbf: int,
         modify_coords: bool,
         bessel_cut_off: float,
@@ -153,7 +151,7 @@ class AdapterEGNN(torch.nn.Module):
             )
             self.s_params_after.append(torch.nn.Parameter(torch.tensor(initial_s)))
 
-    def forward(self, data: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
+    def forward(self, data: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
         """
 
         Args:

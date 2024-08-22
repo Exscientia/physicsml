@@ -1,4 +1,4 @@
-from typing import Any, List, Optional
+from typing import Any
 
 try:
     from openeye import oechem
@@ -9,9 +9,9 @@ except ImportError as err:
 
 
 def atoms_or_file_to_oe_mol_bytes(
-    atom_list: Optional[List[int]] = None,
-    coordinates: Optional[List[List[float]]] = None,
-    system_path: Optional[str] = None,
+    atom_list: list[int] | None = None,
+    coordinates: list[list[float]] | None = None,
+    system_path: str | None = None,
 ) -> Any:
     assert (atom_list is not None) ^ (system_path is not None), ValueError(
         "Must specify either 'atom_list' or 'system_path' (but not both).",

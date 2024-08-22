@@ -1,4 +1,4 @@
-from typing import Any, List, Optional, Tuple
+from typing import Any
 
 import molflux.core as molflux_core
 
@@ -6,15 +6,16 @@ from physicsml.utils import load_from_dvc
 
 
 def to_ase_calculator(
-    model_path: Optional[str] = None,
-    repo_url: Optional[str] = None,
-    rev: Optional[str] = None,
-    model_path_in_repo: Optional[str] = None,
-    y_output: Optional[str] = None,
-    pbc: Optional[Tuple[bool, bool, bool]] = None,
-    cell: Optional[List[List[float]]] = None,
-    output_scaling: Optional[float] = None,
-    position_scaling: Optional[float] = None,
+    model_path: str | None = None,
+    repo_url: str | None = None,
+    rev: str | None = None,
+    model_path_in_repo: str | None = None,
+    y_output: str | None = None,
+    pbc: tuple[bool, bool, bool] | None = None,
+    cell: list[list[float]] | None = None,
+    output_scaling: float | None = None,
+    position_scaling: float | None = None,
+    total_charge: int | None = None,
     device: str = "cpu",
     precision: str = "32",
 ) -> Any:
@@ -52,6 +53,7 @@ def to_ase_calculator(
         cell=cell,
         output_scaling=output_scaling,
         position_scaling=position_scaling,
+        total_charge=total_charge,
         device=device,
         precision=precision,
     )

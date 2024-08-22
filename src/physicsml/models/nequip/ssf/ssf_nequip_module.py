@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional
+from typing import Any
 
 import torch
 from e3nn import o3
@@ -50,7 +50,7 @@ class PooledSSFNequipModule(PhysicsMLModuleBase):
         )
 
         if model_config.datamodule.y_node_scalars is not None:
-            self.node_scalars_head: Optional[torch.nn.Module] = ReadoutHead(
+            self.node_scalars_head: torch.nn.Module | None = ReadoutHead(
                 irrreps_in=self.ssf_nequip.out_irreps[-1],
                 mlp_irreps=o3.Irreps(model_config.mlp_irreps),
                 out_irreps=o3.Irreps(
@@ -63,7 +63,7 @@ class PooledSSFNequipModule(PhysicsMLModuleBase):
             self.node_scalars_head = None
 
         if model_config.datamodule.y_graph_scalars is not None:
-            self.graph_scalars_head: Optional[torch.nn.Module] = PooledReadoutHead(
+            self.graph_scalars_head: torch.nn.Module | None = PooledReadoutHead(
                 irrreps_in=self.ssf_nequip.out_irreps[-1],
                 mlp_irreps=o3.Irreps(model_config.mlp_irreps),
                 out_irreps=o3.Irreps(
@@ -78,7 +78,7 @@ class PooledSSFNequipModule(PhysicsMLModuleBase):
         if (model_config.datamodule.y_node_vector is not None) and (
             not self.model_config.compute_forces
         ):
-            self.node_vector_head: Optional[torch.nn.Module] = ReadoutHead(
+            self.node_vector_head: torch.nn.Module | None = ReadoutHead(
                 irrreps_in=self.ssf_nequip.out_irreps[-1],
                 mlp_irreps=o3.Irreps(model_config.mlp_irreps),
                 out_irreps=o3.Irreps("1o"),
@@ -89,7 +89,7 @@ class PooledSSFNequipModule(PhysicsMLModuleBase):
             self.node_vector_head = None
 
         if model_config.datamodule.y_graph_vector is not None:
-            self.graph_vector_head: Optional[torch.nn.Module] = PooledReadoutHead(
+            self.graph_vector_head: torch.nn.Module | None = PooledReadoutHead(
                 irrreps_in=self.ssf_nequip.out_irreps[-1],
                 mlp_irreps=o3.Irreps(model_config.mlp_irreps),
                 out_irreps=o3.Irreps("1o"),
@@ -99,7 +99,7 @@ class PooledSSFNequipModule(PhysicsMLModuleBase):
         else:
             self.graph_vector_head = None
 
-    def forward(self, data: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
+    def forward(self, data: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
         data = self.ssf_nequip(data)
 
         output = {}
@@ -127,8 +127,8 @@ class PooledSSFNequipModule(PhysicsMLModuleBase):
 
         return output
 
-    def compute_loss(self, input: Any, target: Any) -> Dict[str, torch.Tensor]:
-        loss_dict: Dict[str, torch.Tensor] = {}
+    def compute_loss(self, input: Any, target: Any) -> dict[str, torch.Tensor]:
+        loss_dict: dict[str, torch.Tensor] = {}
         total_loss: torch.Tensor = torch.zeros(1, device=self.device)
         for y_key, loss in self.losses.items():
             if target.get(y_key, None) is not None:
@@ -140,7 +140,7 @@ class PooledSSFNequipModule(PhysicsMLModuleBase):
         return loss_dict
 
     def configure_losses(self) -> Any:
-        losses: Dict[str, Optional[Any]] = {}
+        losses: dict[str, Any | None] = {}
 
         if self.model_config.y_node_vector_loss_config is not None:
             losses["y_node_vector"] = construct_loss(

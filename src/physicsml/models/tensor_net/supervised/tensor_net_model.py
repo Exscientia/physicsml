@@ -1,4 +1,4 @@
-from typing import Any, Type
+from typing import Any
 
 from molflux.modelzoo.info import ModelInfo
 
@@ -19,7 +19,7 @@ class TensorNetModel(PhysicsMLModelBase[TensorNetModelConfig]):
         )
 
     @property
-    def _config_builder(self) -> Type[TensorNetModelConfig]:
+    def _config_builder(self) -> type[TensorNetModelConfig]:
         return TensorNetModelConfig
 
     def _instantiate_module(self) -> Any:

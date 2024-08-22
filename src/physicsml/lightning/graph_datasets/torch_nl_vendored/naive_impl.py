@@ -1,5 +1,3 @@
-from typing import Tuple
-
 import torch
 
 from .utils import get_cell_shift_idx, get_number_of_cell_repeats, strides_of
@@ -9,7 +7,7 @@ def get_fully_connected_mapping(
     i_ids: torch.Tensor,
     shifts_idx: torch.Tensor,
     self_interaction: bool,
-) -> Tuple[torch.Tensor, torch.Tensor]:
+) -> tuple[torch.Tensor, torch.Tensor]:
     n_atom = i_ids.shape[0]
     n_atom2 = n_atom * n_atom
     n_cell_image = shifts_idx.shape[0]
@@ -49,7 +47,7 @@ def build_naive_neighborhood(
     cutoff: float,
     n_atoms: torch.Tensor,
     self_interaction: bool,
-) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
     """TODO: add doc"""
     device = positions.device
     dtype = positions.dtype

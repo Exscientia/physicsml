@@ -1,5 +1,4 @@
 from dataclasses import field
-from typing import Dict, Optional
 
 from molflux.modelzoo.models.lightning.config import OptimizerConfig, SchedulerConfig
 from pydantic.v1 import dataclasses
@@ -17,13 +16,13 @@ class MeanVarMACEModelConfig(PhysicsMLModelConfig):
     num_interactions: int = 2
     hidden_irreps: str = "128x0e + 128x1o"
     mlp_irreps: str = "16x0e"
-    avg_num_neighbours: Optional[float] = None
+    avg_num_neighbours: float | None = None
     correlation: int = 3
     scaling_mean: float = 0.0
     scaling_std: float = 1.0
-    y_node_scalars_loss_config: Optional[Dict] = None
-    y_node_vector_loss_config: Optional[Dict] = None
-    y_graph_vector_loss_config: Optional[Dict] = None
+    y_node_scalars_loss_config: dict | None = None
+    y_node_vector_loss_config: dict | None = None
+    y_graph_vector_loss_config: dict | None = None
     optimizer: OptimizerConfig = field(
         default_factory=lambda: OptimizerConfig(
             name="Adam",
@@ -34,7 +33,7 @@ class MeanVarMACEModelConfig(PhysicsMLModelConfig):
             },
         ),
     )
-    scheduler: Optional[SchedulerConfig] = field(
+    scheduler: SchedulerConfig | None = field(
         default_factory=lambda: SchedulerConfig(
             name="ReduceLROnPlateau",
             config={

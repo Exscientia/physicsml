@@ -1,14 +1,14 @@
-from typing import Any, Dict, List
+from typing import Any
 
 from physicsml.backends.backend_selector import BackendT, bond_feature_callables
 
 
 def compute_bond_features(
     mol: Any,
-    bond_features_list: List[str],
+    bond_features_list: list[str],
     one_hot_encoded: bool,
     backend: BackendT,
-) -> Dict[str, List]:
+) -> dict[str, list]:
     mol_features = []
     mol_idxs = []
 
@@ -28,7 +28,7 @@ def compute_bond_features(
             feat_value: int = values_dict[feat]
 
             if one_hot_encoded:
-                one_hot_feat: List = [0] * len(values_dict)
+                one_hot_feat: list = [0] * len(values_dict)
                 one_hot_feat[feat_value] = 1
                 bond_features += one_hot_feat
             else:
@@ -37,7 +37,10 @@ def compute_bond_features(
         mol_features.append(bond_features)
 
     if (len(mol_features) > 0) and (len(mol_idxs) > 0):
-        mol_idxs, mol_features = zip(*sorted(zip(mol_idxs, mol_features)))
+        mol_idxs, mol_features = zip(
+            *sorted(zip(mol_idxs, mol_features, strict=False)),
+            strict=False,
+        )
 
     return {
         "physicsml_bond_features": list(mol_features),

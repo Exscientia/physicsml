@@ -1,5 +1,5 @@
 import logging
-from typing import TYPE_CHECKING, Dict, List, Optional, Tuple
+from typing import TYPE_CHECKING
 
 import molflux.core as molflux_core
 from datasets import Dataset
@@ -20,18 +20,19 @@ class PhysicsMLASECalculatorBase(Calculator):
     def __init__(
         self,
         physicsml_model: PhysicsMLModelBase,
-        featurisation_metadata: Dict,
-        y_output: Optional[str] = None,
-        pbc: Optional[Tuple[bool, bool, bool]] = None,
-        cell: Optional[List[List[float]]] = None,
-        output_scaling: Optional[float] = None,
-        position_scaling: Optional[float] = None,
+        featurisation_metadata: dict,
+        y_output: str | None = None,
+        pbc: tuple[bool, bool, bool] | None = None,
+        cell: list[list[float]] | None = None,
+        output_scaling: float | None = None,
+        position_scaling: float | None = None,
+        total_charge: int | None = None,
         precision: str = "32",
         device: str = "cpu",
     ):
         super().__init__()
 
-        self.implemented_properties: List[str] = ["energy", "forces"]
+        self.implemented_properties: list[str] = ["energy", "forces"]
 
         self.model_config = physicsml_model.model_config
         self.model_config.datamodule.predict.batch_size = 1
@@ -60,6 +61,9 @@ class PhysicsMLASECalculatorBase(Calculator):
             f"Model will output {getattr(self.model_config.datamodule, self.y_output, None)}",
         )
 
+        # total molecular charge needed for aimnet2 model
+        self.total_charge = total_charge
+
         # specify pbcs and cell
         self.pbc = pbc
         self.cell = cell
@@ -74,8 +78,8 @@ class PhysicsMLASECalculatorBase(Calculator):
 
     def system_to_feated_dataset(
         self,
-        atom_list: List,
-        positions: List[List],
+        atom_list: list,
+        positions: list[list],
     ) -> Dataset:
         scaled_positions = [[xs * self.position_scaling for xs in x] for x in positions]
         self.featurisation_metadata["config"][0]["representations"][0]["config"][

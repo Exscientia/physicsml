@@ -1,12 +1,10 @@
-from typing import Optional
-
 import torch
 
 
 def compute_distances(
     pos: torch.Tensor,
     mapping: torch.Tensor,
-    cell_shifts: Optional[torch.Tensor] = None,
+    cell_shifts: torch.Tensor | None = None,
 ):
     assert mapping.dim() == 2
     assert mapping.shape[0] == 2

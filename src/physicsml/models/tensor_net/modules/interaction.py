@@ -1,5 +1,3 @@
-from typing import Dict, List
-
 import torch
 from torch_geometric.utils import scatter
 
@@ -11,7 +9,7 @@ from physicsml.models.tensor_net.modules.utils import (
 
 
 class Interaction(torch.nn.Module):
-    def __init__(self, num_features: int, num_radial: int, mlp_hidden_dims: List[int]):
+    def __init__(self, num_features: int, num_radial: int, mlp_hidden_dims: list[int]):
         super().__init__()
 
         self.linear_I = torch.nn.Linear(num_features, num_features, bias=False)
@@ -29,7 +27,7 @@ class Interaction(torch.nn.Module):
         self.linear_A_new = torch.nn.Linear(num_features, num_features, bias=False)
         self.linear_S_new = torch.nn.Linear(num_features, num_features, bias=False)
 
-    def forward(self, data: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
+    def forward(self, data: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
         # [num_nodes, num_feats, 3, 3]
         X_i = data["X_i"]
 

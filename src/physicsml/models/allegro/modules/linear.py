@@ -1,5 +1,5 @@
 from math import sqrt
-from typing import List, NamedTuple, Optional, Tuple
+from typing import NamedTuple
 
 import torch
 from e3nn import o3
@@ -20,12 +20,12 @@ class Instruction(NamedTuple):
 def codegen_strided_linear(
     irreps_in: o3.Irreps,
     irreps_out: o3.Irreps,
-    instructions: List[Instruction],
+    instructions: list[Instruction],
     normalization: str = "component",
     internal_weights: bool = False,
     shared_weights: bool = False,
     pad_to_alignment: int = 1,
-) -> Optional[fx.GraphModule]:
+) -> fx.GraphModule | None:
     """Returns None if strided doesn't make sense for this TP."""
     # Check if irreps can be strided
     try:
@@ -41,11 +41,11 @@ def codegen_strided_linear(
         assert shared_weights
 
     # group instructions by output
-    ins_per_output: List[List[Instruction]] = [
+    ins_per_output: list[list[Instruction]] = [
         [ins for ins in instructions if ins.i_out == i]
         for i in range(len(layout_out.base_irreps))
     ]
-    ins_group_irrep_slice: List[Tuple[int, int]] = []
+    ins_group_irrep_slice: list[tuple[int, int]] = []
     # check that each output is a mix of sequential irreps
     for ins_group in ins_per_output:
         if len(ins_group) == 0:
@@ -84,7 +84,7 @@ def codegen_strided_linear(
 
     w_index: int = 0
     for _ins_grp_i, (ins_grp, ins_grp_ins) in enumerate(
-        zip(ins_per_output, ins_group_irrep_slice),
+        zip(ins_per_output, ins_group_irrep_slice, strict=False),
     ):
         if len(ins_grp) == 0:
             continue
@@ -93,9 +93,9 @@ def codegen_strided_linear(
         to_mix = x[
             :,
             :,
-            layout_in.base_irreps[: ins_grp_ins[0]]
-            .dim : layout_in.base_irreps[: ins_grp_ins[1] + 1]
-            .dim,
+            layout_in.base_irreps[: ins_grp_ins[0]].dim : layout_in.base_irreps[
+                : ins_grp_ins[1] + 1
+            ].dim,
         ]  # index the i dim in z u i
         # ^ has i index ranging over ins_grp_ins inputs *of same irrep*, so we can rectangularize with a new "n" dimension:
         n: int = 1 + ins_grp_ins[1] - ins_grp_ins[0]
@@ -132,7 +132,7 @@ def codegen_strided_linear(
             ),
             like=x,
         )
-        for i, (ins_grp, o) in enumerate(zip(ins_per_output, outs))
+        for i, (ins_grp, o) in enumerate(zip(ins_per_output, outs, strict=False))
     ]
     outs = [
         (
@@ -210,9 +210,9 @@ def codegen_strided_linear(
 def Linear(
     irreps_in,
     irreps_out,
-    shared_weights: Optional[bool] = None,
+    shared_weights: bool | None = None,
     internal_weights: bool = False,
-    instructions: Optional[List[Tuple[int, int]]] = None,
+    instructions: list[tuple[int, int]] | None = None,
     pad_to_alignment: int = 1,
 ):
     irreps_in = o3.Irreps(irreps_in)

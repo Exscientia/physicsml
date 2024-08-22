@@ -35,6 +35,7 @@ def test_features_atom_num_only(gdb9_dataset):
         dataset_feated["mol::physicsml_coordinates"],
         dataset_feated["mol::physicsml_atom_numbers"],
         dataset_feated["mol::physicsml_atom_idxs"],
+        strict=False,
     ):
         assert len(coords) == len(atom_nums) == len(atom_idxs)
 
@@ -215,6 +216,7 @@ def test_features(gdb9_dataset):
         dataset_feated["mol::physicsml_coordinates"],
         dataset_feated["mol::physicsml_atom_idxs"],
         dataset_feated["mol::physicsml_atom_features"],
+        strict=False,
     ):
         assert len(coords) == len(atom_idxs) == len(atom_feats)
         for atom_feat in atom_feats:
@@ -223,6 +225,7 @@ def test_features(gdb9_dataset):
     for bond_idxs, bond_feats in zip(
         dataset_feated["mol::physicsml_bond_idxs"],
         dataset_feated["mol::physicsml_bond_features"],
+        strict=False,
     ):
         assert len(bond_idxs) == len(bond_idxs)
         for bond_feat in bond_feats:

@@ -1,5 +1,3 @@
-from typing import Dict, Optional
-
 import torch
 
 from physicsml.models.egnn.egnn_utils import EGNNBlock
@@ -31,9 +29,9 @@ class SSFEGNN(torch.nn.Module):
         num_layers: int,
         num_layers_phi: int,
         c_hidden: int,
-        dropout: Optional[float],
-        mlp_activation: Optional[str],
-        mlp_output_activation: Optional[str],
+        dropout: float | None,
+        mlp_activation: str | None,
+        mlp_output_activation: str | None,
         num_rbf: int,
         modify_coords: bool,
         bessel_cut_off: float,
@@ -99,7 +97,7 @@ class SSFEGNN(torch.nn.Module):
 
             self.ssf.append(SSF(c_hidden=c_hidden))
 
-    def forward(self, data: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
+    def forward(self, data: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
         """
 
         Args:

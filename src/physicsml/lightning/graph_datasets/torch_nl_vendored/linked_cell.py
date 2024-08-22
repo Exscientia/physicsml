@@ -1,5 +1,3 @@
-from typing import Tuple
-
 import torch
 
 from .geometry import compute_cell_shifts
@@ -134,7 +132,7 @@ def linked_cell(
     cutoff: float,
     num_repeats: torch.Tensor,
     self_interaction: bool = False,
-) -> Tuple[torch.Tensor, torch.Tensor]:
+) -> tuple[torch.Tensor, torch.Tensor]:
     """Determine the atomic neighborhood of the atoms of a given structure for a particular cutoff using the linked cell algorithm.
 
     Parameters
@@ -294,7 +292,7 @@ def build_linked_cell_neighborhood(
     cutoff: float,
     n_atoms: torch.Tensor,
     self_interaction: bool = False,
-) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
     """Build the neighborlist of a given set of atomic structures using the linked cell algorithm.
 
     Parameters

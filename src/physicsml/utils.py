@@ -1,6 +1,6 @@
 import tempfile
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 import molflux.core as molflux_core
 import numpy as np
@@ -10,7 +10,6 @@ from physicsml.backends.backend_selector import BackendT, to_mol
 
 
 class OptionalDependencyImportError(Exception):
-
     """Raisable on ImportErrors due to missing optional dependencies."""
 
     def __init__(self, dependency: str, package: str):
@@ -24,7 +23,6 @@ class OptionalDependencyImportError(Exception):
 
 
 class OptionalCondaDependencyImportError(Exception):
-
     """Raisable on ImportErrors due to missing optional dependencies."""
 
     def __init__(self, dependency: str, package: str):
@@ -59,10 +57,10 @@ def load_from_dvc(repo_url: str, rev: str, model_path_in_repo: str) -> Any:
 
 
 def get_atomic_energies(
-    list_mol_bytes: List[bytes],
-    energies: List[float],
+    list_mol_bytes: list[bytes],
+    energies: list[float],
     backend: BackendT = "openeye",
-) -> Dict[str, float]:
+) -> dict[str, float]:
     list_of_mol_atoms = []
     for mol_bytes in list_mol_bytes:
         mol = to_mol(backend)(mol_bytes)

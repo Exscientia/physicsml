@@ -1,4 +1,4 @@
-from typing import Dict, Literal, Optional
+from typing import Literal
 
 from pydantic.v1 import dataclasses
 
@@ -15,16 +15,16 @@ class EGNNModelConfig(PhysicsMLModelConfig):
     num_layers_pooling: int = 2
     c_hidden: int = 128
     modify_coords: bool = False
-    jitter: Optional[float] = None
+    jitter: float | None = None
     pool_type: Literal["sum", "mean"] = "sum"
     pool_from: Literal["nodes", "nodes_edges", "edges"] = "nodes"
-    dropout: Optional[float] = None
-    mlp_activation: Optional[str] = "SiLU"
-    mlp_output_activation: Optional[str] = None
-    output_activation: Optional[str] = None
+    dropout: float | None = None
+    mlp_activation: str | None = "SiLU"
+    mlp_output_activation: str | None = None
+    output_activation: str | None = None
     scaling_mean: float = 0.0
     scaling_std: float = 1.0
-    y_node_scalars_loss_config: Optional[Dict] = None
-    y_edge_scalars_loss_config: Optional[Dict] = None
-    y_graph_scalars_loss_config: Optional[Dict] = None
-    y_node_vector_loss_config: Optional[Dict] = None
+    y_node_scalars_loss_config: dict | None = None
+    y_edge_scalars_loss_config: dict | None = None
+    y_graph_scalars_loss_config: dict | None = None
+    y_node_vector_loss_config: dict | None = None

@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, List
+from typing import Any
 
 import torch
 from torch.utils.data.dataloader import DataLoader
@@ -26,7 +26,7 @@ class OnDiskBatchedDataset(Dataset):
         return batch
 
 
-def collate_fn(list_of_data: List[Any]) -> Any:
+def collate_fn(list_of_data: list[Any]) -> Any:
     assert len(list_of_data) == 1
     return list_of_data[0]
 
