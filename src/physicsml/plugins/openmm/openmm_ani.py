@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict, Optional
+from typing import Any
 
 import torch
 
@@ -18,8 +18,8 @@ class OpenMMANI(OpenMMModuleBase):
         self.batch_dict = self.make_batch(self.datapoint)
         del self.model_config
 
-    def make_batch(self, datapoint: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
-        batch_dict: Dict[str, torch.Tensor] = {}
+    def make_batch(self, datapoint: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
+        batch_dict: dict[str, torch.Tensor] = {}
 
         species = datapoint[self.model_config.datamodule.atomic_numbers_col].unsqueeze(
             0,
@@ -46,7 +46,7 @@ class OpenMMANI(OpenMMModuleBase):
     def forward(
         self,
         positions: torch.Tensor,
-        boxvectors: Optional[torch.Tensor] = None,
+        boxvectors: torch.Tensor | None = None,
     ) -> torch.Tensor:
         batch_dict_clone = self.clone_batch_dict_to_device()
 
@@ -74,7 +74,7 @@ class OpenMMANI(OpenMMModuleBase):
             )
 
         # do inference
-        output: Dict[str, torch.Tensor] = self.module(batch_dict_clone)
+        output: dict[str, torch.Tensor] = self.module(batch_dict_clone)
 
         # get output and scaling
         y_out: torch.Tensor = output[self.y_output].squeeze()

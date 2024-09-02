@@ -6,7 +6,7 @@ requires = ["setuptools>=64.0.0", "setuptools_scm>=6.2.0"]
 name = 'physicsml'
 description = 'A package for all physics based/related models'
 readme = 'README.md'
-requires-python = '>= 3.8'
+requires-python = '>= 3.10'
 authors = [{name = 'Exscientia'}]
 maintainers = [{name = 'Exscientia'}]
 classifiers = [
@@ -16,8 +16,6 @@ classifiers = [
     'Operating System :: OS Independent',
     'Programming Language :: Python',
     'Programming Language :: Python :: 3 :: Only',
-    'Programming Language :: Python :: 3.8',
-    'Programming Language :: Python :: 3.9',
     'Programming Language :: Python :: 3.10',
     'Programming Language :: Python :: 3.11',
     'Typing :: Typed',
@@ -34,7 +32,6 @@ dependencies = [
 
 [project.optional-dependencies]
 openeye = [
-    'openeye-toolkits<2023.0.0; python_version == "3.8"',  # openeye 2023 not supported on python 3.8
     'openeye-toolkits',
 ]
 rdkit = [
@@ -48,7 +45,7 @@ openmm = [
     'rdkit',
 ]
 dev = [
-    'nox',
+    'nox[uv]',
     'pre-commit',
 ]
 docs = [
@@ -112,7 +109,7 @@ mace = 'physicsml.models.mace.mace_prism:MACE'
 nequip = 'physicsml.models.nequip.nequip_prism:Nequip'
 
 [project.urls]
-documentation = 'https://github.com/exscientia/physicsml/issues' # TODO: Fix docs url
+documentation = 'https://exscientia.github.io/physicsml/'
 repository = 'https://github.com/exscientia/physicsml.git'
 issue-tracker = 'https://github.com/exscientia/physicsml/issues'
 changelog = 'https://github.com/exscientia/physicsml/src/main/CHANGELOG.md'
@@ -195,6 +192,8 @@ extend-exclude = [
 ]
 respect-gitignore = true
 show-fixes = true
+
+[tool.ruff.lint]
 select = [ # https://beta.ruff.rs/docs/rules/
     # "A",  # flake8-builtins
     # "ARG", # flake8-unused-arguments
@@ -231,19 +230,19 @@ select = [ # https://beta.ruff.rs/docs/rules/
     "W", # pycodestyle warning
     "YTT", # flake8-2020
 ]
-ignore = ["E501", "S101"]
+ignore = ["E501", "S101", "UP036", "RUF007", "RUF017"]
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "docs/source/conf.py" = ["ERA"]
 "src/physicsml/__init__.py" = ["F401"]
 "src/physicsml/lightning/losses/__init__.py" = ["E402", "F403", "F401"]
 "tests/*" = ["ARG001", "D", "S101", "PLR2004"]
 "noxfile.py" = ["T201"]
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 known-first-party = ["physicsml"]
 
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
 convention = "google"
 
 [tool.setuptools_scm]

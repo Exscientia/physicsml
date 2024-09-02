@@ -1,6 +1,6 @@
-from typing import Any, Dict
+from typing import Any
 
-_AVAILABLE_LOSSES: Dict[str, Any] = {}
+_AVAILABLE_LOSSES: dict[str, Any] = {}
 
 from physicsml.lightning.losses.loss_base import *
 from physicsml.lightning.losses.masked_mse_loss import *

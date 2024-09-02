@@ -1,6 +1,6 @@
 import logging
 from abc import abstractmethod
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 import datasets
 import molflux.core as molflux_core
@@ -18,15 +18,16 @@ class OpenMMModuleBase(PhysicsMLModuleBase):
     def __init__(
         self,
         physicsml_model: Any,
-        featurisation_metadata: Dict,
-        atom_list: Optional[List[int]] = None,
-        system_path: Optional[str] = None,
-        atom_idxs: Optional[List[int]] = None,
-        y_output: Optional[str] = None,
-        pbc: Optional[Tuple[bool, bool, bool]] = None,
-        cell: Optional[List[List[float]]] = None,
-        output_scaling: Optional[float] = None,
-        position_scaling: Optional[float] = None,
+        featurisation_metadata: dict,
+        atom_list: list[int] | None = None,
+        system_path: str | None = None,
+        atom_idxs: list[int] | None = None,
+        total_charge: int | None = None,
+        y_output: str | None = None,
+        pbc: tuple[bool, bool, bool] | None = None,
+        cell: list[list[float]] | None = None,
+        output_scaling: float | None = None,
+        position_scaling: float | None = None,
         precision: str = "32",
         device: str = "cpu",
     ) -> None:
@@ -58,6 +59,7 @@ class OpenMMModuleBase(PhysicsMLModuleBase):
         # get scaling values for output and input
         self.output_scaling = output_scaling or 1.0
         self.position_scaling = position_scaling or 1.0
+
         # will output scalars (assumed to be energy) unless otherwise specified)
         self.y_output = y_output or "y_graph_scalars"
         logger.warning(
@@ -78,12 +80,19 @@ class OpenMMModuleBase(PhysicsMLModuleBase):
 
         # check if using tructated atoms list (for mixed systems) and specify atom idxs tensor
         if atom_idxs is not None:
-            self.atom_idxs: Optional[torch.Tensor] = torch.tensor(
+            self.atom_idxs: torch.Tensor | None = torch.tensor(
                 atom_idxs,
                 dtype=torch.int64,
             )
         else:
             self.atom_idxs = None
+
+        # total molecular charge
+        # set default to None
+        self.total_charge: int | None = None
+
+        if total_charge is not None:
+            self.total_charge = total_charge
 
         self.featurisation_metadata = featurisation_metadata
         self.featurisation_metadata["config"][0]["column"] = "tmp_mol"
@@ -112,18 +121,28 @@ class OpenMMModuleBase(PhysicsMLModuleBase):
         )
         dataset_feated.set_format("torch", self.model_config.x_features)
         self.datapoint = dataset_feated[0]
-        self.batch_dict: Dict[str, torch.Tensor]
+        self.batch_dict: dict[str, torch.Tensor]
 
     @abstractmethod
-    def make_batch(self, datapoint: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
-        ...
+    def make_batch(
+        self,
+        datapoint: dict[str, torch.Tensor],
+    ) -> dict[str, torch.Tensor]: ...
 
-    def clone_batch_dict_to_device(self) -> Dict[str, torch.Tensor]:
+    def clone_batch_dict_to_device(self) -> dict[str, torch.Tensor]:
         clone = {}
+
         for k, v in self.batch_dict.items():
             clone[k] = v.clone().to(self.which_device)
 
+        # add total_charge to the clone if it exists
+        if self.total_charge is not None:
+            clone["graph_attrs"] = torch.as_tensor(
+                [[self.total_charge]],
+                dtype=torch.float,
+            ).to(self.which_device)
+
         return clone
 
-    def compute_loss(self, input: Any, target: Any) -> Dict[str, torch.Tensor]:
+    def compute_loss(self, input: Any, target: Any) -> dict[str, torch.Tensor]:
         return {"loss": torch.empty(0)}

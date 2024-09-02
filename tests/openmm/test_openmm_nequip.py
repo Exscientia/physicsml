@@ -362,9 +362,7 @@ def test_openmm_nequip_cell(featurised_ani1x_atomic_nums):
                 retain_graph=False,  # Make sure the graph is not destroyed during training
                 create_graph=False,  # Create graph for second derivative
                 allow_unused=True,
-            )[
-                0
-            ]  # [n_nodes, 3]
+            )[0]  # [n_nodes, 3]
 
 
 def test_openmm_nequip_boxvectors(featurised_ani1x_atomic_nums):

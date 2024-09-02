@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 try:
     from rdkit import Chem
@@ -9,9 +9,9 @@ except ImportError as err:
 
 
 def atoms_or_file_to_rdkit_mol_bytes(
-    atom_list: Optional[List[int]] = None,
-    coordinates: Optional[List[List[float]]] = None,
-    system_path: Optional[str] = None,
+    atom_list: list[int] | None = None,
+    coordinates: list[list[float]] | None = None,
+    system_path: str | None = None,
 ) -> Any:
     assert (atom_list is not None) ^ (system_path is not None), ValueError(
         "Must specify either 'atom_list' or 'system_path' (but not both).",
@@ -83,7 +83,7 @@ def to_rdkit_mol_bytes(molecule: Any) -> bytes:
         raise TypeError(f"Unsupported input sample type: {type(molecule)!r}")
 
 
-def rdkit_coordinates(mol: Chem.Mol) -> Dict[int, Tuple[float]]:
+def rdkit_coordinates(mol: Chem.Mol) -> dict[int, tuple[float]]:
     coords = mol.GetConformer().GetPositions()
     return dict(enumerate(coords))
 

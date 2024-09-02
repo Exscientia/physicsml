@@ -1,6 +1,6 @@
 import gc
 from collections import OrderedDict
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import torch
 from molflux.modelzoo.models.lightning.module import (
@@ -44,7 +44,7 @@ class PooledANIModule(PhysicsMLModuleBase):
         atomic_nets = OrderedDict()
         for a in self.net_sizes.keys():
             layers = self.net_sizes[a]
-            modules: List[Any] = []
+            modules: list[Any] = []
             for i in range(len(layers) - 1):
                 modules.append(torch.nn.Linear(layers[i], layers[i + 1]))
                 modules.append(torch.nn.CELU(alpha=0.1))
@@ -54,14 +54,14 @@ class PooledANIModule(PhysicsMLModuleBase):
         self.animodel = ANIModel(atomic_nets)
         self.aev_computer = AEVComputer(**self.aev_config)
 
-    def forward(self, input: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
+    def forward(self, input: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
         if "cell" in input:
-            cell: Optional[torch.Tensor] = input["cell"]
+            cell: torch.Tensor | None = input["cell"]
         else:
             cell = None
 
         if "pbc" in input:
-            pbc: Optional[torch.Tensor] = input["pbc"]
+            pbc: torch.Tensor | None = input["pbc"]
         else:
             pbc = None
 
@@ -83,8 +83,8 @@ class PooledANIModule(PhysicsMLModuleBase):
 
         return {"y_graph_scalars": energies}
 
-    def compute_loss(self, input: Any, target: Any) -> Dict[str, torch.Tensor]:
-        loss_dict: Dict[str, torch.Tensor] = {}
+    def compute_loss(self, input: Any, target: Any) -> dict[str, torch.Tensor]:
+        loss_dict: dict[str, torch.Tensor] = {}
         total_loss: torch.Tensor = torch.zeros(1, device=self.device)
         for y_key, loss in self.losses.items():
             if target.get(y_key, None) is not None:
@@ -96,7 +96,7 @@ class PooledANIModule(PhysicsMLModuleBase):
         return loss_dict
 
     def configure_losses(self) -> Any:
-        losses: Dict[str, Optional[Any]] = {}
+        losses: dict[str, Any | None] = {}
         if self.model_config.y_graph_scalars_loss_config is not None:
             losses["y_graph_scalars"] = construct_loss(
                 loss_config=self.model_config.y_graph_scalars_loss_config,
@@ -118,7 +118,7 @@ class PooledANIModule(PhysicsMLModuleBase):
     def _training_step_on_single_source_batch(
         self,
         single_source_batch: Any,
-        source_name: Optional[str],
+        source_name: str | None,
         batch_idx: int,
         *args: Any,
         **kwargs: Any,
@@ -156,7 +156,7 @@ class PooledANIModule(PhysicsMLModuleBase):
     def _validation_step_on_single_source_batch(
         self,
         single_source_batch: Any,
-        source_name: Optional[str],
+        source_name: str | None,
         batch_idx: int,
         *args: Any,
         **kwargs: Any,

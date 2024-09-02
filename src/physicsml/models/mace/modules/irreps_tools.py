@@ -4,7 +4,6 @@
 # This program is distributed under the MIT License (see MIT.md)
 ###########################################################################################
 
-from typing import List, Tuple
 
 import torch
 from e3nn import o3
@@ -16,11 +15,11 @@ def tp_out_irreps_with_instructions(
     irreps1: o3.Irreps,
     irreps2: o3.Irreps,
     target_irreps: o3.Irreps,
-) -> Tuple[o3.Irreps, List]:
+) -> tuple[o3.Irreps, list]:
     trainable = True
 
     # Collect possible irreps and their instructions
-    irreps_out_list: List[Tuple[int, o3.Irreps]] = []
+    irreps_out_list: list[tuple[int, o3.Irreps]] = []
     instructions = []
     for i, (mul, ir_in) in enumerate(irreps1):
         for j, (_, ir_edge) in enumerate(irreps2):
@@ -60,7 +59,7 @@ class reshape_irreps(torch.nn.Module):
         ix = 0
         out = []
         batch, _ = tensor.shape
-        for mul, d in zip(self.muls, self.dims):
+        for mul, d in zip(self.muls, self.dims, strict=False):
             field = tensor[:, ix : ix + mul * d]  # [batch, sample, mul * repr]
             ix += mul * d
             field = field.reshape(batch, mul, d)

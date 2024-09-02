@@ -1,4 +1,4 @@
-from typing import Any, Type
+from typing import Any
 
 from molflux.modelzoo.info import ModelInfo
 
@@ -19,7 +19,7 @@ class MeanVarMACEModel(PhysicsMLUncertaintyModelBase[MeanVarMACEModelConfig]):
         )
 
     @property
-    def _config_builder(self) -> Type[MeanVarMACEModelConfig]:
+    def _config_builder(self) -> type[MeanVarMACEModelConfig]:
         return MeanVarMACEModelConfig
 
     def _instantiate_module(self) -> Any:

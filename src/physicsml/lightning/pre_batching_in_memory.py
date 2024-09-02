@@ -1,6 +1,6 @@
 import os
 import pickle
-from typing import Any, List
+from typing import Any
 
 import torch
 from torch.utils.data.dataloader import DataLoader
@@ -11,7 +11,7 @@ from lightning.pytorch.utilities.rank_zero import rank_zero_only
 
 
 class InMemoryBatchedPickledDataset(Dataset):
-    def __init__(self, batched_dataset: List[Any]) -> None:
+    def __init__(self, batched_dataset: list[Any]) -> None:
         super().__init__()
         self.batched_dataset = batched_dataset
 
@@ -22,7 +22,7 @@ class InMemoryBatchedPickledDataset(Dataset):
         return pickle.loads(self.batched_dataset[idx])  # noqa: S301
 
 
-def collate_fn(list_of_data: List[Any]) -> Any:
+def collate_fn(list_of_data: list[Any]) -> Any:
     assert len(list_of_data) == 1
     return list_of_data[0]
 

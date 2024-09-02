@@ -1,5 +1,3 @@
-from typing import Optional, Tuple
-
 import torch
 
 
@@ -38,9 +36,9 @@ def vector_to_symtensor(vector: torch.Tensor) -> torch.Tensor:
 def compose_irrep_tensor(
     scalar_component: torch.Tensor,
     vector_component: torch.Tensor,
-    coef_I: Optional[torch.Tensor] = None,
-    coef_A: Optional[torch.Tensor] = None,
-    coef_S: Optional[torch.Tensor] = None,
+    coef_I: torch.Tensor | None = None,
+    coef_A: torch.Tensor | None = None,
+    coef_S: torch.Tensor | None = None,
 ) -> torch.Tensor:
     """
     creates an irrep tensor as X = I + A + S, where
@@ -86,7 +84,7 @@ def compose_irrep_tensor(
 
 def decompose_irrep_tensor(
     irrep_tensor: torch.Tensor,
-) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
     """
     Decomposes an irrep tensor X into I, A, S
     Args:

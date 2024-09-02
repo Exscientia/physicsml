@@ -1,4 +1,4 @@
-from typing import Any, List, Optional, Tuple
+from typing import Any
 
 import molflux.core as molflux_core
 
@@ -6,21 +6,22 @@ from physicsml.utils import load_from_dvc
 
 
 def to_openmm_torchscript(
-    model_path: Optional[str] = None,
-    repo_url: Optional[str] = None,
-    rev: Optional[str] = None,
-    model_path_in_repo: Optional[str] = None,
-    atom_list: Optional[List[int]] = None,
-    system_path: Optional[str] = None,
-    atom_idxs: Optional[List[int]] = None,
-    y_output: Optional[str] = None,
-    pbc: Optional[Tuple[bool, bool, bool]] = None,
-    cell: Optional[List[List[float]]] = None,
-    output_scaling: Optional[float] = None,
-    position_scaling: Optional[float] = None,
+    model_path: str | None = None,
+    repo_url: str | None = None,
+    rev: str | None = None,
+    model_path_in_repo: str | None = None,
+    atom_list: list[int] | None = None,
+    system_path: str | None = None,
+    atom_idxs: list[int] | None = None,
+    total_charge: int | None = None,
+    y_output: str | None = None,
+    pbc: tuple[bool, bool, bool] | None = None,
+    cell: list[list[float]] | None = None,
+    output_scaling: float | None = None,
+    position_scaling: float | None = None,
     device: str = "cpu",
     precision: str = "32",
-    torchscipt_path: Optional[str] = None,
+    torchscipt_path: str | None = None,
 ) -> Any:
     assert (model_path is not None) ^ (
         (repo_url is not None)
@@ -54,6 +55,7 @@ def to_openmm_torchscript(
         atom_list=atom_list,
         system_path=system_path,
         atom_idxs=atom_idxs,
+        total_charge=total_charge,
         y_output=y_output,
         pbc=pbc,
         cell=cell,

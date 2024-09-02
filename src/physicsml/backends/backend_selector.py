@@ -1,11 +1,12 @@
-from typing import Any, Callable, Dict, Literal
+from collections.abc import Callable
+from typing import Any, Literal
 
 BackendT = Literal["openeye", "rdkit"]
 
 
 def atom_feature_callables(
     backend: BackendT,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     if backend == "openeye":
         from physicsml.backends.openeye_backend import _OPENEYE_ATOM_FEATURES
 
@@ -20,7 +21,7 @@ def atom_feature_callables(
 
 def bond_feature_callables(
     backend: BackendT,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     if backend == "openeye":
         from physicsml.backends.openeye_backend import _OPENEYE_BOND_FEATURES
 

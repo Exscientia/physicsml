@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional
-
 import torch
 from torch_geometric.utils import scatter
 
@@ -35,12 +33,12 @@ class MLP(torch.nn.Module):
     def __init__(
         self,
         c_in: int,
-        hidden_dims: List[int],
+        hidden_dims: list[int],
         c_out: int,
     ):
         super().__init__()
 
-        layers: List[torch.nn.Module] = []
+        layers: list[torch.nn.Module] = []
         if len(hidden_dims) == 0:
             layers.append(torch.nn.Linear(c_in, c_out))
         else:
@@ -68,7 +66,7 @@ class Embedding(torch.nn.Module):
         num_features: int,
         num_radial: int,
         cut_off: float,
-        mlp_hidden_dims: List[int],
+        mlp_hidden_dims: list[int],
     ):
         super().__init__()
 
@@ -76,7 +74,7 @@ class Embedding(torch.nn.Module):
 
         self.node_embedding = torch.nn.Linear(num_node_feats, num_features, bias=False)
         if num_edge_feats > 0:
-            self.edge_embedding: Optional[torch.nn.Module] = torch.nn.Linear(
+            self.edge_embedding: torch.nn.Module | None = torch.nn.Linear(
                 num_edge_feats,
                 num_features,
                 bias=False,
@@ -108,7 +106,7 @@ class Embedding(torch.nn.Module):
         self.linear_A_after = torch.nn.Linear(num_features, num_features, bias=False)
         self.linear_S_after = torch.nn.Linear(num_features, num_features, bias=False)
 
-    def forward(self, data: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
+    def forward(self, data: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
         if "cell" in data:
             cell = data["cell"]
             cell_shift_vector = data["cell_shift_vector"]

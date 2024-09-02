@@ -17,7 +17,7 @@ def gdb9_dataset():
     df_gdb9 = pd.read_csv("tests/data/gdb9.csv")
 
     dataset = []
-    for mol, (_index, labels) in zip(mols_iterator, df_gdb9.iterrows()):
+    for mol, (_index, labels) in zip(mols_iterator, df_gdb9.iterrows(), strict=False):
         example_dict = labels.to_dict()
         example_dict["mol"] = mol.ToBinary()
         dataset.append(example_dict)
@@ -100,8 +100,8 @@ def ani1x_dataset():
 
         # find list of example dicts (swap dict of lists to list of dicts)
         chemical_formula_examples_list = [
-            dict(zip(chemical_formula_dict, t))
-            for t in zip(*chemical_formula_dict.values())
+            dict(zip(chemical_formula_dict, t, strict=False))
+            for t in zip(*chemical_formula_dict.values(), strict=False)
         ]
 
         # yield the examples for the conformers

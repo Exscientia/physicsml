@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 import datasets
 import torch
@@ -6,9 +6,9 @@ from torch.utils.data import Dataset
 
 
 def validate_features(
-    sub_feature: Optional[Union[List[str], str]],
-    features: Optional[List[str]],
-) -> Optional[Union[List[str], str]]:
+    sub_feature: list[str] | str | None,
+    features: list[str] | None,
+) -> list[str] | str | None:
     # assert that all cols exist in y_features and sort features
     if (sub_feature is not None) and (features is not None):
         if isinstance(sub_feature, list):
@@ -29,16 +29,16 @@ class ANIDataset(Dataset):
     def __init__(
         self,
         dataset: datasets.Dataset,
-        x_features: List,
-        y_features: Optional[List],
+        x_features: list,
+        y_features: list | None,
         with_y_features: bool,
-        y_graph_scalars: Optional[List[str]],
-        y_node_vector: Optional[str],
+        y_graph_scalars: list[str] | None,
+        y_node_vector: str | None,
         atomic_numbers_col: str,
         coordinates_col: str,
         total_atomic_energy_col: str,
-        pbc: Optional[Tuple[bool, bool, bool]],
-        cell: Optional[List[List[float]]],
+        pbc: tuple[bool, bool, bool] | None,
+        cell: list[list[float]] | None,
     ) -> None:
         self.x_features = x_features
         self.y_features = y_features
@@ -49,11 +49,11 @@ class ANIDataset(Dataset):
         self.total_atomic_energy_col = total_atomic_energy_col
 
         if pbc is not None:
-            self.pbc_ten: Optional[torch.Tensor] = torch.tensor(pbc)
+            self.pbc_ten: torch.Tensor | None = torch.tensor(pbc)
         else:
             self.pbc_ten = None
         if cell is not None:
-            self.cell_ten: Optional[torch.Tensor] = torch.tensor(cell)
+            self.cell_ten: torch.Tensor | None = torch.tensor(cell)
         else:
             self.cell_ten = None
 
@@ -72,10 +72,10 @@ class ANIDataset(Dataset):
 
     def make_y_feature(
         self,
-        features: Optional[Union[List[str], str]],
-        datapoint: Dict,
+        features: list[str] | str | None,
+        datapoint: dict,
         graph_level: bool,
-    ) -> Optional[torch.Tensor]:
+    ) -> torch.Tensor | None:
         if features is not None:
             if isinstance(features, list):
                 y: torch.Tensor = torch.tensor(
@@ -133,8 +133,8 @@ class ANIDataset(Dataset):
         }
 
 
-def ani_collate_fn(batch_list: List) -> Dict[str, torch.Tensor]:
-    batch_dict: Dict[str, Any] = {
+def ani_collate_fn(batch_list: list) -> dict[str, torch.Tensor]:
+    batch_dict: dict[str, Any] = {
         k: [dic[k] for dic in batch_list] for k in batch_list[0]
     }
 

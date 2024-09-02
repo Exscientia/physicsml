@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional
+from typing import Any
 
 import datasets
 from molflux.modelzoo.models.lightning.datamodule import LightningDataModule
@@ -20,10 +20,10 @@ class ANIDataModule(LightningDataModule):
     def __init__(
         self,
         model_config: ANIModelConfig,
-        train_data: Optional[Dict[Optional[str], datasets.Dataset]] = None,
-        validation_data: Optional[Dict[Optional[str], datasets.Dataset]] = None,
-        test_data: Optional[Dict[Optional[str], datasets.Dataset]] = None,
-        predict_data: Optional[datasets.Dataset] = None,
+        train_data: dict[str | None, datasets.Dataset] | None = None,
+        validation_data: dict[str | None, datasets.Dataset] | None = None,
+        test_data: dict[str | None, datasets.Dataset] | None = None,
+        predict_data: datasets.Dataset | None = None,
         **kwargs: Any,
     ):
         del kwargs
@@ -39,7 +39,7 @@ class ANIDataModule(LightningDataModule):
         self,
         data: datasets.Dataset,
         split: str,
-        name: Optional[str] = None,
+        name: str | None = None,
         **kwargs: Any,
     ) -> Dataset:
         return ANIDataset(

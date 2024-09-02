@@ -1,4 +1,4 @@
-from typing import Dict, List, Literal, Optional, Tuple
+from typing import Literal
 
 import torch
 import torch.nn as nn
@@ -17,9 +17,9 @@ class EdgeOperation(nn.Module):
         num_layers_phi: int,
         c_hidden: int,
         edge_feats_bool: bool,
-        dropout: Optional[float],
-        mlp_activation: Optional[str],
-        mlp_output_activation: Optional[str],
+        dropout: float | None,
+        mlp_activation: str | None,
+        mlp_output_activation: str | None,
         num_rbf: int,
         bessel_cut_off: float,
     ) -> None:
@@ -27,10 +27,10 @@ class EdgeOperation(nn.Module):
 
         self.with_rbf = num_rbf > 0
         if self.with_rbf:
-            self.bessel_cut_off: Optional[torch.nn.Parameter] = torch.nn.Parameter(
+            self.bessel_cut_off: torch.nn.Parameter | None = torch.nn.Parameter(
                 torch.Tensor([bessel_cut_off]),
             )
-            self.z_0k: Optional[torch.nn.Parameter] = torch.nn.Parameter(
+            self.z_0k: torch.nn.Parameter | None = torch.nn.Parameter(
                 torch.pi * torch.arange(num_rbf),
             )
         else:
@@ -71,11 +71,11 @@ class EdgeOperation(nn.Module):
         self,
         node_feats: torch.Tensor,
         coordinates: torch.Tensor,
-        edge_feats: Optional[torch.Tensor],
+        edge_feats: torch.Tensor | None,
         edge_indices: torch.Tensor,
-        cell: Optional[torch.Tensor],
-        cell_shift_vector: Optional[torch.Tensor],
-    ) -> Tuple[torch.Tensor, Optional[torch.Tensor]]:
+        cell: torch.Tensor | None,
+        cell_shift_vector: torch.Tensor | None,
+    ) -> tuple[torch.Tensor, torch.Tensor | None]:
         sender = edge_indices[0]
         receiver = edge_indices[1]
 
@@ -137,9 +137,9 @@ class NodeOperation(nn.Module):
         self,
         num_layers_phi: int,
         c_hidden: int,
-        dropout: Optional[float],
-        mlp_activation: Optional[str],
-        mlp_output_activation: Optional[str],
+        dropout: float | None,
+        mlp_activation: str | None,
+        mlp_output_activation: str | None,
         modify_coords: int,
     ) -> None:
         super().__init__()
@@ -170,7 +170,7 @@ class NodeOperation(nn.Module):
 
         # MLP for phi_x
         if self.modify_coords:
-            self.phi_x: Optional[torch.nn.Sequential] = make_mlp(
+            self.phi_x: torch.nn.Sequential | None = make_mlp(
                 c_in=c_hidden,
                 c_hidden=c_hidden,
                 c_out=1,
@@ -187,9 +187,9 @@ class NodeOperation(nn.Module):
         coordinates: torch.Tensor,
         m_ji: torch.Tensor,
         edge_indices: torch.Tensor,
-        cell: Optional[torch.Tensor],
-        cell_shift_vector: Optional[torch.Tensor],
-    ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        cell: torch.Tensor | None,
+        cell_shift_vector: torch.Tensor | None,
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         # number of all nodes in batch
         num_nodes = node_feats.shape[0]
         receiver = edge_indices[0]
@@ -237,9 +237,9 @@ class EGNNBlock(nn.Module):
         num_layers_phi: int,
         c_hidden: int,
         edge_feats_bool: bool,
-        dropout: Optional[float],
-        mlp_activation: Optional[str],
-        mlp_output_activation: Optional[str],
+        dropout: float | None,
+        mlp_activation: str | None,
+        mlp_output_activation: str | None,
         modify_coords: bool,
         num_rbf: int,
         bessel_cut_off: float,
@@ -268,7 +268,7 @@ class EGNNBlock(nn.Module):
             modify_coords=self.modify_coords,
         )
 
-    def forward(self, data: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
+    def forward(self, data: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
         """
 
         Args:
@@ -333,9 +333,9 @@ class EGNN(torch.nn.Module):
         num_layers: int,
         num_layers_phi: int,
         c_hidden: int,
-        dropout: Optional[float],
-        mlp_activation: Optional[str],
-        mlp_output_activation: Optional[str],
+        dropout: float | None,
+        mlp_activation: str | None,
+        mlp_output_activation: str | None,
         num_rbf: int,
         modify_coords: bool,
         bessel_cut_off: float,
@@ -396,7 +396,7 @@ class EGNN(torch.nn.Module):
                 ),
             )
 
-    def forward(self, data: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
+    def forward(self, data: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
         """
 
         Args:
@@ -429,11 +429,11 @@ class PoolingHead(torch.nn.Module):
         num_layers_phi: int,
         pool_type: Literal["sum", "mean"],
         pool_from: Literal["nodes", "edges", "nodes_edges"],
-        num_tasks: Optional[int],
-        dropout: Optional[float],
-        mlp_activation: Optional[str],
-        mlp_output_activation: Optional[str],
-        output_activation: Optional[str],
+        num_tasks: int | None,
+        dropout: float | None,
+        mlp_activation: str | None,
+        mlp_output_activation: str | None,
+        output_activation: str | None,
     ) -> None:
         super().__init__()
 
@@ -474,7 +474,7 @@ class PoolingHead(torch.nn.Module):
 
     def forward(
         self,
-        data: Dict[str, torch.Tensor],
+        data: dict[str, torch.Tensor],
     ) -> torch.Tensor:
         """
 
@@ -488,7 +488,7 @@ class PoolingHead(torch.nn.Module):
         node_feats = data["node_feats"]
         num_nodes = node_feats.shape[0]
 
-        list_of_pooled_feats: List[torch.Tensor] = []
+        list_of_pooled_feats: list[torch.Tensor] = []
         if self.pool_from in ["nodes", "nodes_edges"]:
             node_feats = self.headMLP1(node_feats)
             pooled_node_feats = scatter(

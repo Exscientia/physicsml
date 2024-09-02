@@ -1,4 +1,4 @@
-from typing import Any, Type
+from typing import Any
 
 from molflux.modelzoo.info import ModelInfo
 
@@ -19,7 +19,7 @@ class MeanVarNequipModel(PhysicsMLUncertaintyModelBase[MeanVarNequipModelConfig]
         )
 
     @property
-    def _config_builder(self) -> Type[MeanVarNequipModelConfig]:
+    def _config_builder(self) -> type[MeanVarNequipModelConfig]:
         return MeanVarNequipModelConfig
 
     def _instantiate_module(self) -> Any:

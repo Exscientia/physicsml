@@ -1,4 +1,4 @@
-from typing import Any, List, Optional, Tuple
+from typing import Any
 
 import torch
 import torch.nn as nn
@@ -42,11 +42,11 @@ def make_mlp(
     c_hidden: int,
     c_out: int,
     num_layers: int,
-    dropout: Optional[float] = None,
-    mlp_activation: Optional[str] = "SiLU",
-    output_activation: Optional[str] = None,
+    dropout: float | None = None,
+    mlp_activation: str | None = "SiLU",
+    output_activation: str | None = None,
 ) -> nn.Sequential:
-    phi_list: List[Any] = []
+    phi_list: list[Any] = []
     phi_list.append(nn.Linear(c_in, c_hidden))
     if mlp_activation is not None:
         phi_list.append(_AVAILABLE_ACT_FUNCS[mlp_activation]())
@@ -71,9 +71,9 @@ def make_mlp(
 def compute_lengths_and_vectors(
     positions: torch.Tensor,
     edge_index: torch.Tensor,
-    cell: Optional[torch.Tensor] = None,
-    cell_shift_vector: Optional[torch.Tensor] = None,
-) -> Tuple[torch.Tensor, torch.Tensor]:
+    cell: torch.Tensor | None = None,
+    cell_shift_vector: torch.Tensor | None = None,
+) -> tuple[torch.Tensor, torch.Tensor]:
     sender = edge_index[0]
     receiver = edge_index[1]
 
@@ -99,7 +99,7 @@ def generate_random_mask(
     batch: torch.Tensor,
     edge_index: torch.Tensor,
     ratio_masked_nodes: float,
-) -> Tuple[torch.Tensor, torch.Tensor]:
+) -> tuple[torch.Tensor, torch.Tensor]:
     _, counts = batch.unique(return_counts=True)
 
     cum_sum = 0
@@ -116,8 +116,8 @@ def generate_random_mask(
     node_mask = torch.ones_like(batch).type(torch.bool)
     node_mask[masked_indices] = False
 
-    edge_mask = (
-        ~(edge_index.T[:, None, :] == masked_indices[None, :, None]).any(2).any(1)
+    edge_mask = ~(edge_index.T[:, None, :] == masked_indices[None, :, None]).any(2).any(
+        1,
     )
 
     return node_mask, edge_mask

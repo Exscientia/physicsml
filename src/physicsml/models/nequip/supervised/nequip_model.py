@@ -1,4 +1,4 @@
-from typing import Any, Type
+from typing import Any
 
 from molflux.modelzoo.info import ModelInfo
 
@@ -17,7 +17,7 @@ class NequipModel(PhysicsMLModelBase[NequipModelConfig]):
         )
 
     @property
-    def _config_builder(self) -> Type[NequipModelConfig]:
+    def _config_builder(self) -> type[NequipModelConfig]:
         return NequipModelConfig
 
     def _instantiate_module(self) -> Any:

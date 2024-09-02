@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional, Tuple, Union
-
 import datasets
 import torch
 import torch.utils.data
@@ -11,43 +9,43 @@ from physicsml.lightning.graph_datasets.neighbourhood_list_torch import (
 
 
 class GraphDatum(Data):
-    num_graphs: Optional[torch.Tensor]
-    batch: Optional[torch.Tensor]
-    raw_atomic_numbers: Optional[torch.Tensor]
-    atomic_numbers: Optional[torch.Tensor]
-    edge_index: Optional[torch.Tensor]
-    node_attrs: Optional[torch.Tensor]
-    edge_attrs: Optional[torch.Tensor]
-    graph_attrs: Optional[torch.Tensor]
-    y_node_scalars: Optional[torch.Tensor]
-    y_node_vector: Optional[torch.Tensor]
-    y_edge_scalars: Optional[torch.Tensor]
-    y_edge_vector: Optional[torch.Tensor]
-    y_graph_scalars: Optional[torch.Tensor]
-    y_graph_vector: Optional[torch.Tensor]
-    cell: Optional[torch.Tensor]
-    total_atomic_energy: Optional[torch.Tensor]
-    coordinates: Optional[torch.Tensor]
-    cell_shift_vector: Optional[torch.Tensor]
+    num_graphs: torch.Tensor | None
+    batch: torch.Tensor | None
+    raw_atomic_numbers: torch.Tensor | None
+    atomic_numbers: torch.Tensor | None
+    edge_index: torch.Tensor | None
+    node_attrs: torch.Tensor | None
+    edge_attrs: torch.Tensor | None
+    graph_attrs: torch.Tensor | None
+    y_node_scalars: torch.Tensor | None
+    y_node_vector: torch.Tensor | None
+    y_edge_scalars: torch.Tensor | None
+    y_edge_vector: torch.Tensor | None
+    y_graph_scalars: torch.Tensor | None
+    y_graph_vector: torch.Tensor | None
+    cell: torch.Tensor | None
+    total_atomic_energy: torch.Tensor | None
+    coordinates: torch.Tensor | None
+    cell_shift_vector: torch.Tensor | None
 
     def __init__(
         self,
-        raw_atomic_numbers: Optional[torch.Tensor],  # [n_nodes]
-        atomic_numbers: Optional[torch.Tensor],  # [n_nodes]
-        edge_index: Optional[torch.Tensor],  # [2, n_edges]
-        node_attrs: Optional[torch.Tensor],  # [n_nodes, n_node_attrs]
-        edge_attrs: Optional[torch.Tensor],  # [n_edges, n_edge_attrs]
-        graph_attrs: Optional[torch.Tensor],  # [1, n_graph_attrs]
-        y_node_scalars: Optional[torch.Tensor],  # [n_nodes, n_scalars]
-        y_node_vector: Optional[torch.Tensor],  # [n_nodes, dim_vector]
-        y_edge_scalars: Optional[torch.Tensor],  # [n_edges, n_scalars]
-        y_edge_vector: Optional[torch.Tensor],  # [n_edges, dim_vector]
-        y_graph_scalars: Optional[torch.Tensor],  # [n_scalars]
-        y_graph_vector: Optional[torch.Tensor],  # [dim_vector]
-        cell: Optional[torch.Tensor],  # [3, 3]
-        total_atomic_energy: Optional[torch.Tensor],  # [1,]
-        coordinates: Optional[torch.Tensor],  # [n_nodes, 3]
-        cell_shift_vector: Optional[torch.Tensor],  # [n_nodes, 3]
+        raw_atomic_numbers: torch.Tensor | None,  # [n_nodes]
+        atomic_numbers: torch.Tensor | None,  # [n_nodes]
+        edge_index: torch.Tensor | None,  # [2, n_edges]
+        node_attrs: torch.Tensor | None,  # [n_nodes, n_node_attrs]
+        edge_attrs: torch.Tensor | None,  # [n_edges, n_edge_attrs]
+        graph_attrs: torch.Tensor | None,  # [1, n_graph_attrs]
+        y_node_scalars: torch.Tensor | None,  # [n_nodes, n_scalars]
+        y_node_vector: torch.Tensor | None,  # [n_nodes, dim_vector]
+        y_edge_scalars: torch.Tensor | None,  # [n_edges, n_scalars]
+        y_edge_vector: torch.Tensor | None,  # [n_edges, dim_vector]
+        y_graph_scalars: torch.Tensor | None,  # [n_scalars]
+        y_graph_vector: torch.Tensor | None,  # [dim_vector]
+        cell: torch.Tensor | None,  # [3, 3]
+        total_atomic_energy: torch.Tensor | None,  # [1,]
+        coordinates: torch.Tensor | None,  # [n_nodes, 3]
+        cell_shift_vector: torch.Tensor | None,  # [n_nodes, 3]
     ) -> None:
         if raw_atomic_numbers is not None:
             num_nodes = raw_atomic_numbers.shape[0]
@@ -124,9 +122,9 @@ class GraphDatum(Data):
 
 
 def validate_features(
-    sub_feature: Optional[Union[List[str], str]],
-    features: Optional[List[str]],
-) -> Optional[Union[List[str], str]]:
+    sub_feature: list[str] | str | None,
+    features: list[str] | None,
+) -> list[str] | str | None:
     # assert that all cols exist in y_features and sort features
     if (sub_feature is not None) and (features is not None):
         if isinstance(sub_feature, list):
@@ -147,27 +145,27 @@ class GraphDataset(Dataset):
     def __init__(
         self,
         dataset: datasets.Dataset,
-        x_features: List,
-        y_features: Optional[List],
+        x_features: list,
+        y_features: list | None,
         with_y_features: bool,
         atomic_numbers_col: str,
         node_attrs_col: str,
         edge_attrs_col: str,
         node_idxs_col: str,
         edge_idxs_col: str,
-        graph_attrs_cols: Optional[List[str]],
+        graph_attrs_cols: list[str] | None,
         coordinates_col: str,
         total_atomic_energy_col: str,
-        y_node_scalars: Optional[List[str]],
-        y_node_vector: Optional[str],
-        y_edge_scalars: Optional[List[str]],
-        y_edge_vector: Optional[str],
-        y_graph_scalars: Optional[List[str]],
-        y_graph_vector: Optional[str],
+        y_node_scalars: list[str] | None,
+        y_node_vector: str | None,
+        y_edge_scalars: list[str] | None,
+        y_edge_vector: str | None,
+        y_graph_scalars: list[str] | None,
+        y_graph_vector: str | None,
         num_elements: int,
         self_interaction: bool,
-        pbc: Optional[Tuple[bool, bool, bool]],
-        cell: Optional[List],
+        pbc: tuple[bool, bool, bool] | None,
+        cell: list | None,
         cut_off: float,
     ) -> None:
         super().__init__()
@@ -197,11 +195,12 @@ class GraphDataset(Dataset):
         self.cutoff = cut_off
         self.pbc = pbc
         if cell is not None:
-            self.cell_ten: Optional[torch.Tensor] = torch.tensor(cell)
+            self.cell_ten: torch.Tensor | None = torch.tensor(cell)
         else:
             self.cell_ten = None
         self.self_interaction = self_interaction
 
+        graph_dataset_features = self.x_features
         if self.with_y_features and (self.y_features is not None):
             # assert that all cols exist in y_features and sort features
             self.y_node_scalars = validate_features(y_node_scalars, self.y_features)
@@ -212,10 +211,9 @@ class GraphDataset(Dataset):
             self.y_edge_vector = validate_features(y_edge_vector, self.y_features)
             self.y_graph_vector = validate_features(y_graph_vector, self.y_features)
 
-            dataset.set_format(columns=self.x_features + self.y_features)
-        else:
-            dataset.set_format(columns=self.x_features)
+            graph_dataset_features += self.y_features
 
+        dataset.set_format(columns=graph_dataset_features)
         self.dataset = dataset
 
     def len(self) -> int:
@@ -223,10 +221,10 @@ class GraphDataset(Dataset):
 
     def make_y_feature(
         self,
-        features: Optional[Union[List[str], str]],
-        datapoint: Dict,
+        features: list[str] | str | None,
+        datapoint: dict,
         graph_level: bool,
-    ) -> Optional[torch.Tensor]:
+    ) -> torch.Tensor | None:
         if features is not None:
             if isinstance(features, list):
                 y: torch.Tensor = torch.tensor(
@@ -263,7 +261,7 @@ class GraphDataset(Dataset):
                 feat = datapoint[graph_attrs_col]
                 if isinstance(feat, list):
                     graph_attrs_list += feat
-                elif isinstance(feat, float):
+                elif isinstance(feat, float) or isinstance(feat, int):
                     graph_attrs_list.append(feat)
                 else:
                     raise RuntimeError(
@@ -275,7 +273,7 @@ class GraphDataset(Dataset):
 
         if raw_atomic_numbers is not None:
             raw_atomic_numbers = torch.tensor(raw_atomic_numbers)
-            atomic_numbers: Optional[torch.Tensor] = (
+            atomic_numbers: torch.Tensor | None = (
                 torch.nn.functional.one_hot(
                     raw_atomic_numbers,
                     num_classes=self.num_elements,

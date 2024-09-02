@@ -1,12 +1,10 @@
-from typing import Dict
-
 import torch
 
 from physicsml.lightning.losses import _AVAILABLE_LOSSES
 
 
 class MaskedMSELoss(torch.nn.Module):
-    def __init__(self, loss_config: Dict, column_name: str) -> None:
+    def __init__(self, loss_config: dict, column_name: str) -> None:
         super().__init__()
 
         self.weight = loss_config.get("weight", 1.0)
@@ -15,8 +13,8 @@ class MaskedMSELoss(torch.nn.Module):
 
     def forward(
         self,
-        pred: Dict[str, torch.Tensor],
-        ref: Dict[str, torch.Tensor],
+        pred: dict[str, torch.Tensor],
+        ref: dict[str, torch.Tensor],
     ) -> torch.Tensor:
         mask = ~ref[self.column_name].isnan()
         masked_pred = pred[self.column_name][mask]

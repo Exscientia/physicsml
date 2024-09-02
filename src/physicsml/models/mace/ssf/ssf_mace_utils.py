@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any
 
 import torch
 from e3nn import o3
@@ -44,7 +44,6 @@ class SSF(torch.nn.Module):
 
 
 class SSFMACE(torch.nn.Module):
-
     """
     Class for ssf mace model
     """
@@ -163,7 +162,7 @@ class SSFMACE(torch.nn.Module):
 
             self.out_irreps.append(hidden_irreps_tmp)
 
-    def forward(self, data: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
+    def forward(self, data: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
         if "cell" in data:
             cell = data["cell"]
             cell_shift_vector = data["cell_shift_vector"]
@@ -185,7 +184,7 @@ class SSFMACE(torch.nn.Module):
             edge_feats = torch.cat([edge_feats, data["edge_attrs"]], dim=-1)
 
         for idx, (interaction, message, node_update) in enumerate(
-            zip(self.interactions, self.messages, self.node_updates),
+            zip(self.interactions, self.messages, self.node_updates, strict=False),
         ):
             a_i = interaction(
                 node_feats=node_feats,

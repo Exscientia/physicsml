@@ -1,5 +1,4 @@
 import copy
-from typing import Dict
 
 import torch
 
@@ -8,7 +7,7 @@ from physicsml.lightning.losses.loss_base import LossBase
 
 
 class SerialBCEWithLogitsLoss(LossBase):
-    def __init__(self, loss_config: Dict, column_name: str) -> None:
+    def __init__(self, loss_config: dict, column_name: str) -> None:
         super().__init__(loss_config=loss_config, column_name=column_name)
 
         tmp_loss_config = copy.deepcopy(loss_config)
@@ -27,8 +26,8 @@ class SerialBCEWithLogitsLoss(LossBase):
 
     def forward(
         self,
-        pred: Dict[str, torch.Tensor],
-        ref: Dict[str, torch.Tensor],
+        pred: dict[str, torch.Tensor],
+        ref: dict[str, torch.Tensor],
     ) -> torch.Tensor:
         loss: torch.Tensor = self.weight * self.loss_func(
             pred[self.column_name],

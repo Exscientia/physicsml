@@ -5,7 +5,7 @@
 ###########################################################################################
 
 import collections
-from typing import Any, List, Optional, Tuple, Union
+from typing import Any
 
 import torch
 from e3nn import o3
@@ -17,15 +17,15 @@ _INPUT = collections.namedtuple("_INPUT", "tensor, start, stop")
 
 
 def _wigner_nj(
-    irrepss: List[o3.Irreps],
+    irrepss: list[o3.Irreps],
     normalization: str = "component",
-    filter_ir_mid: Optional[List[o3.Irreps]] = None,
-) -> List[Tuple[o3.Irreps, Any, torch.Tensor]]:
+    filter_ir_mid: list[o3.Irreps] | None = None,
+) -> list[tuple[o3.Irreps, Any, torch.Tensor]]:
     irrepss = [o3.Irreps(irreps) for irreps in irrepss]
     if filter_ir_mid is not None:
         filter_ir_mid = [o3.Irrep(ir) for ir in filter_ir_mid]
 
-    ret: List[Tuple[Any, Any, torch.Tensor]]
+    ret: list[tuple[Any, Any, torch.Tensor]]
     if len(irrepss) == 1:
         (irreps,) = irrepss
         ret = []
@@ -90,12 +90,12 @@ def _wigner_nj(
 
 
 def U_matrix_real(
-    irreps_in: Union[str, o3.Irreps],
-    irreps_out: Union[str, o3.Irreps],
+    irreps_in: str | o3.Irreps,
+    irreps_out: str | o3.Irreps,
     correlation: int,
     normalization: str = "component",
-    filter_ir_mid: Optional[List[o3.Irreps]] = None,
-) -> List:
+    filter_ir_mid: list[o3.Irreps] | None = None,
+) -> list:
     irreps_out = o3.Irreps(irreps_out)
     irrepss = [o3.Irreps(irreps_in)] * correlation
     if correlation == 4:

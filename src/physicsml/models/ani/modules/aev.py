@@ -2,7 +2,7 @@
 # Taken from https://github.com/aiqm/torchani/blob/17204c6dccf6210753bc8c0ca4c92278b60719c9/torchani/aev.py
 import math
 import sys
-from typing import NamedTuple, Optional, Tuple
+from typing import NamedTuple
 
 import torch
 from torch import Tensor
@@ -157,7 +157,7 @@ def neighbor_pairs(
     cell: Tensor,
     shifts: Tensor,
     cutoff: float,
-) -> Tuple[Tensor, Tensor]:
+) -> tuple[Tensor, Tensor]:
     """Compute pairs of atoms that are neighbors
 
     Arguments:
@@ -266,7 +266,7 @@ def cumsum_from_zero(input_: Tensor) -> Tensor:
     return cumsum
 
 
-def triple_by_molecule(atom_index12: Tensor) -> Tuple[Tensor, Tensor, Tensor]:
+def triple_by_molecule(atom_index12: Tensor) -> tuple[Tensor, Tensor, Tensor]:
     """Input: indices for pairs of atoms that are close to each other.
     each pair only appear once, i.e. only one of the pairs (1, 2) and
     (2, 1) exists.
@@ -319,9 +319,9 @@ def compute_aev(
     species: Tensor,
     coordinates: Tensor,
     triu_index: Tensor,
-    constants: Tuple[float, Tensor, Tensor, float, Tensor, Tensor, Tensor, Tensor],
-    sizes: Tuple[int, int, int, int, int],
-    cell_shifts: Optional[Tuple[Tensor, Tensor]],
+    constants: tuple[float, Tensor, Tensor, float, Tensor, Tensor, Tensor, Tensor],
+    sizes: tuple[int, int, int, int, int],
+    cell_shifts: tuple[Tensor, Tensor] | None,
 ) -> Tensor:
     Rcr, EtaR, ShfR, Rca, ShfZ, EtaA, Zeta, ShfA = constants
     (
@@ -452,6 +452,7 @@ class AEVComputer(torch.nn.Module):
     .. _ANI paper:
         http://pubs.rsc.org/en/Content/ArticleLanding/2017/SC/C6SC05720A#!divAbstract
     """
+
     Rcr: Final[float]
     Rca: Final[float]
     num_species: Final[int]
@@ -461,7 +462,7 @@ class AEVComputer(torch.nn.Module):
     angular_sublength: Final[int]
     angular_length: Final[int]
     aev_length: Final[int]
-    sizes: Final[Tuple[int, int, int, int, int]]
+    sizes: Final[tuple[int, int, int, int, int]]
     triu_index: Tensor
     use_cuda_extension: Final[bool]
 
@@ -629,9 +630,9 @@ class AEVComputer(torch.nn.Module):
 
     def forward(
         self,
-        input_: Tuple[Tensor, Tensor],
-        cell: Optional[Tensor] = None,
-        pbc: Optional[Tensor] = None,
+        input_: tuple[Tensor, Tensor],
+        cell: Tensor | None = None,
+        pbc: Tensor | None = None,
     ) -> SpeciesAEV:
         """Compute AEVs
 

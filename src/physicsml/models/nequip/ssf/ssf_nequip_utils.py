@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any
 
 import torch
 from e3nn import o3
@@ -129,7 +129,7 @@ class SSFNequip(torch.nn.Module):
 
             self.out_irreps.append(interaction_irreps_in)
 
-    def forward(self, data: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
+    def forward(self, data: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
         # Embeddings
         data["node_feats"] = self.node_embedding(data["node_attrs"])
 

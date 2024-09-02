@@ -1,6 +1,6 @@
+from collections.abc import Mapping
 from timeit import default_timer as timer
 from types import GeneratorType
-from typing import Mapping
 
 import numpy as np
 

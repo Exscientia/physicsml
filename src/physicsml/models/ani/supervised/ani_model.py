@@ -1,4 +1,4 @@
-from typing import Any, Type
+from typing import Any
 
 from molflux.modelzoo.info import ModelInfo
 
@@ -17,7 +17,7 @@ class ANIModel(PhysicsMLModelBase[ANIModelConfig]):
         )
 
     @property
-    def _config_builder(self) -> Type[ANIModelConfig]:
+    def _config_builder(self) -> type[ANIModelConfig]:
         return ANIModelConfig
 
     def _instantiate_module(self) -> Any:
@@ -26,7 +26,7 @@ class ANIModel(PhysicsMLModelBase[ANIModelConfig]):
         )
 
     @property
-    def _datamodule_builder(self) -> Type[ANIDataModule]:  # type: ignore
+    def _datamodule_builder(self) -> type[ANIDataModule]:  # type: ignore
         return ANIDataModule
 
     def to_openmm(self, **kwargs: Any) -> Any:

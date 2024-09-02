@@ -1,5 +1,5 @@
 import logging
-from typing import Any, List, Optional, Tuple
+from typing import Any
 
 import torch
 
@@ -16,10 +16,10 @@ class ANIASECalculator(PhysicsMLASECalculatorBase):
 
     def calculate(
         self,
-        atoms: Optional[ase.Atoms] = None,
-        properties: Optional[List[str]] = None,
-        system_changes: Optional[List[str]] = all_changes,
-    ) -> Tuple:
+        atoms: ase.Atoms | None = None,
+        properties: list[str] | None = None,
+        system_changes: list[str] | None = all_changes,
+    ) -> tuple:
         super().calculate(atoms, properties, system_changes)
 
         # create system
@@ -47,15 +47,13 @@ class ANIASECalculator(PhysicsMLASECalculatorBase):
 
         output = self.module(batch_dict)
         energy = output["y_graph_scalars"] * self.output_scaling
-        grad_outputs: Optional[List[Optional[torch.Tensor]]] = [torch.ones_like(energy)]
+        grad_outputs: list[torch.Tensor | None] | None = [torch.ones_like(energy)]
         gradient = torch.autograd.grad(
             outputs=[energy],  # [1, 1]
             inputs=[batch_dict["coordinates"]],  # [1, n_nodes, 3]
             grad_outputs=grad_outputs,  # type: ignore
             allow_unused=True,
-        )[
-            0
-        ]  # [n_nodes, 3]
+        )[0]  # [n_nodes, 3]
 
         if gradient is None:
             raise RuntimeWarning("Gradient is None")

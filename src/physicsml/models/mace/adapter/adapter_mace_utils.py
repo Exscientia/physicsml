@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import torch
 from e3nn import o3
@@ -28,7 +28,7 @@ class Adapter(torch.nn.Module):
         irreps_down = o3.Irreps(
             [(ir[0] // ratio_adapter_down, ir[1]) for ir in irreps_in],
         )
-        acts: List[Optional[torch.nn.Module]] = []
+        acts: list[torch.nn.Module | None] = []
         for _mul, ir in irreps_down:
             if ir.is_scalar():
                 acts.append(torch.nn.SiLU())
@@ -49,7 +49,6 @@ class Adapter(torch.nn.Module):
 
 
 class AdapterMACE(torch.nn.Module):
-
     """
     Class for adapter mace model
     """
@@ -190,7 +189,7 @@ class AdapterMACE(torch.nn.Module):
 
             self.out_irreps.append(hidden_irreps_tmp)
 
-    def forward(self, data: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
+    def forward(self, data: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
         if "cell" in data:
             cell = data["cell"]
             cell_shift_vector = data["cell_shift_vector"]
@@ -212,7 +211,7 @@ class AdapterMACE(torch.nn.Module):
             edge_feats = torch.cat([edge_feats, data["edge_attrs"]], dim=-1)
 
         for idx, (interaction, message, node_update) in enumerate(
-            zip(self.interactions, self.messages, self.node_updates),
+            zip(self.interactions, self.messages, self.node_updates, strict=False),
         ):
             ada_node_feats_before = self.adapters_before[idx](node_feats)
             a_i = interaction(

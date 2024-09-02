@@ -1,11 +1,8 @@
 from typing import (
     TYPE_CHECKING,
     Any,
-    Dict,
     Generic,
-    Tuple,
     TypeVar,
-    Union,
 )
 
 import numpy as np
@@ -44,10 +41,10 @@ class PhysicsMLUncertaintyModelBase(
     def _predict_with_std(
         self,
         data: Dataset,
-        datamodule_config: Union[DataModuleConfig, Dict[str, Any], None] = None,
-        trainer_config: Union[TrainerConfig, Dict[str, Any], None] = None,
+        datamodule_config: DataModuleConfig | dict[str, Any] | None = None,
+        trainer_config: TrainerConfig | dict[str, Any] | None = None,
         **kwargs: Any,
-    ) -> Tuple[PredictionResult, PredictionResult]:
+    ) -> tuple[PredictionResult, PredictionResult]:
         """method for predicting"""
         del kwargs
         display_names = self._predict_display_names
@@ -107,12 +104,20 @@ class PhysicsMLUncertaintyModelBase(
 
         ordered_output = {
             display_name: output[y_feature]
-            for display_name, y_feature in zip(display_names, self.y_features)
+            for display_name, y_feature in zip(
+                display_names,
+                self.y_features,
+                strict=False,
+            )
         }
 
         ordered_output_std = {
             f"{display_name}::std": output_std[f"{y_feature}::std"]
-            for display_name, y_feature in zip(display_names, self.y_features)
+            for display_name, y_feature in zip(
+                display_names,
+                self.y_features,
+                strict=False,
+            )
         }
 
         return ordered_output, ordered_output_std
@@ -121,10 +126,10 @@ class PhysicsMLUncertaintyModelBase(
         self,
         data: Dataset,
         confidence: float,
-        datamodule_config: Union[DataModuleConfig, Dict[str, Any], None] = None,
-        trainer_config: Union[TrainerConfig, Dict[str, Any], None] = None,
+        datamodule_config: DataModuleConfig | dict[str, Any] | None = None,
+        trainer_config: TrainerConfig | dict[str, Any] | None = None,
         **kwargs: Any,
-    ) -> Tuple[PredictionResult, PredictionResult]:
+    ) -> tuple[PredictionResult, PredictionResult]:
         # get the result dictionary of means and standard deviations
         prediction_mean_results, prediction_std_results = self._predict_with_std(
             data,
@@ -139,6 +144,7 @@ class PhysicsMLUncertaintyModelBase(
             self._predict_display_names,
             prediction_mean_results.values(),
             prediction_std_results.values(),
+            strict=False,
         ):
             if all(s is None for s in std):
                 prediction_results[display_name] = mean
@@ -160,7 +166,7 @@ class PhysicsMLUncertaintyModelBase(
                 prediction_results[display_name] = mean
                 prediction_prediction_interval_results[
                     f"{display_name}::prediction_interval"
-                ] = list(zip(lower_bound, upper_bound))
+                ] = list(zip(lower_bound, upper_bound, strict=False))
 
         return prediction_results, prediction_prediction_interval_results
 
@@ -172,7 +178,7 @@ class PhysicsMLUncertaintyModelBase(
         data: Any,
         confidence: float,
         **kwargs: Any,
-    ) -> Tuple[PredictionResult, PredictionResult]:
+    ) -> tuple[PredictionResult, PredictionResult]:
         return self._predict_with_prediction_interval(
             data,
             confidence=confidence,

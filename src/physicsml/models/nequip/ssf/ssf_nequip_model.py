@@ -1,4 +1,4 @@
-from typing import Any, Type
+from typing import Any
 
 from molflux.modelzoo.info import ModelInfo
 
@@ -17,7 +17,7 @@ class SsfNequipModel(PhysicsMLModelBase[SSFNequipModelConfig]):
         )
 
     @property
-    def _config_builder(self) -> Type[SSFNequipModelConfig]:
+    def _config_builder(self) -> type[SSFNequipModelConfig]:
         return SSFNequipModelConfig
 
     def _instantiate_module(self) -> Any:

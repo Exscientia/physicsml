@@ -1,5 +1,4 @@
 # type: ignore
-from typing import Dict
 
 import pytest
 import torch
@@ -53,7 +52,7 @@ ALANINE_DIPEPTIDE_PATH = "tests/data/alanine-dipeptide-truncated.pdb"
 @pytest.mark.skipif(not OPENMM_, reason="no openmm")
 @pytest.mark.parametrize("model_properties", NNP_MODELS)
 def test_nnp_potential_system_cpu(
-    model_properties: Dict,
+    model_properties: dict,
     platform: str = "cpu",
 ) -> None:
     # fetch the .pdb file
@@ -92,7 +91,7 @@ def test_nnp_potential_system_cpu(
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="no gpus")
 @pytest.mark.parametrize("model_properties", NNP_MODELS)
 def test_nnp_potential_system_gpu(
-    model_properties: Dict,
+    model_properties: dict,
     platform: str = "cuda",
 ) -> None:
     # fetch the .pdb file

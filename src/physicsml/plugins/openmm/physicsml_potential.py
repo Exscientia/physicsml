@@ -1,6 +1,7 @@
 # type: ignore
 import logging
-from typing import Any, Iterable, Optional
+from collections.abc import Iterable
+from typing import Any
 
 try:
     import openmm
@@ -38,13 +39,14 @@ class PhysicsMLPotentialImpl(MLPotentialImpl):
 
     def __init__(
         self,
-        model_path: Optional[str] = None,
-        repo_url: Optional[str] = None,
-        rev: Optional[str] = None,
-        model_path_in_repo: Optional[str] = None,
-        y_output: Optional[str] = None,
-        output_scaling: Optional[float] = None,
-        position_scaling: Optional[float] = None,
+        model_path: str | None = None,
+        repo_url: str | None = None,
+        rev: str | None = None,
+        model_path_in_repo: str | None = None,
+        y_output: str | None = None,
+        output_scaling: float | None = None,
+        position_scaling: float | None = None,
+        total_charge: int | None = None,
         device: str = "cpu",
         precision: str = "32",
     ) -> None:
@@ -77,6 +79,12 @@ class PhysicsMLPotentialImpl(MLPotentialImpl):
             "precision": precision,
         }
 
+        # total charge
+        # this adds it to the model config which is then passed to to_openmm_torchscript
+        # in addForces
+        if total_charge is not None:
+            self.model_config["total_charge"] = total_charge
+
         if model_path is not None:
             self.model_config["model_path"] = model_path
         else:
@@ -88,7 +96,7 @@ class PhysicsMLPotentialImpl(MLPotentialImpl):
         self,
         topology: openmm.app.Topology,
         system: openmm.System,
-        atoms: Optional[Iterable[int]],
+        atoms: Iterable[int] | None,
         force_group: int,
         filename: str = "physicsml_model.pt",
         **args: Any,
@@ -110,6 +118,7 @@ class PhysicsMLPotentialImpl(MLPotentialImpl):
             included_atoms = [included_atoms[i] for i in atoms]
 
         atom_num_list = [atom.element.atomic_number for atom in included_atoms]
+
         self.model_config["atom_list"] = atom_num_list
         self.model_config["atom_idxs"] = atoms
 

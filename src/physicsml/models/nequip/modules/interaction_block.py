@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional
-
 import torch
 from e3nn import o3
 from e3nn.nn import FullyConnectedNet
@@ -14,7 +12,7 @@ class InteractionBlock(torch.nn.Module):
         node_attrs_irreps: o3.Irreps,
         edge_feats_irreps: o3.Irreps,
         edge_attrs_irreps: o3.Irreps,
-        avg_num_neighbours: Optional[float] = None,
+        avg_num_neighbours: float | None = None,
         self_connection: bool = True,
     ) -> None:
         super().__init__()
@@ -28,7 +26,7 @@ class InteractionBlock(torch.nn.Module):
             shared_weights=True,
         )
 
-        irreps_mid_list: List = []
+        irreps_mid_list: list = []
         instructions = []
 
         for i, (mul, ir_in) in enumerate(interaction_irreps_in):
@@ -73,17 +71,17 @@ class InteractionBlock(torch.nn.Module):
         )
 
         if self_connection:
-            self.self_connection_layer: Optional[
-                o3.FullyConnectedTensorProduct
-            ] = o3.FullyConnectedTensorProduct(
-                interaction_irreps_in,
-                node_attrs_irreps,
-                interaction_irreps_out,
+            self.self_connection_layer: o3.FullyConnectedTensorProduct | None = (
+                o3.FullyConnectedTensorProduct(
+                    interaction_irreps_in,
+                    node_attrs_irreps,
+                    interaction_irreps_out,
+                )
             )
         else:
             self.self_connection_layer = None
 
-    def forward(self, data: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
+    def forward(self, data: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
         weight = self.fc(data["edge_feats"])
 
         x = data["node_feats"]

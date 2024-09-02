@@ -1,5 +1,3 @@
-from typing import Dict, Optional
-
 import torch
 from e3nn import o3
 
@@ -32,7 +30,7 @@ class ConvNetLayer(torch.nn.Module):
         edge_feats_irreps: o3.Irreps,
         edge_attrs_irreps: o3.Irreps,
         hidden_irreps: o3.Irreps,
-        avg_num_neighbours: Optional[float] = None,
+        avg_num_neighbours: float | None = None,
         self_connection: bool = True,
         num_layers: int = 3,
         resnet: bool = False,
@@ -100,7 +98,7 @@ class ConvNetLayer(torch.nn.Module):
             self_connection=self_connection,
         )
 
-    def forward(self, data: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
+    def forward(self, data: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
         # save old features for resnet
         old_x = data["node_feats"]
         # run convolution

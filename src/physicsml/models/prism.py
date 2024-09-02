@@ -1,6 +1,6 @@
 import logging
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union
+from typing import TYPE_CHECKING, Any
 
 import datasets
 import molflux.core as molflux_core
@@ -24,10 +24,10 @@ logger = logging.getLogger(__name__)
 class PhysicsMLPrismBase(RepresentationBase):
     def __init__(
         self,
-        path: Optional[str] = None,
-        rev: Optional[str] = None,
-        repo_url: Optional[str] = None,
-        model_path_in_repo: Optional[str] = None,
+        path: str | None = None,
+        rev: str | None = None,
+        repo_url: str | None = None,
+        model_path_in_repo: str | None = None,
         **kwargs: Any,
     ) -> None:
         super().__init__(**kwargs)
@@ -82,19 +82,19 @@ class PhysicsMLPrismBase(RepresentationBase):
     def _extract_features(
         self,
         dataset_feated: datasets.Dataset,
-        datamodule_config: Union[DataModuleConfig, Dict[str, Any], None] = None,
-        trainer_config: Union[TrainerConfig, Dict[str, Any], None] = None,
+        datamodule_config: DataModuleConfig | dict[str, Any] | None = None,
+        trainer_config: TrainerConfig | dict[str, Any] | None = None,
         **kwargs: Any,
-    ) -> List:
+    ) -> list:
         """method to extract features from model."""
 
     def _featurise(
         self,
         *columns: MolArray,
-        datamodule_config: Union[DataModuleConfig, Dict[str, Any], None] = None,
-        trainer_config: Union[TrainerConfig, Dict[str, Any], None] = None,
+        datamodule_config: DataModuleConfig | dict[str, Any] | None = None,
+        trainer_config: TrainerConfig | dict[str, Any] | None = None,
         **kwargs: Any,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
 
         Takes 2D molecules (as SMILES, OEMols or OEMolBytes).
@@ -146,7 +146,7 @@ class PrismLightningBase(PhysicsMLModuleBase):
     def __init__(self) -> None:
         super().__init__(model_config=None)  # type: ignore
 
-    def compute_loss(self, input: Any, target: Any) -> Dict[str, torch.Tensor]:
+    def compute_loss(self, input: Any, target: Any) -> dict[str, torch.Tensor]:
         return {"loss": torch.empty(0)}
 
     def predict_step(self, batch: Any, batch_idx: int, dataloader_idx: int = 0) -> Any:

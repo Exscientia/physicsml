@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import torch
 from e3nn import o3
@@ -24,7 +24,7 @@ class Adapter(torch.nn.Module):
         irreps_down = o3.Irreps(
             [(ir[0] // ratio_adapter_down, ir[1]) for ir in irreps_in],
         )
-        acts: List[Optional[torch.nn.Module]] = []
+        acts: list[torch.nn.Module | None] = []
         for _mul, ir in irreps_down:
             if ir.is_scalar():
                 acts.append(torch.nn.SiLU())
@@ -158,7 +158,7 @@ class AdapterNequip(torch.nn.Module):
             interaction_irreps_in = interaction_irreps_in_new
             self.out_irreps.append(interaction_irreps_in)
 
-    def forward(self, data: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
+    def forward(self, data: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
         # Embeddings
         data["node_feats"] = self.node_embedding(data["node_attrs"])
 

@@ -1,5 +1,4 @@
 from math import sqrt
-from typing import List, Optional, Tuple
 
 import torch
 from e3nn import o3
@@ -15,18 +14,18 @@ from physicsml.models.allegro.modules.spmm import ExplicitGradSpmm
 
 def codegen_strided_tensor_product_forward(
     irreps_in1: o3.Irreps,
-    in1_var: List[float],
+    in1_var: list[float],
     irreps_in2: o3.Irreps,
-    in2_var: List[float],
+    in2_var: list[float],
     irreps_out: o3.Irreps,
-    out_var: List[float],
-    instructions: List[Instruction],
+    out_var: list[float],
+    instructions: list[Instruction],
     normalization: str = "component",
     shared_weights: bool = False,
     specialized_code: bool = True,
-    sparse_mode: Optional[str] = None,
+    sparse_mode: str | None = None,
     pad_to_alignment: int = 1,
-) -> Optional[fx.GraphModule]:
+) -> fx.GraphModule | None:
     """Returns None if strided doesn't make sense for this TP."""
     # TODO padding
     # Check if irreps can be strided
@@ -358,12 +357,12 @@ def Contractor(
     irreps_in1,
     irreps_in2,
     irreps_out,
-    instructions: List[Tuple[int, int, int]],
+    instructions: list[tuple[int, int, int]],
     has_weight: bool,
     connection_mode: str,
     pad_to_alignment: int = 1,
     shared_weights: bool = False,
-    sparse_mode: Optional[str] = None,
+    sparse_mode: str | None = None,
 ):
     irreps_in1 = o3.Irreps(irreps_in1)
     assert all(mul == irreps_in1[0].mul for mul, ir in irreps_in1)

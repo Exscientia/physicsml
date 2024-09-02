@@ -1,5 +1,3 @@
-from typing import Dict
-
 import torch
 
 from physicsml.lightning.losses import _AVAILABLE_LOSSES
@@ -7,7 +5,7 @@ from physicsml.lightning.losses.loss_base import LossBase
 
 
 class MultiTaskLoss(torch.nn.Module):
-    def __init__(self, loss_config: Dict, column_name: str) -> None:
+    def __init__(self, loss_config: dict, column_name: str) -> None:
         super().__init__()
         self.column_name = column_name
 
@@ -18,8 +16,8 @@ class MultiTaskLoss(torch.nn.Module):
 
     def forward(
         self,
-        pred: Dict[str, torch.Tensor],
-        ref: Dict[str, torch.Tensor],
+        pred: dict[str, torch.Tensor],
+        ref: dict[str, torch.Tensor],
     ) -> torch.Tensor:
         pred_tensor = pred[self.column_name]
         ref_tensor = ref[self.column_name]

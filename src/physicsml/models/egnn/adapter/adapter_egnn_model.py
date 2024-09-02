@@ -1,4 +1,4 @@
-from typing import Any, Type
+from typing import Any
 
 from molflux.modelzoo.info import ModelInfo
 
@@ -19,7 +19,7 @@ class AdapterEGNNModel(PhysicsMLModelBase[AdapterEGNNModelConfig]):
         )
 
     @property
-    def _config_builder(self) -> Type[AdapterEGNNModelConfig]:
+    def _config_builder(self) -> type[AdapterEGNNModelConfig]:
         return AdapterEGNNModelConfig
 
     def _instantiate_module(self) -> Any:

@@ -1,5 +1,3 @@
-from typing import List, Optional
-
 import torch
 from e3nn import o3
 from e3nn.math import normalize2mom
@@ -30,7 +28,7 @@ class Activation(torch.nn.Module):
     256x0o+16x1e
     """
 
-    def __init__(self, irreps_in: o3.Irreps, acts: List[Optional[torch.nn.Module]]):
+    def __init__(self, irreps_in: o3.Irreps, acts: list[torch.nn.Module | None]):
         super().__init__()
         irreps_in = o3.Irreps(irreps_in)
         if len(irreps_in) != len(acts):
@@ -44,7 +42,7 @@ class Activation(torch.nn.Module):
         from e3nn.util._argtools import _get_device
 
         irreps_out = []
-        for (mul, (l_in, p_in)), act in zip(irreps_in, acts):
+        for (mul, (l_in, p_in)), act in zip(irreps_in, acts, strict=False):
             if act is not None:
                 if l_in != 0:
                     raise ValueError(
@@ -77,7 +75,7 @@ class Activation(torch.nn.Module):
         self.acts = torch.nn.ModuleList(acts)  # type: ignore
         assert len(self.irreps_in) == len(self.acts)
 
-        self.ir_dims: List[int] = [ir.dim for _, ir in self.irreps_in]
+        self.ir_dims: list[int] = [ir.dim for _, ir in self.irreps_in]
 
     def __repr__(self) -> str:
         acts = "".join(["x" if a is not None else " " for a in self.acts])

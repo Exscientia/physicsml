@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from molflux.features.bases import RepresentationBase
 from molflux.features.info import RepresentationInfo
@@ -28,12 +28,12 @@ Can also, specify whether one_hot_encoded or not, True by default.
 class PhysicsMLFeatures(RepresentationBase):
     def __init__(
         self,
-        atomic_number_mapping: Optional[Dict[int, int]] = None,
-        atomic_energies: Optional[Dict[int, int]] = None,
-        atom_features: Optional[List[str]] = None,
-        bond_features: Optional[List[str]] = None,
+        atomic_number_mapping: dict[int, int] | None = None,
+        atomic_energies: dict[int, int] | None = None,
+        atom_features: list[str] | None = None,
+        bond_features: list[str] | None = None,
         one_hot_encoded: bool = True,
-        backend: Optional[BackendT] = None,
+        backend: BackendT | None = None,
         **kwargs: Any,
     ) -> None:
         super().__init__(**kwargs)
@@ -41,14 +41,14 @@ class PhysicsMLFeatures(RepresentationBase):
         assert backend is not None, KeyError("Must specify backend for featurisation")
 
         # make sure json encoding str keys are converted to int(k)
-        self.atomic_number_mapping: Optional[Dict] = {}
+        self.atomic_number_mapping: dict | None = {}
         if atomic_number_mapping is not None:
             for k, v in atomic_number_mapping.items():
                 self.atomic_number_mapping[int(k)] = v
         else:
             self.atomic_number_mapping = None
 
-        self.atomic_energies: Optional[Dict] = {}
+        self.atomic_energies: dict | None = {}
         if atomic_energies is not None:
             for k, v in atomic_energies.items():
                 self.atomic_energies[int(k)] = v
@@ -77,12 +77,12 @@ class PhysicsMLFeatures(RepresentationBase):
             self.atomic_energies = None
 
         if (atom_features is not None) and (len(atom_features) > 0):
-            self.atom_features_list: Optional[List[str]] = sorted(atom_features)
+            self.atom_features_list: list[str] | None = sorted(atom_features)
         else:
             self.atom_features_list = None
 
         if (bond_features is not None) and (len(bond_features) > 0):
-            self.bond_features_list: Optional[List[str]] = sorted(bond_features)
+            self.bond_features_list: list[str] | None = sorted(bond_features)
         else:
             self.bond_features_list = None
 
@@ -99,7 +99,7 @@ class PhysicsMLFeatures(RepresentationBase):
         self,
         *columns: MolArray,
         **kwargs: Any,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         assert_n_positional_args(*columns, expected_size=1)
         samples = columns[0]
 

@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from physicsml.backends.backend_selector import BackendT, atom_feature_callables
 
@@ -22,9 +22,9 @@ logger.addFilter(dup_filter)
 
 def compute_atom_numbers_and_coordinates(
     mol: Any,
-    atomic_number_mapping: Optional[Dict[int, int]],
+    atomic_number_mapping: dict[int, int] | None,
     backend: BackendT,
-) -> Dict[str, List]:
+) -> dict[str, list]:
     mol_atom_numbers = []
     mol_idxs = []
 
@@ -34,14 +34,17 @@ def compute_atom_numbers_and_coordinates(
         atom_number = atom_feature_callables(backend)["atomic_num"]["method"](atom)
 
         if atomic_number_mapping is not None:
-            values_dict: Dict = atomic_number_mapping
+            values_dict: dict = atomic_number_mapping
         else:
             values_dict = atom_feature_callables(backend)["atomic_num"]["values"]
 
         mol_atom_numbers.append(values_dict[atom_number])
 
     if (len(mol_atom_numbers) > 0) and (len(mol_idxs) > 0):
-        mol_idxs, mol_atom_numbers = zip(*sorted(zip(mol_idxs, mol_atom_numbers)))  # type: ignore
+        mol_idxs, mol_atom_numbers = zip(  # type: ignore[assignment]
+            *sorted(zip(mol_idxs, mol_atom_numbers, strict=False)),
+            strict=False,
+        )
 
     coords_dict = atom_feature_callables(backend)["coordinates"]["method"](mol)
 
@@ -56,9 +59,9 @@ def compute_atom_numbers_and_coordinates(
 
 def compute_total_atomic_energies(
     mol: Any,
-    atomic_energies: Dict,
+    atomic_energies: dict,
     backend: BackendT,
-) -> Dict[str, float]:
+) -> dict[str, float]:
     total_energy = 0
     for atom in mol.GetAtoms():
         atom_number = atom_feature_callables(backend)["atomic_num"]["method"](atom)
@@ -89,10 +92,10 @@ def compute_total_atomic_energies(
 
 def compute_atom_features(
     mol: Any,
-    atom_features_list: List[str],
+    atom_features_list: list[str],
     backend: BackendT,
     one_hot_encoded: bool,
-) -> Dict[str, List]:
+) -> dict[str, list]:
     mol_features = []
     mol_idxs = []
 
@@ -110,7 +113,7 @@ def compute_atom_features(
                 feat_value = feat
 
             if one_hot_encoded and isinstance(feat_value, int):
-                one_hot_feat: List = [0] * len(values_dict)
+                one_hot_feat: list = [0] * len(values_dict)
                 one_hot_feat[feat_value] = 1
                 atom_features += one_hot_feat
             else:
@@ -119,7 +122,10 @@ def compute_atom_features(
         mol_features.append(atom_features)
 
     if (len(mol_features) > 0) and (len(mol_idxs) > 0):
-        mol_idxs, mol_features = zip(*sorted(zip(mol_idxs, mol_features)))  # type: ignore
+        mol_idxs, mol_features = zip(  # type: ignore[assignment]
+            *sorted(zip(mol_idxs, mol_features, strict=False)),
+            strict=False,
+        )
 
     return {
         "physicsml_atom_features": list(mol_features),

@@ -1,5 +1,3 @@
-from typing import Optional, Tuple
-
 import torch
 from torch_geometric.utils import (
     coalesce,
@@ -36,7 +34,7 @@ def compute_neighborlist_n2_no_cell(
     cutoff: float,
     pos: torch.Tensor,
     self_interaction: bool,
-) -> Tuple[torch.Tensor, torch.Tensor]:
+) -> tuple[torch.Tensor, torch.Tensor]:
     r_ij = ((pos.unsqueeze(0) - pos.unsqueeze(1)) ** 2).sum(-1)
     mask = (r_ij <= cutoff**2).nonzero()
 
@@ -56,12 +54,12 @@ def compute_neighborlist_n2_no_cell(
 def construct_edge_indices_and_attrs(
     positions: torch.Tensor,
     cutoff: float,
-    initial_edge_indices: Optional[torch.Tensor],
-    initial_edge_attrs: Optional[torch.Tensor],
-    pbc: Optional[Tuple[bool, bool, bool]],
-    cell: Optional[torch.Tensor],
+    initial_edge_indices: torch.Tensor | None,
+    initial_edge_attrs: torch.Tensor | None,
+    pbc: tuple[bool, bool, bool] | None,
+    cell: torch.Tensor | None,
     self_interaction: bool,
-) -> Tuple[torch.Tensor, Optional[torch.Tensor], torch.Tensor]:
+) -> tuple[torch.Tensor, torch.Tensor | None, torch.Tensor]:
     if (pbc is not None) and all(pbc) and (cell is not None):
         cell = cell.type(positions.dtype).to(positions.device)
 

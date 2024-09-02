@@ -1,4 +1,4 @@
-from typing import Any, Type
+from typing import Any
 
 from molflux.modelzoo.info import ModelInfo
 
@@ -19,7 +19,7 @@ class AdapterNequipModel(PhysicsMLModelBase[AdapterNequipModelConfig]):
         )
 
     @property
-    def _config_builder(self) -> Type[AdapterNequipModelConfig]:
+    def _config_builder(self) -> type[AdapterNequipModelConfig]:
         return AdapterNequipModelConfig
 
     def _instantiate_module(self) -> Any:
