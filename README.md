@@ -1,5 +1,7 @@
-![Logo Dark](docs/source/_static/PhysicsML_Logo_PhyML_logo%20full%20light-cropped.svg#gh-dark-mode-only)
-![Logo Light](docs/source/_static/PhysicsML_Logo_PhyML_logo%20full%20dark-cropped.svg#gh-light-mode-only)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/source/_static/PhysicsML_Logo_PhyML_logo%20full%20light-cropped.svg">
+  <img alt="PhysicsML logo" src="docs/source/_static/PhysicsML_Logo_PhyML_logo%20full%20dark-cropped.svg">
+</picture>
 
 ---
 
