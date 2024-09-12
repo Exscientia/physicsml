@@ -9,6 +9,7 @@ from physicsml.lightning.config import ConfigDict, PhysicsMLModelConfig
 class AdapterEGNNModelConfig(PhysicsMLModelConfig):
     num_node_feats: int = 0
     num_edge_feats: int = 0
+    num_graph_feats: int = 0
     num_rbf: int = 0
     num_layers: int = 4
     num_layers_phi: int = 2

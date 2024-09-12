@@ -427,6 +427,7 @@ class PoolingHead(torch.nn.Module):
         self,
         c_hidden: int,
         num_layers_phi: int,
+        num_graph_feats: int,
         pool_type: Literal["sum", "mean"],
         pool_from: Literal["nodes", "edges", "nodes_edges"],
         num_tasks: int | None,
@@ -463,7 +464,7 @@ class PoolingHead(torch.nn.Module):
             c_in_head_2 = c_hidden
 
         self.headMLP2 = make_mlp(
-            c_in=c_in_head_2,
+            c_in=c_in_head_2 + num_graph_feats,
             c_hidden=c_hidden,
             c_out=num_tasks,
             num_layers=num_layers_phi,
@@ -523,6 +524,9 @@ class PoolingHead(torch.nn.Module):
             )  # [n_graphs,]
 
             list_of_pooled_feats.append(pooled_edge_feats)
+
+        if "graph_attrs" in data:
+            list_of_pooled_feats.append(data["graph_attrs"])
 
         pooled_feats: torch.Tensor = self.headMLP2(
             torch.cat(

@@ -9,6 +9,12 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ---------------------------------------------------------
+## [0.6.0] - 2024-09-12
+
+### Added
+
+* Added EGNN graph attrs
+
 ## [0.5.0] - 2024-09-02
 
 ### Removed

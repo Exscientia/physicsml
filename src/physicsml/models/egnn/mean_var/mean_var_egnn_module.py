@@ -73,6 +73,7 @@ class PooledMeanVarEGNNModule(PhysicsMLModuleBase):
             self.pooling_head: torch.nn.Module = PoolingHead(
                 c_hidden=model_config.c_hidden,
                 num_layers_phi=model_config.num_layers_pooling,
+                num_graph_feats=self.model_config.num_graph_feats,
                 pool_type=model_config.pool_type,
                 pool_from=model_config.pool_from,
                 num_tasks=len(model_config.datamodule.y_graph_scalars),
@@ -84,6 +85,7 @@ class PooledMeanVarEGNNModule(PhysicsMLModuleBase):
             self.pooling_head_std: torch.nn.Module = PoolingHead(
                 c_hidden=model_config.c_hidden,
                 num_layers_phi=model_config.num_layers_pooling,
+                num_graph_feats=self.model_config.num_graph_feats,
                 pool_type="mean",
                 pool_from=model_config.pool_from,
                 num_tasks=len(model_config.datamodule.y_graph_scalars),
